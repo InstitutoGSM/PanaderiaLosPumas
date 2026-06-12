@@ -36,8 +36,25 @@
     }
     .ob-cerrar:hover { color: white; }
 
-    /* Ocultar mob-menu por defecto, CSS lo muestra en mobile */
     .mob-menu-btn { display: none; }
+
+    .medios-pago-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(130px,1fr));
+      gap: 10px;
+    }
+    .medio-check {
+      display: flex; align-items: center; gap: 8px;
+      border: 2px solid var(--crema-dark); border-radius: var(--radio);
+      padding: 12px; cursor: pointer; font-weight: 700; font-size: 0.88rem;
+      transition: all var(--trans); background: var(--blanco);
+    }
+    .medio-check:hover { border-color: var(--naranja-lt); }
+    .medio-check.on    { border-color: var(--naranja); background: #FFF3E0; }
+    .medio-check input { width: auto; margin: 0; accent-color: var(--naranja); }
+    .medio-ico { font-size: 1.1rem; }
+    .medios-pago-hint {
+      font-size: 0.82rem; color: var(--gris); margin-bottom: 14px;
+    }
   </style>
 </head>
 <body>
@@ -415,6 +432,56 @@
           <label for="pf-email">Email de contacto</label>
           <input type="email" id="pf-email">
         </div>
+
+        <div class="checkout-sep" style="height:1px;background:var(--crema-dark);margin:22px 0"></div>
+
+        <h3 style="margin-bottom:6px">💳 Medios de pago que aceptás</h3>
+        <p class="medios-pago-hint">
+          El efectivo siempre está disponible para tus compradores. Activá los demás que aceptes.
+        </p>
+
+        <div class="medios-pago-grid">
+          <label class="medio-check on" style="cursor:not-allowed;opacity:0.75">
+            <input type="checkbox" checked disabled>
+            <span class="medio-ico">💵</span> Efectivo
+          </label>
+          <label class="medio-check" id="lbl-pago-transferencia">
+            <input type="checkbox" id="pf-pago-transferencia">
+            <span class="medio-ico">📲</span> Transferencia
+          </label>
+          <label class="medio-check" id="lbl-pago-debito">
+            <input type="checkbox" id="pf-pago-debito">
+            <span class="medio-ico">💳</span> Débito
+          </label>
+          <label class="medio-check" id="lbl-pago-credito">
+            <input type="checkbox" id="pf-pago-credito">
+            <span class="medio-ico">💳</span> Crédito
+          </label>
+        </div>
+
+        <div id="pf-transferencia-datos" style="display:none;margin-top:16px">
+          <div class="field">
+            <label for="pf-cbu">CBU</label>
+            <input type="text" id="pf-cbu" placeholder="0000003100000000000000"
+                   maxlength="22" inputmode="numeric">
+          </div>
+          <div class="form-row">
+            <div class="field">
+              <label for="pf-alias">Alias</label>
+              <input type="text" id="pf-alias" placeholder="mi.alias.mp">
+            </div>
+            <div class="field">
+              <label for="pf-titular">Titular de la cuenta</label>
+              <input type="text" id="pf-titular" placeholder="Nombre completo">
+            </div>
+          </div>
+          <div style="font-size:0.78rem;color:var(--gris);margin-top:-6px;margin-bottom:10px">
+            Ingresá al menos el CBU o el alias para que los compradores puedan transferirte.
+          </div>
+        </div>
+
+        <div class="checkout-sep" style="height:1px;background:var(--crema-dark);margin:22px 0"></div>
+
         <button class="btn btn-marron" id="btn-guardar-perfil">
           Guardar cambios
         </button>

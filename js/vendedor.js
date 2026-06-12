@@ -26,7 +26,6 @@ async function init() {
   initEventos()
   initRealtime()
 
-  // Onboarding solo si no tiene productos aún
   const { count, error: countErr } = await supabase
     .from('productos')
     .select('id', { count: 'exact', head: true })
@@ -209,6 +208,15 @@ function initEventos() {
     mostrarSec('agregar'))
   document.getElementById('ob-cerrar')?.addEventListener('click', () => {
     document.getElementById('onboarding').style.display = 'none'
+  })
+
+  // Medios de pago — checkboxes
+  ;['pf-pago-transferencia','pf-pago-debito','pf-pago-credito'].forEach(id => {
+    const chk = document.getElementById(id)
+    chk.addEventListener('change', () => {
+      actualizarEstiloMedio(chk)
+      if (id === 'pf-pago-transferencia') toggleTransferenciaDatos()
+    })
   })
 }
 
@@ -556,6 +564,15 @@ window._cambiarEstado = async (id, estado) => {
 }
 
 // ══ PERFIL ══
+function actualizarEstiloMedio(chk) {
+  chk.closest('.medio-check')?.classList.toggle('on', chk.checked)
+}
+
+function toggleTransferenciaDatos() {
+  const visible = document.getElementById('pf-pago-transferencia').checked
+  document.getElementById('pf-transferencia-datos').style.display = visible ? 'block' : 'none'
+}
+
 function rellenarPerfil() {
   document.getElementById('pf-nombre').value    = perfil.nombre           || ''
   document.getElementById('pf-panaderia').value = perfil.nombre_panaderia || ''
@@ -564,6 +581,21 @@ function rellenarPerfil() {
   document.getElementById('pf-tel').value       = perfil.telefono         || ''
   document.getElementById('pf-email').value     = perfil.email_contacto   || ''
   document.getElementById('pf-banner').value    = perfil.banner_anuncio   || ''
+
+  const medios = Array.isArray(perfil.medios_pago) ? perfil.medios_pago : ['efectivo']
+  const chkTransf = document.getElementById('pf-pago-transferencia')
+  const chkDeb    = document.getElementById('pf-pago-debito')
+  const chkCred   = document.getElementById('pf-pago-credito')
+  chkTransf.checked = medios.includes('transferencia')
+  chkDeb.checked    = medios.includes('debito')
+  chkCred.checked   = medios.includes('credito')
+  ;[chkTransf, chkDeb, chkCred].forEach(actualizarEstiloMedio)
+
+  document.getElementById('pf-cbu').value     = perfil.cbu            || ''
+  document.getElementById('pf-alias').value   = perfil.alias_cbu      || ''
+  document.getElementById('pf-titular').value = perfil.titular_cuenta || ''
+
+  toggleTransferenciaDatos()
 
   const avatarEl = document.getElementById('avatar-preview')
   if (perfil.avatar_url) {
@@ -576,6 +608,21 @@ function rellenarPerfil() {
 
 async function guardarPerfil() {
   const btn = document.getElementById('btn-guardar-perfil')
+
+  const medios = ['efectivo']
+  if (document.getElementById('pf-pago-transferencia').checked) medios.push('transferencia')
+  if (document.getElementById('pf-pago-debito').checked)        medios.push('debito')
+  if (document.getElementById('pf-pago-credito').checked)       medios.push('credito')
+
+  const cbu     = document.getElementById('pf-cbu').value.trim()
+  const alias   = document.getElementById('pf-alias').value.trim()
+  const titular = document.getElementById('pf-titular').value.trim()
+
+  if (medios.includes('transferencia') && !cbu && !alias) {
+    toast('Para aceptar transferencias ingresá al menos el CBU o el alias', 'err')
+    return
+  }
+
   btn.disabled = true; btn.textContent = 'Guardando...'
 
   const { error } = await supabase.from('profiles').update({
@@ -586,10 +633,20 @@ async function guardarPerfil() {
     telefono:         document.getElementById('pf-tel').value.trim(),
     email_contacto:   document.getElementById('pf-email').value.trim(),
     banner_anuncio:   document.getElementById('pf-banner').value.trim() || null,
+    medios_pago:      medios,
+    cbu:              cbu     || null,
+    alias_cbu:        alias   || null,
+    titular_cuenta:   titular || null,
   }).eq('id', uid)
 
   btn.disabled = false; btn.textContent = 'Guardar cambios'
   if (error) { toast('Error al guardar', 'err'); return }
+
+  perfil.medios_pago    = medios
+  perfil.cbu            = cbu     || null
+  perfil.alias_cbu      = alias   || null
+  perfil.titular_cuenta = titular || null
+
   toast('Perfil actualizado ✓', 'ok')
 }
 
