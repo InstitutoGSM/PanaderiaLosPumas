@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Finalizar pedido — PanaderiaMarket</title>
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/checkout.css">
+  <style>html,body{overflow-x:hidden}</style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="index.html" class="navbar-logo">
+        <img src="assets/logo.png" alt="Logo" onerror="this.style.display='none'">
+        Panaderia<span class="marca">PUMA</span>
+      </a>
+      <div class="navbar-actions">
+        <a href="index.html" class="btn btn-ghost btn-sm">← Seguir comprando</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="checkout-wrap">
+    <h1 class="checkout-titulo">Listo para ordenar? 🥖</h1>
+    <p class="checkout-sub">Revisá tu pedido y completá tus datos</p>
+
+    <div class="checkout-grid">
+
+      <!-- FORMULARIO -->
+      <div>
+        <div class="checkout-form-card">
+          <h3>Tus datos</h3>
+          <div class="field">
+            <label for="co-nombre">Nombre completo</label>
+            <input type="text" id="co-nombre" placeholder="Juan Pérez" autocomplete="name">
+          </div>
+          <div class="field">
+            <label for="co-email">Email</label>
+            <input type="email" id="co-email" placeholder="tu@email.com" autocomplete="email">
+          </div>
+
+          <div class="checkout-sep"></div>
+          <h3>Medio de envío</h3>
+          <div class="field">
+            <label for="co-cp">Código postal</label>
+            <input type="text" id="co-cp" placeholder="Ej: 4700" maxlength="8">
+          </div>
+          <div class="field">
+            <label for="co-dir">Dirección de entrega</label>
+            <textarea id="co-dir" rows="2" placeholder="Calle, número, piso..."></textarea>
+          </div>
+          <div class="field">
+            <label for="co-notas">Notas para el vendedor (opcional)</label>
+            <textarea id="co-notas" rows="2" placeholder="Sin sal, extra semillas..."></textarea>
+          </div>
+
+          <div class="checkout-sep"></div>
+          <h3>Medio de pago</h3>
+
+          <div class="pago-opts" role="radiogroup">
+            <div class="pago-opt on" data-pago="efectivo" tabindex="0" role="radio" aria-checked="true">
+              <span class="pago-ico">💵</span> Efectivo
+            </div>
+            <div class="pago-opt" data-pago="transferencia" tabindex="0" role="radio" aria-checked="false">
+              <span class="pago-ico">📲</span> Transferencia
+            </div>
+            <div class="pago-opt" data-pago="debito" tabindex="0" role="radio" aria-checked="false">
+              <span class="pago-ico">💳</span> Débito
+            </div>
+            <div class="pago-opt" data-pago="credito" tabindex="0" role="radio" aria-checked="false">
+              <span class="pago-ico">💳</span> Crédito
+            </div>
+          </div>
+
+          <!-- Tarjeta -->
+          <div class="tarjeta-wrap" id="tarjeta-wrap">
+            <div class="tarjeta-visual">
+              <div class="tarjeta-chip"></div>
+              <div class="tarjeta-numero" id="tv-numero">•••• •••• •••• ••••</div>
+              <div class="tarjeta-bottom">
+                <div>
+                  <div class="tarjeta-label">Titular</div>
+                  <div class="tarjeta-val" id="tv-nombre">TU NOMBRE</div>
+                </div>
+                <div>
+                  <div class="tarjeta-label">Vence</div>
+                  <div class="tarjeta-val" id="tv-vence">MM/AA</div>
+                </div>
+                <div class="tarjeta-brand" id="tv-brand">CARD</div>
+              </div>
+            </div>
+
+            <div class="tarjeta-form">
+              <div class="field">
+                <label for="t-numero">Número de tarjeta</label>
+                <input type="text" id="t-numero" placeholder="1234 5678 9012 3456"
+                       maxlength="19" autocomplete="cc-number" inputmode="numeric">
+              </div>
+              <div class="field">
+                <label for="t-nombre">Nombre del titular</label>
+                <input type="text" id="t-nombre" placeholder="Como figura en la tarjeta"
+                       autocomplete="cc-name">
+              </div>
+              <div class="form-row">
+                <div class="field">
+                  <label for="t-vence">Vencimiento</label>
+                  <input type="text" id="t-vence" placeholder="MM/AA"
+                         maxlength="5" autocomplete="cc-exp">
+                </div>
+                <div class="field">
+                  <label>CVV</label>
+                  <input type="password" placeholder="No requerido"
+                         disabled style="opacity:0.5;cursor:not-allowed">
+                </div>
+              </div>
+              <div class="tarjeta-aviso">
+                🔒 Solo guardamos los últimos 4 dígitos. El CVV nunca se almacena.
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- RESUMEN -->
+      <div>
+        <div class="resumen-card">
+          <h3>Tu pedido</h3>
+          <div id="resumen-items">
+            <p style="color:var(--gris);font-size:0.9rem">Cargando carrito...</p>
+          </div>
+          <div class="resumen-total">
+            <span>Total</span>
+            <strong id="resumen-total">$0</strong>
+          </div>
+          <button class="btn btn-naranja btn-full" id="btn-finalizar" style="margin-top:16px">
+            Confirmar pedido →
+          </button>
+          <p style="text-align:center;font-size:0.78rem;color:var(--gris);margin-top:10px">
+            Al confirmar, el vendedor recibirá tu pedido
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="toast-box"></div>
+
+  <script type="module">
+    import { supabase }                     from './js/supabase.js'
+    import { toast, formatPrecio }          from './js/utils.js'
+    import { getCarrito, totalCarrito,
+             vaciarCarrito }                from './js/carrito.js'
+    import { getUser, getPerfil,
+             requireAuthParaComprar }       from './js/auth.js'
+    import { abrirTicket }                  from './js/ticket.js'
+
+    let pagoSel = 'efectivo'
+
+    async function verificarAcceso() {
+      const user = await getUser()
+      if (!user) {
+        await requireAuthParaComprar()
+        return null
+      }
+      return user
+    }
+
+    // ── Render resumen ──
+    function renderResumen() {
+      const items = getCarrito()
+      const el    = document.getElementById('resumen-items')
+      if (items.length === 0) {
+        el.innerHTML = '<p style="color:var(--gris)">Tu carrito está vacío</p>'
+        document.getElementById('resumen-total').textContent = '$0'
+        return
+      }
+      el.innerHTML = items.map(i => `
+        <div class="resumen-item">
+          <span class="resumen-nombre">${i.nombre}</span>
+          <span class="resumen-cant">× ${i.cantidad}</span>
+          <span class="resumen-precio">${formatPrecio(i.precio * i.cantidad)}</span>
+        </div>
+      `).join('')
+      document.getElementById('resumen-total').textContent = formatPrecio(totalCarrito())
+    }
+
+    // ── Prellenar datos del usuario ──
+    async function prellenarDatos(user) {
+      if (!user) return
+      const p = await getPerfil(user.id)
+      if (p) {
+        document.getElementById('co-nombre').value = p.nombre   || ''
+        document.getElementById('co-email').value  = user.email || ''
+      }
+      // Cargar tarjeta guardada si hay
+      const { data: tarjetas } = await supabase
+        .from('tarjetas').select('*').eq('user_id', user.id).limit(1)
+      if (tarjetas && tarjetas.length > 0) {
+        const t = tarjetas[0]
+        document.getElementById('t-numero').value        = t.numero_enmascarado
+        document.getElementById('tv-numero').textContent = t.numero_enmascarado
+        document.getElementById('tv-brand').textContent  = t.tipo || 'CARD'
+      }
+    }
+
+    // ── elija medio de pago ──
+    document.querySelectorAll('.pago-opt').forEach(opt => {
+      opt.addEventListener('click', () => {
+        document.querySelectorAll('.pago-opt').forEach(o => {
+          o.classList.remove('on'); o.setAttribute('aria-checked','false')
+        })
+        opt.classList.add('on'); opt.setAttribute('aria-checked','true')
+        pagoSel = opt.dataset.pago
+        const wrap = document.getElementById('tarjeta-wrap')
+        wrap.classList.toggle('show', pagoSel === 'debito' || pagoSel === 'credito')
+      })
+      opt.addEventListener('keydown', e => { if(e.key==='Enter'||e.key===' ') opt.click() })
+    })
+
+    // ── Tarjeta visual en tiempo real ──
+    document.getElementById('t-numero').addEventListener('input', e => {
+      let v = e.target.value.replace(/\D/g,'').slice(0,16)
+      const fmt = v.replace(/(.{4})/g,'$1 ').trim()
+      e.target.value = fmt
+      const masked = fmt.length > 0
+        ? '•••• •••• •••• ' + (v.slice(-4) || '••••')
+        : '•••• •••• •••• ••••'
+      document.getElementById('tv-numero').textContent = masked
+      const brand = v[0]==='4' ? 'VISA' : v[0]==='5' ? 'MASTERCARD' :
+                    v.startsWith('34')||v.startsWith('37') ? 'AMEX' : 'CARD'
+      document.getElementById('tv-brand').textContent = brand
+    })
+
+    document.getElementById('t-nombre').addEventListener('input', e => {
+      document.getElementById('tv-nombre').textContent =
+        e.target.value.toUpperCase() || 'TU NOMBRE'
+    })
+
+    document.getElementById('t-vence').addEventListener('input', e => {
+      let v = e.target.value.replace(/\D/g,'').slice(0,4)
+      if (v.length >= 3) v = v.slice(0,2) + '/' + v.slice(2)
+      e.target.value = v
+      document.getElementById('tv-vence').textContent = v || 'MM/AA'
+    })
+
+    // ── Confirmar pedido ──
+    document.getElementById('btn-finalizar').addEventListener('click', async () => {
+      const items = getCarrito()
+      if (items.length === 0) { toast('Tu carrito está vacío', 'err'); return }
+
+      const nombre = document.getElementById('co-nombre').value.trim()
+      const email  = document.getElementById('co-email').value.trim()
+
+      if (!nombre || !email) { toast('Completá nombre y email', 'err'); return }
+
+      if (pagoSel === 'debito' || pagoSel === 'credito') {
+        const num   = document.getElementById('t-numero').value.replace(/\s/g,'')
+        const vence = document.getElementById('t-vence').value
+        if (num.length < 16) { toast('Ingresá un número de tarjeta válido', 'err'); return }
+        if (vence.length < 5) { toast('Ingresá la fecha de vencimiento', 'err'); return }
+      }
+
+      const btn = document.getElementById('btn-finalizar')
+      btn.disabled = true; btn.textContent = 'Enviando pedido...'
+
+      const user = await getUser()
+      if (!user) {
+        btn.disabled = false; btn.textContent = 'Confirmar pedido →'
+        await requireAuthParaComprar()
+        return
+      }
+
+      // Guardar tarjeta (sin CVV)
+      if (pagoSel === 'debito' || pagoSel === 'credito') {
+        const num      = document.getElementById('t-numero').value.replace(/\s/g,'')
+        const ultimos4 = num.slice(-4)
+        const masked   = '•••• •••• •••• ' + ultimos4
+        const tipo     = document.getElementById('tv-brand').textContent
+        await supabase.from('tarjetas').upsert({
+          user_id:            user.id,
+          numero_enmascarado: masked,
+          ultimos_4:          ultimos4,
+          tipo
+        }, { onConflict: 'user_id' })
+      }
+
+      const porVendedor = {}
+      items.forEach(i => {
+        if (!porVendedor[i.vendedor_id]) porVendedor[i.vendedor_id] = []
+        porVendedor[i.vendedor_id].push(i)
+      })
+
+      let pedidoCreado = null
+      let todoBien     = true
+
+      for (const [vendedorId, itemsV] of Object.entries(porVendedor)) {
+        const total = itemsV.reduce((acc, i) => acc + i.precio * i.cantidad, 0)
+
+        // Generar ticket_id único
+        const ticketId = 'TK-' + Date.now().toString(36).toUpperCase() +
+                         '-' + Math.random().toString(36).slice(2,6).toUpperCase()
+
+        const { data, error } = await supabase.from('pedidos').insert({
+          comprador_id:     user.id,
+          vendedor_id:      vendedorId,
+          items:            itemsV.map(i => ({
+            nombre:   i.nombre,
+            cantidad: i.cantidad,
+            precio:   i.precio,
+            variante: i.variante
+          })),
+          total,
+          estado:           'pendiente',
+          medio_pago:       pagoSel,
+          ticket_id:        ticketId,
+          codigo_postal:    document.getElementById('co-cp').value.trim()    || null,
+          direccion:        document.getElementById('co-dir').value.trim()   || null,
+          notas:            document.getElementById('co-notas').value.trim() || null,
+          nombre_comprador: nombre,
+          email_comprador:  email,
+        }).select().single()
+
+        if (error) { console.error(error); todoBien = false }
+        else if (!pedidoCreado) pedidoCreado = data
+      }
+
+      btn.disabled = false; btn.textContent = 'Confirmar pedido →'
+
+      if (!todoBien) { toast('Error al enviar el pedido', 'err'); return }
+
+      vaciarCarrito()
+      toast('¡Pedido confirmado! 🎉', 'ok')
+
+      if (pedidoCreado) {
+        setTimeout(() => {
+          abrirTicket({ ...pedidoCreado, nombre_comprador: nombre, email_comprador: email })
+          setTimeout(() => { location.href = 'historial.html' }, 500)
+        }, 800)
+      } else {
+        setTimeout(() => { location.href = 'index.html' }, 1500)
+      }
+    })
+
+    // ── Init ──
+    async function init() {
+      const user = await verificarAcceso()
+      renderResumen()
+      if (user) await prellenarDatos(user)
+    }
+
+    init()
+  </script>
+</body>
+</html>

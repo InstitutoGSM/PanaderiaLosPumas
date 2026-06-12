@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panaderia PUMA — Ingresar</title>
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/login.css">
+
+  <style>
+  html, body { overflow-x: hidden; min-height: 100vh; }
+</style>
+</head>
+<body>
+
+<!-- Fondo decorativo -->
+<div class="bg-deco" aria-hidden="true">
+  <svg style="top:-30px;left:-50px;width:400px" viewBox="0 0 300 180">
+    <ellipse cx="150" cy="90" rx="135" ry="65" fill="#C8601A"/>
+    <ellipse cx="150" cy="78" rx="115" ry="50" fill="#C8601A"/>
+  </svg>
+  <svg style="bottom:40px;right:-60px;width:360px;transform:scaleX(-1)" viewBox="0 0 300 180">
+    <ellipse cx="150" cy="90" rx="135" ry="65" fill="#C8601A"/>
+    <ellipse cx="150" cy="78" rx="115" ry="50" fill="#C8601A"/>
+  </svg>
+</div>
+
+<div class="login-wrap">
+
+  <!-- Ilustración izquierda -->
+    <div class="side" aria-hidden="true">
+    <svg viewBox="0 0 300 460" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M10 115 L150 75 L290 115 L290 155 L10 155Z" fill="#A0522D"/>
+      <path d="M10 115 L150 75 L290 115" stroke="#7B3A1E" stroke-width="2.5"/>
+      <path d="M10 155 Q22 170 34 155 Q46 170 58 155 Q70 170 82 155 Q94 170 106 155 Q118 170 130 155 Q142 170 154 155 Q166 170 178 155 Q190 170 202 155 Q214 170 226 155 Q238 170 250 155 Q262 170 274 155 Q286 170 290 155" stroke="#A0522D" stroke-width="2.5" fill="none"/>
+      <rect x="20" y="155" width="260" height="210" rx="4" fill="#D2986A"/>
+      <rect x="20" y="155" width="260" height="18" fill="#C4844A"/>
+      <rect x="35" y="190" width="230" height="10" rx="3" fill="#C4844A"/>
+      <rect x="35" y="260" width="230" height="10" rx="3" fill="#C4844A"/>
+      <ellipse cx="80"  cy="188" rx="28" ry="14" fill="#D4B48E"/>
+      <ellipse cx="145" cy="187" rx="22" ry="12" fill="#C09060"/>
+      <ellipse cx="205" cy="188" rx="25" ry="13" fill="#B8855A"/>
+      <ellipse cx="255" cy="189" rx="17" ry="10" fill="#C8A882"/>
+      <ellipse cx="70"  cy="258" rx="23" ry="12" fill="#D4A870"/>
+      <ellipse cx="128" cy="257" rx="26" ry="13" fill="#C8956A"/>
+      <ellipse cx="190" cy="258" rx="20" ry="11" fill="#B87850"/>
+      <ellipse cx="242" cy="257" rx="19" ry="11" fill="#D4A870"/>
+      <rect x="45" y="292" width="75" height="55" rx="4" fill="#2C2C2C"/>
+      <rect x="200" y="155" width="68" height="38" rx="4" fill="#8B1A1A"/>
+      <rect x="35" y="370" width="16" height="75" rx="3" fill="#8B5E3C"/>
+      <rect x="249" y="370" width="16" height="75" rx="3" fill="#8B5E3C"/>
+      <ellipse cx="163" cy="335" rx="32" ry="18" fill="#A07030"/>
+      <rect x="131" y="318" width="64" height="20" rx="5" fill="#B08040"/>
+      <ellipse cx="163" cy="318" rx="32" ry="9" fill="#C09050"/>
+      <ellipse cx="152" cy="311" rx="13" ry="7" fill="#D4A050"/>
+      <ellipse cx="175" cy="312" rx="11" ry="6" fill="#C89040"/>
+      <ellipse cx="150" cy="448" rx="120" ry="10" fill="#3B1A0A" opacity="0.1"/>
+    </svg>
+  </div> 
+
+  <!-- Columna central -->
+  <div class="login-col">
+
+    <!-- Logo -->
+    <div class="logo-wrap">
+      <div class="logo-circle">
+        <img src="assets/logo.png" alt="Logo Panaderia PUMA"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <!-- SVG de fallback si no hay logo.png -->
+        <svg style="display:none;width:100%;height:100%" viewBox="0 0 120 120">
+          <circle cx="60" cy="60" r="58" fill="#FDFAF4" stroke="#3B1A0A" stroke-width="2"/>
+          <ellipse cx="60" cy="65" rx="24" ry="26" fill="#D4904A"/>
+          <ellipse cx="60" cy="68" rx="20" ry="20" fill="#E0A060"/>
+          <path d="M38 52 L34 38 L46 46Z" fill="#C07838"/>
+          <path d="M82 52 L86 38 L74 46Z" fill="#C07838"/>
+          <ellipse cx="52" cy="60" rx="5" ry="5" fill="#3B1A0A"/>
+          <ellipse cx="68" cy="60" rx="5" ry="5" fill="#3B1A0A"/>
+          <ellipse cx="53.5" cy="58.5" rx="1.5" ry="1.5" fill="white"/>
+          <ellipse cx="69.5" cy="58.5" rx="1.5" ry="1.5" fill="white"/>
+          <path d="M56 68 Q60 72 64 68 Q62 74 60 74 Q58 74 56 68Z" fill="#3B1A0A"/>
+          <ellipse cx="60" cy="44" rx="16" ry="7" fill="white" stroke="#ddd" stroke-width="1"/>
+          <rect x="50" y="38" width="20" height="7" fill="white"/>
+          <ellipse cx="60" cy="37" rx="12" ry="9" fill="white" stroke="#ddd" stroke-width="1"/>
+          <rect x="48" y="43" width="24" height="4" rx="2" fill="#E0E0E0"/>
+          <ellipse cx="60" cy="89" rx="16" ry="7" fill="#C8A060"/>
+          <ellipse cx="60" cy="86" rx="12" ry="4.5" fill="#D4AA70"/>
+        </svg>
+      </div>
+      <div class="logo-nombre">
+        <span class="top">Panaderia</span>
+        <span class="bot">PUMA</span>
+      </div>
+      <div class="logo-div"><div class="logo-div-dot"></div></div>
+    </div>
+
+    <!-- Card -->
+    <div class="login-card">
+
+      <div class="tabs" role="tablist" aria-label="Modo de acceso">
+        <button class="tab on" data-tab="login" role="tab" aria-selected="true">Iniciar Sesión</button>
+        <button class="tab"    data-tab="registro" role="tab" aria-selected="false">Registrarse</button>
+      </div>
+
+      <!-- Login -->
+      <div class="panel on" id="panel-login" role="tabpanel">
+        <p class="panel-title">Iniciar Sesión</p>
+        <div class="field">
+          <label for="l-email">Email</label>
+          <input type="email" id="l-email" placeholder="tu@email.com" autocomplete="email">
+        </div>
+        <div class="field">
+          <label for="l-pass">Contraseña</label>
+          <input type="password" id="l-pass" placeholder="••••••••" autocomplete="current-password">
+        </div>
+        <button class="btn-login" id="btn-login">Iniciar Sesión</button>
+        <p class="help">¡Si no tenés una cuenta <a id="ir-registro">registrate!</a></p>
+      </div>
+
+      <!-- Registro -->
+      <div class="panel" id="panel-registro" role="tabpanel">
+        <p class="panel-title">Registrarse</p>
+
+        <div class="field">
+          <label>Soy...</label>
+          <div class="tipo-row" role="radiogroup">
+            <div class="tipo-opt on" data-tipo="comprador" tabindex="0" role="radio" aria-checked="true">
+              <span class="tipo-icon">🛒</span>
+              <div class="tipo-label">Comprador</div>
+              <div class="tipo-sub">Quiero comprar</div>
+            </div>
+            <div class="tipo-opt" data-tipo="vendedor" tabindex="0" role="radio" aria-checked="false">
+              <span class="tipo-icon">🍞</span>
+              <div class="tipo-label">Vendedor</div>
+              <div class="tipo-sub">Tengo panadería</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="r-nombre">Nombre Completo</label>
+          <input type="text" id="r-nombre" placeholder="Juan Pérez" autocomplete="name">
+        </div>
+
+        <div class="field" id="campo-panaderia" style="display:none">
+          <label for="r-panaderia">Nombre de tu panadería</label>
+          <input type="text" id="r-panaderia" placeholder="Ej: Panadería El Amasijo">
+        </div>
+
+        <div class="field">
+          <label for="r-email">Email</label>
+          <input type="email" id="r-email" placeholder="tu@email.com" autocomplete="email">
+        </div>
+
+        <div class="field">
+          <label for="r-pass">Contraseña</label>
+          <input type="password" id="r-pass" placeholder="Mínimo 8 caracteres" autocomplete="new-password">
+          <div id="pass-bar" class="pass-bar" style="width:0;background:transparent"></div>
+          <div id="pass-label" class="pass-label"></div>
+        </div>
+
+        <button class="btn-login" id="btn-registro">Registrarse</button>
+        <p class="help">¡Si ya tenés una cuenta <a id="ir-login">Iniciá Sesión!</a></p>
+      </div>
+
+    </div>
+
+    <div class="social">
+      <p>Seguinos</p>
+      <div class="social-icons">
+        <a href="tel:+5493834223388" aria-label="Teléfono">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.01L6.6 10.8z"/></svg>
+        </a>
+        <a href="https://instagram.com/puma.cake" target="_blank" rel="noopener" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        </a>
+        <a href="mailto:pumapasteleria@gmail.com" aria-label="Email">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="side" aria-hidden="true">
+    <svg viewBox="0 0 300 460" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform:scaleX(-1)">
+      <path d="M10 115 L150 75 L290 115 L290 155 L10 155Z" fill="#A0522D"/>
+      <path d="M10 115 L150 75 L290 115" stroke="#7B3A1E" stroke-width="2.5"/>
+      <path d="M10 155 Q22 170 34 155 Q46 170 58 155 Q70 170 82 155 Q94 170 106 155 Q118 170 130 155 Q142 170 154 155 Q166 170 178 155 Q190 170 202 155 Q214 170 226 155 Q238 170 250 155 Q262 170 274 155 Q286 170 290 155" stroke="#A0522D" stroke-width="2.5" fill="none"/>
+      <rect x="20" y="155" width="260" height="210" rx="4" fill="#D2986A"/>
+      <rect x="20" y="155" width="260" height="18" fill="#C4844A"/>
+      <rect x="35" y="190" width="230" height="10" rx="3" fill="#C4844A"/>
+      <rect x="35" y="260" width="230" height="10" rx="3" fill="#C4844A"/>
+      <ellipse cx="80"  cy="188" rx="28" ry="14" fill="#D4B48E"/>
+      <ellipse cx="145" cy="187" rx="22" ry="12" fill="#C09060"/>
+      <ellipse cx="205" cy="188" rx="25" ry="13" fill="#B8855A"/>
+      <ellipse cx="255" cy="189" rx="17" ry="10" fill="#C8A882"/>
+      <ellipse cx="70"  cy="258" rx="23" ry="12" fill="#D4A870"/>
+      <ellipse cx="128" cy="257" rx="26" ry="13" fill="#C8956A"/>
+      <ellipse cx="190" cy="258" rx="20" ry="11" fill="#B87850"/>
+      <ellipse cx="242" cy="257" rx="19" ry="11" fill="#D4A870"/>
+      <rect x="180" y="292" width="75" height="55" rx="4" fill="#2C2C2C"/>
+      <rect x="27"  y="155" width="68" height="38" rx="4" fill="#8B1A1A"/>
+      <rect x="35" y="370" width="16" height="75" rx="3" fill="#8B5E3C"/>
+      <rect x="249" y="370" width="16" height="75" rx="3" fill="#8B5E3C"/>
+      <ellipse cx="163" cy="335" rx="32" ry="18" fill="#A07030"/>
+      <rect x="131" y="318" width="64" height="20" rx="5" fill="#B08040"/>
+      <ellipse cx="163" cy="318" rx="32" ry="9" fill="#C09050"/>
+      <ellipse cx="152" cy="311" rx="13" ry="7" fill="#D4A050"/>
+      <ellipse cx="175" cy="312" rx="11" ry="6" fill="#C89040"/>
+      <ellipse cx="150" cy="448" rx="120" ry="10" fill="#3B1A0A" opacity="0.1"/>
+    </svg>
+  </div>
+
+</div>
+
+<div id="toast-box"></div>
+<script type="module" src="js/login.js"></script>
+</body>
+</html>

@@ -1,0 +1,131 @@
+.checkout-wrap {
+  max-width: 900px; margin: 0 auto;
+  padding: 36px 24px 60px;
+}
+.checkout-grid {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 24px; align-items: start;
+}
+.checkout-titulo {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem; font-weight: 900; margin-bottom: 6px;
+}
+.checkout-sub { color: var(--gris); font-size: 0.9rem; margin-bottom: 28px; }
+
+.resumen-card {
+  background: var(--blanco); border-radius: var(--radio-lg);
+  padding: 22px; box-shadow: var(--sombra);
+  position: sticky; top: 80px;
+}
+.resumen-card h3 {
+  font-family: 'Playfair Display', serif; margin-bottom: 16px;
+}
+.resumen-item {
+  display: flex; justify-content: space-between;
+  padding: 8px 0; border-bottom: 1px solid var(--crema-dark);
+  font-size: 0.88rem;
+}
+.resumen-item:last-of-type { border-bottom: none; }
+.resumen-nombre { flex: 1; }
+.resumen-cant   { color: var(--gris); margin: 0 12px; }
+.resumen-precio { font-weight: 700; color: var(--verde); }
+.resumen-total {
+  display: flex; justify-content: space-between;
+  align-items: center; margin-top: 14px;
+  padding-top: 14px; border-top: 2px solid var(--crema-dark);
+}
+.resumen-total span  { font-weight: 700; }
+.resumen-total strong {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem; color: var(--verde);
+}
+
+.checkout-form-card {
+  background: var(--blanco); border-radius: var(--radio-lg);
+  padding: 26px; box-shadow: var(--sombra);
+}
+.checkout-form-card h3 {
+  font-family: 'Playfair Display', serif; margin-bottom: 18px;
+}
+.checkout-sep { height: 1px; background: var(--crema-dark); margin: 20px 0; }
+
+/* ── Medios de pago ── */
+.pago-opts {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+}
+.pago-opt {
+  border: 2px solid var(--crema-dark); border-radius: var(--radio);
+  padding: 12px; cursor: pointer; text-align: center;
+  transition: all var(--trans); background: var(--blanco);
+  font-size: 0.85rem; font-weight: 700;
+}
+.pago-opt:hover { border-color: var(--naranja-lt); }
+.pago-opt.on    { border-color: var(--naranja); background: #FFF3E0; }
+.pago-ico { font-size: 1.4rem; display: block; margin-bottom: 4px; }
+
+/* ── Tarjeta maqueta ── */
+.tarjeta-wrap {
+  margin-top: 16px;
+  display: none;
+}
+.tarjeta-wrap.show { display: block; }
+.tarjeta-visual {
+  background: linear-gradient(135deg, #3B1A0A 0%, #6B3A2A 100%);
+  border-radius: 14px; padding: 24px 22px;
+  color: white; margin-bottom: 16px;
+  position: relative; overflow: hidden;
+  min-height: 160px;
+}
+.tarjeta-visual::before {
+  content: '';
+  position: absolute; top: -30px; right: -30px;
+  width: 150px; height: 150px; border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+}
+.tarjeta-visual::after {
+  content: '';
+  position: absolute; bottom: -40px; right: 20px;
+  width: 120px; height: 120px; border-radius: 50%;
+  background: rgba(255,255,255,0.04);
+}
+.tarjeta-chip {
+  width: 38px; height: 28px; border-radius: 5px;
+  background: linear-gradient(135deg, #D4A820, #F0C040);
+  margin-bottom: 18px;
+}
+.tarjeta-numero {
+  font-size: 1.15rem; letter-spacing: 0.2em;
+  font-family: 'Courier New', monospace;
+  margin-bottom: 18px; opacity: 0.95;
+}
+.tarjeta-bottom {
+  display: flex; justify-content: space-between; align-items: flex-end;
+}
+.tarjeta-label { font-size: 0.65rem; opacity: 0.6; text-transform: uppercase; margin-bottom: 2px; }
+.tarjeta-val   { font-size: 0.88rem; font-weight: 700; letter-spacing: 0.05em; }
+.tarjeta-brand { font-size: 1.1rem; font-weight: 900; opacity: 0.85; }
+
+.tarjeta-form .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.tarjeta-aviso {
+  font-size: 0.75rem; color: var(--gris);
+  background: var(--crema); padding: 8px 12px;
+  border-radius: 8px; margin-top: 10px;
+  display: flex; align-items: center; gap: 6px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 720px) {
+  .checkout-wrap  { padding: 24px 16px 48px; }
+  .checkout-titulo { font-size: 1.35rem; }
+  .checkout-grid  { grid-template-columns: 1fr; gap: 16px; }
+  .checkout-grid > div:last-child { order: -1; }
+  .resumen-card   { position: static; }
+  .pago-opts      { grid-template-columns: 1fr 1fr; }
+  .tarjeta-form .form-row { grid-template-columns: 1fr; }
+}
+@media (max-width: 400px) {
+  .pago-opts { grid-template-columns: 1fr; }
+  .pago-opt  { display: flex; align-items: center; gap: 10px; text-align: left; }
+  .pago-ico  { font-size: 1.2rem; display: inline; margin: 0; }
+}
