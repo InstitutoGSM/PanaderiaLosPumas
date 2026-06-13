@@ -1,84 +1,127 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Términos y Condiciones — PanaderiaMarket</title>
   <link rel="stylesheet" href="css/global.css">
   <style>
-    html, body { overflow-x: hidden; }
+    html,
+    body {
+      overflow-x: hidden;
+    }
+
     .terms-wrap {
-      max-width: 860px; margin: 0 auto;
+      max-width: 860px;
+      margin: 0 auto;
       padding: 48px 24px 80px;
     }
+
     .terms-header {
-      text-align: center; margin-bottom: 48px;
+      text-align: center;
+      margin-bottom: 48px;
       padding-bottom: 32px;
       border-bottom: 2px solid var(--crema-dark);
     }
+
     .terms-header h1 {
-      font-size: 2.2rem; color: var(--marron);
+      font-size: 2.2rem;
+      color: var(--marron);
       margin-bottom: 10px;
     }
+
     .terms-header p {
-      color: var(--gris); font-size: 0.92rem;
+      color: var(--gris);
+      font-size: 0.92rem;
     }
+
     .terms-toc {
       background: var(--crema);
       border-radius: var(--radio-lg);
       padding: 24px 28px;
       margin-bottom: 40px;
     }
+
     .terms-toc h3 {
       font-family: 'Playfair Display', serif;
-      margin-bottom: 14px; font-size: 1.1rem;
+      margin-bottom: 14px;
+      font-size: 1.1rem;
     }
+
     .terms-toc ol {
       padding-left: 20px;
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 6px 24px;
     }
+
     .terms-toc li a {
-      color: var(--naranja); font-size: 0.88rem;
+      color: var(--naranja);
+      font-size: 0.88rem;
       font-weight: 600;
     }
-    .terms-toc li a:hover { text-decoration: underline; }
+
+    .terms-toc li a:hover {
+      text-decoration: underline;
+    }
+
     .terms-sec {
       margin-bottom: 40px;
       padding-bottom: 40px;
       border-bottom: 1px solid var(--crema-dark);
     }
-    .terms-sec:last-child { border-bottom: none; }
+
+    .terms-sec:last-child {
+      border-bottom: none;
+    }
+
     .terms-sec h2 {
       font-family: 'Playfair Display', serif;
-      font-size: 1.35rem; color: var(--marron);
+      font-size: 1.35rem;
+      color: var(--marron);
       margin-bottom: 16px;
-      display: flex; align-items: center; gap: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
+
     .terms-sec h3 {
-      font-size: 1rem; color: var(--marron-mid);
+      font-size: 1rem;
+      color: var(--marron-mid);
       margin: 18px 0 8px;
     }
+
     .terms-sec p {
-      color: #444; line-height: 1.8;
-      margin-bottom: 12px; font-size: 0.93rem;
+      color: #444;
+      line-height: 1.8;
+      margin-bottom: 12px;
+      font-size: 0.93rem;
     }
-    .terms-sec ul, .terms-sec ol {
-      padding-left: 22px; margin-bottom: 12px;
+
+    .terms-sec ul,
+    .terms-sec ol {
+      padding-left: 22px;
+      margin-bottom: 12px;
     }
+
     .terms-sec li {
-      color: #444; line-height: 1.8;
-      font-size: 0.93rem; margin-bottom: 4px;
+      color: #444;
+      line-height: 1.8;
+      font-size: 0.93rem;
+      margin-bottom: 4px;
     }
+
     .terms-highlight {
       background: #FFF8E1;
       border-left: 4px solid var(--naranja);
       padding: 14px 18px;
       border-radius: 0 var(--radio) var(--radio) 0;
       margin: 16px 0;
-      font-size: 0.9rem; color: var(--marron);
+      font-size: 0.9rem;
+      color: var(--marron);
     }
+
     .terms-alert {
       background: #FFF3E0;
       border: 1px solid var(--naranja-lt);
@@ -87,6 +130,7 @@
       margin: 16px 0;
       font-size: 0.9rem;
     }
+
     .terms-footer {
       background: var(--marron);
       color: white;
@@ -95,14 +139,29 @@
       text-align: center;
       margin-top: 48px;
     }
-    .terms-footer p { color: rgba(255,255,255,0.75); font-size: 0.88rem; margin: 6px 0; }
-    .terms-footer a { color: var(--naranja-lt); }
+
+    .terms-footer p {
+      color: rgba(255, 255, 255, 0.75);
+      font-size: 0.88rem;
+      margin: 6px 0;
+    }
+
+    .terms-footer a {
+      color: var(--naranja-lt);
+    }
+
     @media (max-width: 600px) {
-      .terms-toc ol { grid-template-columns: 1fr; }
-      .terms-header h1 { font-size: 1.6rem; }
+      .terms-toc ol {
+        grid-template-columns: 1fr;
+      }
+
+      .terms-header h1 {
+        font-size: 1.6rem;
+      }
     }
   </style>
 </head>
+
 <body>
 
   <nav class="navbar">
@@ -155,24 +214,36 @@
       <h2>1. 📖 Definiciones y partes</h2>
       <p>A los efectos de los presentes Términos y Condiciones, se entiende por:</p>
       <ul>
-        <li><strong>Plataforma:</strong> el sitio web PanaderiaMarket, accesible desde el dominio correspondiente, que actúa como marketplace de productos de panadería y repostería artesanal.</li>
-        <li><strong>Operador:</strong> la persona o entidad responsable de la administración técnica y operativa de PanaderiaMarket.</li>
-        <li><strong>Vendedor:</strong> toda persona física o jurídica que registre una cuenta como vendedor para publicar y comercializar productos de panadería, pastelería o repostería artesanal.</li>
-        <li><strong>Comprador:</strong> toda persona física que acceda a la plataforma con el fin de adquirir productos publicados por los vendedores.</li>
+        <li><strong>Plataforma:</strong> el sitio web PanaderiaMarket, accesible desde el dominio correspondiente, que
+          actúa como marketplace de productos de panadería y repostería artesanal.</li>
+        <li><strong>Operador:</strong> la persona o entidad responsable de la administración técnica y operativa de
+          PanaderiaMarket.</li>
+        <li><strong>Vendedor:</strong> toda persona física o jurídica que registre una cuenta como vendedor para
+          publicar y comercializar productos de panadería, pastelería o repostería artesanal.</li>
+        <li><strong>Comprador:</strong> toda persona física que acceda a la plataforma con el fin de adquirir productos
+          publicados por los vendedores.</li>
         <li><strong>Usuario:</strong> término genérico que engloba tanto a vendedores como a compradores.</li>
-        <li><strong>Producto:</strong> cualquier artículo alimenticio publicado por un vendedor en la plataforma, incluyendo panes, facturas, galletas, tortas, y otros productos de elaboración artesanal.</li>
-        <li><strong>Pedido:</strong> la solicitud formal de compra realizada por un comprador a través del sistema de checkout de la plataforma.</li>
+        <li><strong>Producto:</strong> cualquier artículo alimenticio publicado por un vendedor en la plataforma,
+          incluyendo panes, facturas, galletas, tortas, y otros productos de elaboración artesanal.</li>
+        <li><strong>Pedido:</strong> la solicitud formal de compra realizada por un comprador a través del sistema de
+          checkout de la plataforma.</li>
       </ul>
     </div>
 
     <!-- 2 -->
     <div class="terms-sec" id="s2">
       <h2>2. ✅ Aceptación de términos</h2>
-      <p>El acceso y uso de PanaderiaMarket implica la aceptación plena e incondicional de los presentes Términos y Condiciones, así como de la Política de Privacidad vigente. Si no estás de acuerdo con alguna de las disposiciones aquí establecidas, debés abstenerte de utilizar la plataforma.</p>
+      <p>El acceso y uso de PanaderiaMarket implica la aceptación plena e incondicional de los presentes Términos y
+        Condiciones, así como de la Política de Privacidad vigente. Si no estás de acuerdo con alguna de las
+        disposiciones aquí establecidas, debés abstenerte de utilizar la plataforma.</p>
       <div class="terms-highlight">
-        ⚠️ El registro como usuario, la publicación de productos o la realización de un pedido constituyen actos de aceptación expresa de estos términos, con plena validez jurídica conforme a la Ley N° 25.506 de Firma Digital de la República Argentina.
+        ⚠️ El registro como usuario, la publicación de productos o la realización de un pedido constituyen actos de
+        aceptación expresa de estos términos, con plena validez jurídica conforme a la Ley N° 25.506 de Firma Digital de
+        la República Argentina.
       </div>
-      <p>PanaderiaMarket se reserva el derecho de modificar estos términos en cualquier momento. Las modificaciones entrarán en vigor a partir de su publicación en la plataforma. El uso continuado de la misma después de la publicación de cambios implica la aceptación de los términos modificados.</p>
+      <p>PanaderiaMarket se reserva el derecho de modificar estos términos en cualquier momento. Las modificaciones
+        entrarán en vigor a partir de su publicación en la plataforma. El uso continuado de la misma después de la
+        publicación de cambios implica la aceptación de los términos modificados.</p>
     </div>
 
     <!-- 3 -->
@@ -184,22 +255,31 @@
         <li>Ser mayor de 18 años o contar con autorización de su representante legal.</li>
         <li>Proporcionar información verdadera, actualizada y completa durante el proceso de registro.</li>
         <li>Disponer de una dirección de correo electrónico válida y activa.</li>
-        <li>En el caso de vendedores, contar con la habilitación municipal correspondiente para la elaboración y comercialización de alimentos.</li>
+        <li>En el caso de vendedores, contar con la habilitación municipal correspondiente para la elaboración y
+          comercialización de alimentos.</li>
       </ul>
       <h3>3.2 Seguridad de la cuenta</h3>
-      <p>El usuario es responsable de mantener la confidencialidad de sus credenciales de acceso. Cualquier actividad realizada desde su cuenta será de su exclusiva responsabilidad. Ante sospechas de uso no autorizado, deberá notificarlo de inmediato al operador de la plataforma.</p>
+      <p>El usuario es responsable de mantener la confidencialidad de sus credenciales de acceso. Cualquier actividad
+        realizada desde su cuenta será de su exclusiva responsabilidad. Ante sospechas de uso no autorizado, deberá
+        notificarlo de inmediato al operador de la plataforma.</p>
       <h3>3.3 Suspensión y cancelación</h3>
-      <p>PanaderiaMarket se reserva el derecho de suspender o cancelar cuentas que incumplan los presentes términos, proporcionen información falsa, realicen prácticas fraudulentas o generen perjuicios a otros usuarios o a la plataforma, sin necesidad de notificación previa.</p>
+      <p>PanaderiaMarket se reserva el derecho de suspender o cancelar cuentas que incumplan los presentes términos,
+        proporcionen información falsa, realicen prácticas fraudulentas o generen perjuicios a otros usuarios o a la
+        plataforma, sin necesidad de notificación previa.</p>
     </div>
 
     <!-- 4 -->
     <div class="terms-sec" id="s4">
       <h2>4. 🏪 Rol de la plataforma</h2>
-      <p>PanaderiaMarket actúa exclusivamente como <strong>intermediario tecnológico</strong> que facilita el contacto entre vendedores y compradores. La plataforma <strong>no es parte</strong> de los contratos de compraventa que se celebren entre usuarios.</p>
+      <p>PanaderiaMarket actúa exclusivamente como <strong>intermediario tecnológico</strong> que facilita el contacto
+        entre vendedores y compradores. La plataforma <strong>no es parte</strong> de los contratos de compraventa que
+        se celebren entre usuarios.</p>
       <div class="terms-alert">
-        🔔 PanaderiaMarket no elabora, almacena, manipula ni distribuye ningún producto alimenticio. La responsabilidad sobre la calidad, inocuidad, etiquetado y condiciones de los productos recae exclusivamente en el vendedor.
+        🔔 PanaderiaMarket no elabora, almacena, manipula ni distribuye ningún producto alimenticio. La responsabilidad
+        sobre la calidad, inocuidad, etiquetado y condiciones de los productos recae exclusivamente en el vendedor.
       </div>
-      <p>En consecuencia, PanaderiaMarket no garantiza la disponibilidad, calidad, ni la entrega efectiva de los productos publicados, limitándose a proveer el espacio tecnológico para la interacción entre las partes.</p>
+      <p>En consecuencia, PanaderiaMarket no garantiza la disponibilidad, calidad, ni la entrega efectiva de los
+        productos publicados, limitándose a proveer el espacio tecnológico para la interacción entre las partes.</p>
     </div>
 
     <!-- 5 -->
@@ -208,24 +288,35 @@
       <h3>5.1 Habilitaciones y certificaciones</h3>
       <p>Todo vendedor que opere en PanaderiaMarket declara bajo juramento que cuenta con:</p>
       <ul>
-        <li>Habilitación municipal del local o establecimiento de elaboración, conforme a la normativa de cada municipio de la Provincia de Catamarca.</li>
-        <li>Certificado de manipulación de alimentos vigente, emitido por autoridad sanitaria competente, conforme a la Ley N° 18.284 (Código Alimentario Argentino) y sus normas reglamentarias.</li>
-        <li>Cumplimiento de las Buenas Prácticas de Manufactura (BPM) establecidas en el Capítulo N° II del Código Alimentario Argentino.</li>
-        <li>Registro ante el organismo competente (ANMAT, SENASA o autoridad provincial) cuando corresponda por el tipo de producto elaborado.</li>
+        <li>Habilitación municipal del local o establecimiento de elaboración, conforme a la normativa de cada municipio
+          de la Provincia de Catamarca.</li>
+        <li>Certificado de manipulación de alimentos vigente, emitido por autoridad sanitaria competente, conforme a la
+          Ley N° 18.284 (Código Alimentario Argentino) y sus normas reglamentarias.</li>
+        <li>Cumplimiento de las Buenas Prácticas de Manufactura (BPM) establecidas en el Capítulo N° II del Código
+          Alimentario Argentino.</li>
+        <li>Registro ante el organismo competente (ANMAT, SENASA o autoridad provincial) cuando corresponda por el tipo
+          de producto elaborado.</li>
         <li>Libreta sanitaria al día para todos los manipuladores de alimentos que intervengan en la elaboración.</li>
       </ul>
       <h3>5.2 Veracidad de la información</h3>
-      <p>El vendedor se compromete a publicar información veraz, completa y actualizada sobre sus productos, incluyendo descripción, ingredientes relevantes, alérgenos, precio, disponibilidad y condiciones de entrega. Queda expresamente prohibido publicar productos que:</p>
+      <p>El vendedor se compromete a publicar información veraz, completa y actualizada sobre sus productos, incluyendo
+        descripción, ingredientes relevantes, alérgenos, precio, disponibilidad y condiciones de entrega. Queda
+        expresamente prohibido publicar productos que:</p>
       <ul>
         <li>No cumplan con los estándares del Código Alimentario Argentino (Ley N° 18.284).</li>
-        <li>Contengan sustancias no declaradas, especialmente alérgenos contemplados en la Resolución ANMAT N° 834/2010 y la Ley N° 26.588 (celiaquía).</li>
+        <li>Contengan sustancias no declaradas, especialmente alérgenos contemplados en la Resolución ANMAT N° 834/2010
+          y la Ley N° 26.588 (celiaquía).</li>
         <li>Hayan sido elaborados en condiciones insalubres.</li>
         <li>Estén vencidos o en mal estado.</li>
       </ul>
       <h3>5.3 Precios y disponibilidad</h3>
-      <p>Los precios publicados deben incluir todos los impuestos aplicables conforme a la Ley N° 24.240 de Defensa del Consumidor y la Resolución 7/2002 de la Secretaría de Coordinación Técnica. El vendedor es responsable de mantener actualizada la disponibilidad de sus productos.</p>
+      <p>Los precios publicados deben incluir todos los impuestos aplicables conforme a la Ley N° 24.240 de Defensa del
+        Consumidor y la Resolución 7/2002 de la Secretaría de Coordinación Técnica. El vendedor es responsable de
+        mantener actualizada la disponibilidad de sus productos.</p>
       <h3>5.4 Entrega y cumplimiento</h3>
-      <p>El vendedor se compromete a cumplir con los pedidos confirmados en tiempo y forma. En caso de imposibilidad de cumplimiento, deberá notificarlo al comprador con la mayor anticipación posible y gestionar la devolución del pago si correspondiere.</p>
+      <p>El vendedor se compromete a cumplir con los pedidos confirmados en tiempo y forma. En caso de imposibilidad de
+        cumplimiento, deberá notificarlo al comprador con la mayor anticipación posible y gestionar la devolución del
+        pago si correspondiere.</p>
     </div>
 
     <!-- 6 -->
@@ -240,7 +331,8 @@
         <li>Comunicarse directamente con el vendedor ante cualquier inconveniente con el pedido.</li>
       </ul>
       <div class="terms-highlight">
-        💡 El comprador tiene derecho a recibir información clara y veraz sobre los productos adquiridos, conforme a los artículos 4 y 46 de la Ley N° 24.240 de Defensa del Consumidor.
+        💡 El comprador tiene derecho a recibir información clara y veraz sobre los productos adquiridos, conforme a los
+        artículos 4 y 46 de la Ley N° 24.240 de Defensa del Consumidor.
       </div>
     </div>
 
@@ -248,7 +340,8 @@
     <div class="terms-sec" id="s7">
       <h2>7. 📦 Productos y publicaciones</h2>
       <h3>7.1 Contenido permitido</h3>
-      <p>Solo se permite la publicación de productos alimenticios de panadería, pastelería y repostería artesanal. Queda prohibida la publicación de:</p>
+      <p>Solo se permite la publicación de productos alimenticios de panadería, pastelería y repostería artesanal. Queda
+        prohibida la publicación de:</p>
       <ul>
         <li>Productos no alimenticios.</li>
         <li>Alimentos que requieran cadena de frío y no puedan garantizarla.</li>
@@ -256,16 +349,23 @@
         <li>Contenido engañoso, falso o que induzca a error al consumidor.</li>
       </ul>
       <h3>7.2 Imágenes y descripciones</h3>
-      <p>Las imágenes publicadas deben corresponder fielmente al producto ofrecido. El uso de imágenes de terceros sin autorización, que infrinjan derechos de propiedad intelectual, queda expresamente prohibido. PanaderiaMarket podrá eliminar sin previo aviso publicaciones que incumplan estas disposiciones.</p>
+      <p>Las imágenes publicadas deben corresponder fielmente al producto ofrecido. El uso de imágenes de terceros sin
+        autorización, que infrinjan derechos de propiedad intelectual, queda expresamente prohibido. PanaderiaMarket
+        podrá eliminar sin previo aviso publicaciones que incumplan estas disposiciones.</p>
       <h3>7.3 Alérgenos</h3>
-      <p>Conforme a la Resolución Conjunta N° 201/2011 del Ministerio de Salud y la Resolución ANMAT N° 834/2010, el vendedor debe declarar en la descripción del producto la presencia de los 14 alérgenos de declaración obligatoria: gluten, crustáceos, huevos, pescado, maníes, soja, leche, frutos de cáscara, apio, mostaza, sésamo, dióxido de azufre y sulfitos, altramuces y moluscos.</p>
+      <p>Conforme a la Resolución Conjunta N° 201/2011 del Ministerio de Salud y la Resolución ANMAT N° 834/2010, el
+        vendedor debe declarar en la descripción del producto la presencia de los 14 alérgenos de declaración
+        obligatoria: gluten, crustáceos, huevos, pescado, maníes, soja, leche, frutos de cáscara, apio, mostaza, sésamo,
+        dióxido de azufre y sulfitos, altramuces y moluscos.</p>
     </div>
 
     <!-- 8 -->
     <div class="terms-sec" id="s8">
       <h2>8. 💵 Precios y medios de pago</h2>
       <h3>8.1 Precios</h3>
-      <p>Todos los precios publicados en PanaderiaMarket están expresados en pesos argentinos (ARS) e incluyen el Impuesto al Valor Agregado (IVA) cuando corresponda. PanaderiaMarket no cobra comisiones al comprador sobre el precio de los productos.</p>
+      <p>Todos los precios publicados en PanaderiaMarket están expresados en pesos argentinos (ARS) e incluyen el
+        Impuesto al Valor Agregado (IVA) cuando corresponda. PanaderiaMarket no cobra comisiones al comprador sobre el
+        precio de los productos.</p>
       <h3>8.2 Medios de pago</h3>
       <p>Los medios de pago disponibles dependen de lo configurado por cada vendedor y pueden incluir:</p>
       <ul>
@@ -274,38 +374,55 @@
         <li><strong>Tarjeta de débito o crédito:</strong> sujeto a disponibilidad del vendedor.</li>
       </ul>
       <h3>8.3 Seguridad de datos de pago</h3>
-      <p>PanaderiaMarket no almacena números completos de tarjetas de crédito o débito. Solo se conservan los últimos 4 dígitos con fines de identificación, conforme a las normas PCI-DSS y a la Ley N° 25.326 de Protección de Datos Personales. El CVV/CVC nunca es almacenado bajo ninguna circunstancia.</p>
+      <p>PanaderiaMarket no almacena números completos de tarjetas de crédito o débito. Solo se conservan los últimos 4
+        dígitos con fines de identificación, conforme a las normas PCI-DSS y a la Ley N° 25.326 de Protección de Datos
+        Personales. El CVV/CVC nunca es almacenado bajo ninguna circunstancia.</p>
       <h3>8.4 Variación de precios</h3>
-      <p>Los vendedores pueden modificar sus precios en cualquier momento. El precio aplicable será el vigente al momento de la confirmación del pedido. PanaderiaMarket no se responsabiliza por variaciones de precios ocurridas entre la visualización del producto y la confirmación del pedido.</p>
+      <p>Los vendedores pueden modificar sus precios en cualquier momento. El precio aplicable será el vigente al
+        momento de la confirmación del pedido. PanaderiaMarket no se responsabiliza por variaciones de precios ocurridas
+        entre la visualización del producto y la confirmación del pedido.</p>
     </div>
 
     <!-- 9 -->
     <div class="terms-sec" id="s9">
       <h2>9. 📬 Pedidos y entregas</h2>
       <h3>9.1 Proceso del pedido</h3>
-      <p>Un pedido se considera confirmado cuando el comprador completa el proceso de checkout y recibe el ticket de confirmación con número único. A partir de ese momento, el vendedor recibe la notificación y debe confirmar la disponibilidad.</p>
+      <p>Un pedido se considera confirmado cuando el comprador completa el proceso de checkout y recibe el ticket de
+        confirmación con número único. A partir de ese momento, el vendedor recibe la notificación y debe confirmar la
+        disponibilidad.</p>
       <h3>9.2 Plazos de entrega</h3>
-      <p>Los plazos de entrega son acordados directamente entre comprador y vendedor. PanaderiaMarket no garantiza plazos específicos ni se responsabiliza por demoras. Se recomienda que el comprador coordine los tiempos con el vendedor a través de los canales de contacto disponibles (WhatsApp, teléfono, email).</p>
+      <p>Los plazos de entrega son acordados directamente entre comprador y vendedor. PanaderiaMarket no garantiza
+        plazos específicos ni se responsabiliza por demoras. Se recomienda que el comprador coordine los tiempos con el
+        vendedor a través de los canales de contacto disponibles (WhatsApp, teléfono, email).</p>
       <h3>9.3 Cancelación de pedidos</h3>
-      <p>El comprador podrá cancelar un pedido siempre que el vendedor no haya iniciado su elaboración. Una vez iniciada la elaboración del producto, el vendedor no está obligado a aceptar la cancelación. Se recomienda comunicarse directamente con el vendedor a la brevedad ante cualquier necesidad de cancelación.</p>
+      <p>El comprador podrá cancelar un pedido siempre que el vendedor no haya iniciado su elaboración. Una vez iniciada
+        la elaboración del producto, el vendedor no está obligado a aceptar la cancelación. Se recomienda comunicarse
+        directamente con el vendedor a la brevedad ante cualquier necesidad de cancelación.</p>
       <h3>9.4 Ticket de pedido</h3>
-      <p>Al confirmar cada pedido, la plataforma genera automáticamente un comprobante digital (ticket) con número único que sirve como constancia de la transacción. Este documento tiene validez como comprobante de compra conforme a la normativa de defensa del consumidor.</p>
+      <p>Al confirmar cada pedido, la plataforma genera automáticamente un comprobante digital (ticket) con número único
+        que sirve como constancia de la transacción. Este documento tiene validez como comprobante de compra conforme a
+        la normativa de defensa del consumidor.</p>
     </div>
 
     <!-- 10 -->
     <div class="terms-sec" id="s10">
       <h2>10. 🔄 Devoluciones y reclamos</h2>
       <h3>10.1 Derecho del consumidor</h3>
-      <p>Conforme al artículo 10 bis y concordantes de la Ley N° 24.240 de Defensa del Consumidor (modificada por Ley N° 26.361), el comprador tiene derecho a:</p>
+      <p>Conforme al artículo 10 bis y concordantes de la Ley N° 24.240 de Defensa del Consumidor (modificada por Ley N°
+        26.361), el comprador tiene derecho a:</p>
       <ul>
         <li>Exigir el cumplimiento de la prestación en los términos ofertados.</li>
         <li>Aceptar otro producto o prestación de servicio equivalente.</li>
         <li>Rescindir el contrato con derecho a la restitución del precio pagado.</li>
       </ul>
       <h3>10.2 Productos en mal estado</h3>
-      <p>Si el producto recibido no corresponde al publicado, presenta problemas de calidad o inocuidad, el comprador deberá notificarlo al vendedor dentro de las 24 horas de recibido el producto. Ante productos en mal estado que pudieran representar un riesgo para la salud, el comprador podrá también realizar la denuncia correspondiente ante el ANMAT o la autoridad sanitaria provincial.</p>
+      <p>Si el producto recibido no corresponde al publicado, presenta problemas de calidad o inocuidad, el comprador
+        deberá notificarlo al vendedor dentro de las 24 horas de recibido el producto. Ante productos en mal estado que
+        pudieran representar un riesgo para la salud, el comprador podrá también realizar la denuncia correspondiente
+        ante el ANMAT o la autoridad sanitaria provincial.</p>
       <h3>10.3 Canal de reclamos</h3>
-      <p>PanaderiaMarket dispone como canal de contacto el correo electrónico y el número de WhatsApp del operador. Para reclamos que no puedan resolverse entre las partes, el comprador podrá recurrir a:</p>
+      <p>PanaderiaMarket dispone como canal de contacto el correo electrónico y el número de WhatsApp del operador. Para
+        reclamos que no puedan resolverse entre las partes, el comprador podrá recurrir a:</p>
       <ul>
         <li>Dirección de Defensa del Consumidor de la Provincia de Catamarca.</li>
         <li>Sistema Nacional de Arbitraje de Consumo (SNAC).</li>
@@ -316,7 +433,9 @@
     <!-- 11 -->
     <div class="terms-sec" id="s11">
       <h2>11. 🔒 Protección de datos personales</h2>
-      <p>PanaderiaMarket trata los datos personales de sus usuarios conforme a la <strong>Ley N° 25.326 de Protección de los Datos Personales</strong> y sus normas reglamentarias, y a la <strong>Disposición DNPDP N° 10/2008</strong>.</p>
+      <p>PanaderiaMarket trata los datos personales de sus usuarios conforme a la <strong>Ley N° 25.326 de Protección de
+          los Datos Personales</strong> y sus normas reglamentarias, y a la <strong>Disposición DNPDP N°
+          10/2008</strong>.</p>
       <h3>11.1 Datos recopilados</h3>
       <ul>
         <li>Nombre completo y dirección de correo electrónico (registro).</li>
@@ -325,20 +444,31 @@
         <li>Últimos 4 dígitos de tarjeta (si corresponde).</li>
       </ul>
       <h3>11.2 Finalidad del tratamiento</h3>
-      <p>Los datos son utilizados exclusivamente para la prestación del servicio de marketplace, la gestión de pedidos, la comunicación entre las partes y la mejora de la plataforma. No se ceden ni comercializan datos a terceros.</p>
+      <p>Los datos son utilizados exclusivamente para la prestación del servicio de marketplace, la gestión de pedidos,
+        la comunicación entre las partes y la mejora de la plataforma. No se ceden ni comercializan datos a terceros.
+      </p>
       <h3>11.3 Derechos del titular</h3>
-      <p>Todo usuario tiene derecho de acceso, rectificación, actualización y supresión de sus datos personales, conforme al artículo 14 de la Ley N° 25.326. Para ejercer estos derechos, puede contactarse con el operador de la plataforma.</p>
+      <p>Todo usuario tiene derecho de acceso, rectificación, actualización y supresión de sus datos personales,
+        conforme al artículo 14 de la Ley N° 25.326. Para ejercer estos derechos, puede contactarse con el operador de
+        la plataforma.</p>
       <div class="terms-highlight">
-        🔐 La DIRECCIÓN NACIONAL DE PROTECCIÓN DE DATOS PERSONALES, Órgano de Control de la Ley N° 25.326, tiene la atribución de atender las denuncias y reclamos que interpongan quienes resulten afectados en sus derechos por incumplimiento de las normas vigentes en materia de protección de datos personales.
+        🔐 La DIRECCIÓN NACIONAL DE PROTECCIÓN DE DATOS PERSONALES, Órgano de Control de la Ley N° 25.326, tiene la
+        atribución de atender las denuncias y reclamos que interpongan quienes resulten afectados en sus derechos por
+        incumplimiento de las normas vigentes en materia de protección de datos personales.
       </div>
     </div>
 
     <!-- 12 -->
     <div class="terms-sec" id="s12">
       <h2>12. ©️ Propiedad intelectual</h2>
-      <p>El nombre, logo, diseño, código fuente y demás elementos que componen PanaderiaMarket son propiedad exclusiva de su operador y están protegidos por la <strong>Ley N° 11.723 de Propiedad Intelectual</strong> y los tratados internacionales aplicables.</p>
-      <p>Los vendedores conservan la propiedad de las imágenes y contenidos que publican, otorgando a PanaderiaMarket una licencia no exclusiva, gratuita y revocable para mostrarlos en la plataforma mientras la cuenta permanezca activa.</p>
-      <p>Queda prohibida la reproducción, distribución, modificación o uso comercial de cualquier elemento de la plataforma sin autorización expresa y escrita del operador.</p>
+      <p>El nombre, logo, diseño, código fuente y demás elementos que componen PanaderiaMarket son propiedad exclusiva
+        de su operador y están protegidos por la <strong>Ley N° 11.723 de Propiedad Intelectual</strong> y los tratados
+        internacionales aplicables.</p>
+      <p>Los vendedores conservan la propiedad de las imágenes y contenidos que publican, otorgando a PanaderiaMarket
+        una licencia no exclusiva, gratuita y revocable para mostrarlos en la plataforma mientras la cuenta permanezca
+        activa.</p>
+      <p>Queda prohibida la reproducción, distribución, modificación o uso comercial de cualquier elemento de la
+        plataforma sin autorización expresa y escrita del operador.</p>
     </div>
 
     <!-- 13 -->
@@ -354,14 +484,16 @@
         <li>El contenido de sitios web de terceros enlazados desde la plataforma.</li>
       </ul>
       <div class="terms-alert">
-        ⚠️ En ningún caso la responsabilidad de PanaderiaMarket podrá exceder el monto total abonado por el comprador en la transacción que originó el reclamo.
+        ⚠️ En ningún caso la responsabilidad de PanaderiaMarket podrá exceder el monto total abonado por el comprador en
+        la transacción que originó el reclamo.
       </div>
     </div>
 
     <!-- 14 -->
     <div class="terms-sec" id="s14">
       <h2>14. 🏛️ Ley aplicable y jurisdicción</h2>
-      <p>Los presentes Términos y Condiciones se rigen por las leyes de la <strong>República Argentina</strong>, en particular por:</p>
+      <p>Los presentes Términos y Condiciones se rigen por las leyes de la <strong>República Argentina</strong>, en
+        particular por:</p>
       <ul>
         <li>Ley N° 24.240 — Defensa del Consumidor y sus modificatorias.</li>
         <li>Ley N° 25.326 — Protección de los Datos Personales.</li>
@@ -372,7 +504,9 @@
         <li>Ley N° 26.993 — Sistema de Resolución de Conflictos en Relaciones de Consumo.</li>
         <li>Decreto N° 1798/94 — Reglamentación Ley de Defensa del Consumidor.</li>
       </ul>
-      <p>Para cualquier controversia derivada del uso de la plataforma, las partes se someten a la jurisdicción de los Tribunales Ordinarios de la ciudad de <strong>San Fernando del Valle de Catamarca</strong>, renunciando a cualquier otro fuero o jurisdicción que pudiere corresponderles.</p>
+      <p>Para cualquier controversia derivada del uso de la plataforma, las partes se someten a la jurisdicción de los
+        Tribunales Ordinarios de la ciudad de <strong>San Fernando del Valle de Catamarca</strong>, renunciando a
+        cualquier otro fuero o jurisdicción que pudiere corresponderles.</p>
     </div>
 
     <div class="terms-footer">
@@ -382,14 +516,17 @@
       </strong>
       <p>San Fernando del Valle de Catamarca, Provincia de Catamarca, Argentina</p>
       <p>Consultas: <a href="mailto:pumapasteleria@gmail.com">pumapasteleria@gmail.com</a>
-         · <a href="tel:+5493834223388">+54 9 383 422-3388</a></p>
+        · <a href="tel:+5493834223388">+54 9 383 422-3388</a></p>
       <p style="margin-top:12px;font-size:0.78rem;opacity:0.6">
         © <span id="anio-actual"></span> PanaderiaMarket — Todos los derechos reservados
       </p>
     </div>
 
   </div>
-
+  <footer style="text-align:center;padding:24px;font-size:0.8rem;color:var(--gris)">
+    <a href="privacidad.html" style="color:var(--gris)">Privacidad</a> ·
+    <a href="nosotros.html" style="color:var(--gris)">Sobre nosotros</a>
+  </footer>
   <script>
     const hoy = new Date()
     document.getElementById('fecha-actual').textContent =
@@ -398,4 +535,5 @@
   </script>
 
 </body>
+
 </html>

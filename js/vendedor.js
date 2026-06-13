@@ -9,6 +9,52 @@ let perfil     = null
 let misProds   = []
 let fotosExtra = []
 
+// ── Pedidos: estado de filtros ──
+let todosPedidosCache  = []
+let filtroPedidoEstado = 'todos'
+let busqPedidos        = ''
+
+// ── Notificación de pedido nuevo ──
+const TITULO_ORIGINAL = document.title
+let tituloFlashInterval = null
+
+function reproducirSonidoPedido() {
+  try {
+    const ctx  = new (window.AudioContext || window.webkitAudioContext)()
+    const osc  = ctx.createOscillator()
+    const gain = ctx.createGain()
+    osc.type = 'sine'
+    osc.connect(gain); gain.connect(ctx.destination)
+    osc.frequency.setValueAtTime(880,  ctx.currentTime)
+    osc.frequency.setValueAtTime(1175, ctx.currentTime + 0.15)
+    gain.gain.setValueAtTime(0.18, ctx.currentTime)
+    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.5)
+    osc.start()
+    osc.stop(ctx.currentTime + 0.5)
+  } catch (e) { /* navegador sin soporte de audio */ }
+}
+
+function iniciarFlashTitulo() {
+  if (tituloFlashInterval) return
+  let on = false
+  tituloFlashInterval = setInterval(() => {
+    document.title = on ? TITULO_ORIGINAL : '🛎️ ¡Nuevo pedido!'
+    on = !on
+  }, 1000)
+}
+
+function detenerFlashTitulo() {
+  if (tituloFlashInterval) {
+    clearInterval(tituloFlashInterval)
+    tituloFlashInterval = null
+  }
+  document.title = TITULO_ORIGINAL
+}
+
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden) detenerFlashTitulo()
+})
+
 // ══ INIT ══
 async function init() {
   const session = await requireAuth('vendedor')
@@ -52,6 +98,10 @@ function initRealtime() {
       const ticketRef = payload.new.ticket_id ||
         '#' + payload.new.id.slice(-6).toUpperCase()
       toast(`🛎️ ¡Nuevo pedido recibido! ${ticketRef}`, 'ok')
+
+      reproducirSonidoPedido()
+      if (document.hidden) iniciarFlashTitulo()
+
       const badge = document.getElementById('badge-pedidos')
       if (badge) {
         const n = parseInt(badge.textContent || '0') + 1
@@ -217,6 +267,20 @@ function initEventos() {
       actualizarEstiloMedio(chk)
       if (id === 'pf-pago-transferencia') toggleTransferenciaDatos()
     })
+  })
+
+  // Filtros de pedidos
+  document.querySelectorAll('#filtros-pedidos .filtro').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#filtros-pedidos .filtro').forEach(b => b.classList.remove('on'))
+      btn.classList.add('on')
+      filtroPedidoEstado = btn.dataset.estado
+      renderPedidosFiltrados()
+    })
+  })
+  document.getElementById('buscar-pedidos').addEventListener('input', e => {
+    busqPedidos = e.target.value
+    renderPedidosFiltrados()
   })
 }
 
@@ -508,13 +572,42 @@ async function cargarPedidos() {
     .eq('vendedor_id', uid)
     .order('created_at', { ascending: false })
 
-  const el = document.getElementById('lista-pedidos')
-  if (!data || data.length === 0) {
+  todosPedidosCache = data || []
+  renderPedidosFiltrados()
+}
+
+function renderPedidosFiltrados() {
+  let lista = todosPedidosCache
+
+  if (filtroPedidoEstado !== 'todos') {
+    lista = lista.filter(p => p.estado === filtroPedidoEstado)
+  }
+  if (busqPedidos.trim()) {
+    const q = busqPedidos.toLowerCase()
+    lista = lista.filter(p =>
+      (p.ticket_id || '').toLowerCase().includes(q) ||
+      (p.nombre_comprador || '').toLowerCase().includes(q) ||
+      p.id.toLowerCase().includes(q)
+    )
+  }
+
+  const el    = document.getElementById('lista-pedidos')
+  const empty = document.getElementById('empty-pedidos')
+
+  if (todosPedidosCache.length === 0) {
     el.innerHTML = '<p style="color:var(--gris)">Aún no recibiste pedidos</p>'
+    empty.style.display = 'none'
     return
   }
 
-  el.innerHTML = data.map(p => `
+  if (lista.length === 0) {
+    el.innerHTML = ''
+    empty.style.display = 'block'
+    return
+  }
+  empty.style.display = 'none'
+
+  el.innerHTML = lista.map(p => `
     <div class="pedido-card">
       <div class="pedido-top">
         <div>
@@ -560,6 +653,12 @@ window._cambiarEstado = async (id, estado) => {
   const { error } = await supabase.from('pedidos').update({ estado }).eq('id', id)
   if (error) { toast('Error al actualizar estado', 'err'); return }
   toast(`Estado actualizado: ${estado}`, 'ok')
+
+  // Actualizar cache local sin recargar
+  const idx = todosPedidosCache.findIndex(p => p.id === id)
+  if (idx >= 0) todosPedidosCache[idx].estado = estado
+  renderPedidosFiltrados()
+
   cargarStats()
 }
 

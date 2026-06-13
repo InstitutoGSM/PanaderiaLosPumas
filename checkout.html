@@ -182,7 +182,8 @@
   </div>
 
   <footer style="text-align:center;padding:24px;font-size:0.8rem;color:var(--gris)">
-    <a href="terminos.html" style="color:var(--gris)">Términos y Condiciones</a>
+    <a href="terminos.html" style="color:var(--gris)">Términos y Condiciones</a> ·
+    <a href="privacidad.html" style="color:var(--gris)">Privacidad</a>
   </footer>
 
   <div id="toast-box"></div>
@@ -417,7 +418,7 @@
       }
 
       const btn = document.getElementById('btn-finalizar')
-      btn.disabled = true; btn.textContent = 'Enviando pedido...'
+      btn.disabled = true; btn.textContent = 'Verificando stock...'
 
       const user = await getUser()
       if (!user) {
@@ -426,6 +427,23 @@
         return
       }
 
+      // ── Validar y descontar stock de forma atómica ──
+      const itemsStock = items.map(i => ({ id: i.id, cantidad: i.cantidad }))
+      const { error: stockError } = await supabase.rpc('descontar_stock_items', { items: itemsStock })
+
+      if (stockError) {
+        btn.disabled = false; btn.textContent = 'Confirmar pedido →'
+        if (stockError.message?.includes('STOCK_INSUFICIENTE')) {
+          toast('Uno o más productos ya no tienen stock suficiente. Revisá tu carrito.', 'err')
+        } else {
+          toast('Error al verificar stock', 'err')
+        }
+        return
+      }
+
+      btn.textContent = 'Enviando pedido...'
+
+      // Guardar tarjeta (solo enmascarada, NUNCA el número completo ni el CVV)
       if (necesitaTarjeta) {
         const num = document.getElementById('t-numero').value.replace(/\s/g, '')
         const ultimos4 = num.slice(-4)
@@ -473,7 +491,12 @@
 
       btn.disabled = false; btn.textContent = 'Confirmar pedido →'
 
-      if (!todoBien) { toast('Error al enviar el pedido', 'err'); return }
+      if (!todoBien) {
+        // Rollback del stock ya descontado
+        await supabase.rpc('restaurar_stock_items', { items: itemsStock })
+        toast('Error al enviar el pedido. El stock fue restaurado.', 'err')
+        return
+      }
 
       vaciarCarrito()
       toast('¡Pedido confirmado! 🎉', 'ok')

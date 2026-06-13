@@ -26,6 +26,35 @@ tabs.forEach(t => t.addEventListener('click', () => switchTab(t.dataset.tab)))
 document.getElementById('ir-registro')?.addEventListener('click', () => switchTab('registro'))
 document.getElementById('ir-login')?.addEventListener('click',    () => switchTab('login'))
 
+// ── Recuperar contraseña (panel especial, fuera de los tabs) ──
+function mostrarPanel(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('on'))
+  document.getElementById(id).classList.add('on')
+}
+
+document.getElementById('ir-recuperar')?.addEventListener('click', () => {
+  mostrarPanel('panel-recuperar')
+})
+document.getElementById('ir-login-from-recuperar')?.addEventListener('click', () => {
+  switchTab('login')
+})
+
+document.getElementById('btn-recuperar')?.addEventListener('click', async () => {
+  const btn   = document.getElementById('btn-recuperar')
+  const email = document.getElementById('rec-email').value.trim()
+  if (!email) { toast('Ingresá tu email', 'err'); return }
+
+  btn.disabled = true; btn.textContent = 'Enviando...'
+
+  const redirectTo = location.href.replace(/login\.html.*$/, 'reset-password.html')
+  const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo })
+
+  btn.disabled = false; btn.textContent = 'Enviar link de recuperación'
+
+  if (error) { toast('Error: ' + error.message, 'err'); return }
+  toast('Si el email existe, te enviamos un link de recuperación 📧', 'ok')
+})
+
 // ── Tipo de usuario ──
 let tipoSel = 'comprador'
 document.querySelectorAll('.tipo-opt').forEach(opt => {
@@ -129,7 +158,9 @@ document.addEventListener('keydown', e => {
   if (e.key !== 'Enter') return
   if (document.getElementById('panel-login').classList.contains('on')) {
     document.getElementById('btn-login').click()
-  } else {
+  } else if (document.getElementById('panel-registro').classList.contains('on')) {
     document.getElementById('btn-registro').click()
+  } else if (document.getElementById('panel-recuperar').classList.contains('on')) {
+    document.getElementById('btn-recuperar').click()
   }
 })

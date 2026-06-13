@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,491 +8,599 @@
   <link rel="stylesheet" href="css/global.css">
   <link rel="stylesheet" href="css/vendedor.css">
   <style>
-    html, body { overflow-x: hidden; }
+    html,
+    body {
+      overflow-x: hidden;
+    }
 
     .onboarding {
       background: linear-gradient(135deg, var(--marron) 0%, var(--marron-mid) 100%);
-      border-radius: var(--radio-lg); padding: 32px;
-      color: white; margin-bottom: 28px; display: none;
+      border-radius: var(--radio-lg);
+      padding: 32px;
+      color: white;
+      margin-bottom: 28px;
+      display: none;
       position: relative;
     }
-    .onboarding h2 { color: white; margin-bottom: 8px; font-size: 1.4rem; }
-    .onboarding p  { opacity: 0.8; margin-bottom: 20px; font-size: 0.95rem; }
-    .ob-steps {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr));
-      gap: 12px; margin-bottom: 20px;
-    }
-    .ob-step {
-      background: rgba(255,255,255,0.1); border-radius: var(--radio);
-      padding: 16px; display: flex; align-items: flex-start; gap: 12px;
-    }
-    .ob-step-ico { font-size: 1.6rem; flex-shrink: 0; }
-    .ob-step-txt strong { display: block; font-size: 0.9rem; margin-bottom: 2px; }
-    .ob-step-txt span   { font-size: 0.78rem; opacity: 0.75; }
-    .ob-actions { display: flex; gap: 10px; flex-wrap: wrap; }
-    .ob-cerrar  {
-      position: absolute; top: 16px; right: 16px;
-      background: none; border: none; color: rgba(255,255,255,0.6);
-      font-size: 1.2rem; cursor: pointer;
-    }
-    .ob-cerrar:hover { color: white; }
 
-    .mob-menu-btn { display: none; }
+    .onboarding h2 {
+      color: white;
+      margin-bottom: 8px;
+      font-size: 1.4rem;
+    }
+
+    .onboarding p {
+      opacity: 0.8;
+      margin-bottom: 20px;
+      font-size: 0.95rem;
+    }
+
+    .ob-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .ob-step {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: var(--radio);
+      padding: 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .ob-step-ico {
+      font-size: 1.6rem;
+      flex-shrink: 0;
+    }
+
+    .ob-step-txt strong {
+      display: block;
+      font-size: 0.9rem;
+      margin-bottom: 2px;
+    }
+
+    .ob-step-txt span {
+      font-size: 0.78rem;
+      opacity: 0.75;
+    }
+
+    .ob-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .ob-cerrar {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: none;
+      border: none;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+
+    .ob-cerrar:hover {
+      color: white;
+    }
+
+    .mob-menu-btn {
+      display: none;
+    }
 
     .medios-pago-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(130px,1fr));
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
       gap: 10px;
+
+      .filtro {
+        padding: 7px 16px;
+        border-radius: 50px;
+        border: 2px solid var(--crema-dark);
+        background: var(--blanco);
+        font-weight: 700;
+        font-size: 0.82rem;
+        cursor: pointer;
+        transition: all var(--trans);
+      }
+
+      .filtro.on {
+        border-color: var(--naranja);
+        background: #FFF3E0;
+        color: var(--naranja);
+      }
     }
+
     .medio-check {
-      display: flex; align-items: center; gap: 8px;
-      border: 2px solid var(--crema-dark); border-radius: var(--radio);
-      padding: 12px; cursor: pointer; font-weight: 700; font-size: 0.88rem;
-      transition: all var(--trans); background: var(--blanco);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border: 2px solid var(--crema-dark);
+      border-radius: var(--radio);
+      padding: 12px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.88rem;
+      transition: all var(--trans);
+      background: var(--blanco);
     }
-    .medio-check:hover { border-color: var(--naranja-lt); }
-    .medio-check.on    { border-color: var(--naranja); background: #FFF3E0; }
-    .medio-check input { width: auto; margin: 0; accent-color: var(--naranja); }
-    .medio-ico { font-size: 1.1rem; }
+
+    .medio-check:hover {
+      border-color: var(--naranja-lt);
+    }
+
+    .medio-check.on {
+      border-color: var(--naranja);
+      background: #FFF3E0;
+    }
+
+    .medio-check input {
+      width: auto;
+      margin: 0;
+      accent-color: var(--naranja);
+    }
+
+    .medio-ico {
+      font-size: 1.1rem;
+    }
+
     .medios-pago-hint {
-      font-size: 0.82rem; color: var(--gris); margin-bottom: 14px;
+      font-size: 0.82rem;
+      color: var(--gris);
+      margin-bottom: 14px;
     }
   </style>
 </head>
+
 <body>
 
-<div class="dash-layout">
+  <div class="dash-layout">
 
-  <!-- SIDEBAR -->
-  <div class="sidebar-overlay" id="sidebar-overlay"></div>
-  <nav class="sidebar" id="sidebar" aria-label="Menú del panel">
-    <div class="sidebar-logo">🥖 Panaderia<span>PUMA</span></div>
-    <ul class="sidebar-nav">
-      <li>
-        <a href="#" class="nav-link on" data-sec="inicio">
-          <span class="nav-ico">📊</span> Inicio
-        </a>
-      </li>
-      <li>
-        <a href="#" class="nav-link" data-sec="productos">
-          <span class="nav-ico">🍞</span> Mis Productos
-        </a>
-      </li>
-      <li>
-        <a href="#" class="nav-link" data-sec="agregar">
-          <span class="nav-ico">➕</span> Agregar Producto
-        </a>
-      </li>
-      <li>
-        <a href="#" class="nav-link" data-sec="pedidos">
-          <span class="nav-ico">📦</span> Pedidos
-          <span id="badge-pedidos"
-                style="display:none;background:var(--rojo);color:white;
+    <!-- SIDEBAR -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+    <nav class="sidebar" id="sidebar" aria-label="Menú del panel">
+      <div class="sidebar-logo">🥖 Panaderia<span>PUMA</span></div>
+      <ul class="sidebar-nav">
+        <li>
+          <a href="#" class="nav-link on" data-sec="inicio">
+            <span class="nav-ico">📊</span> Inicio
+          </a>
+        </li>
+        <li>
+          <a href="#" class="nav-link" data-sec="productos">
+            <span class="nav-ico">🍞</span> Mis Productos
+          </a>
+        </li>
+        <li>
+          <a href="#" class="nav-link" data-sec="agregar">
+            <span class="nav-ico">➕</span> Agregar Producto
+          </a>
+        </li>
+        <li>
+          <a href="#" class="nav-link" data-sec="pedidos">
+            <span class="nav-ico">📦</span> Pedidos
+            <span id="badge-pedidos" style="display:none;background:var(--rojo);color:white;
                        border-radius:50%;width:18px;height:18px;font-size:0.7rem;
                        font-weight:700;align-items:center;justify-content:center;
                        margin-left:auto">0</span>
-        </a>
-      </li>
-      <li>
-        <a href="#" class="nav-link" data-sec="perfil">
-          <span class="nav-ico">⚙️</span> Mi Perfil
-        </a>
-      </li>
-    </ul>
-    <div class="sidebar-bottom">
-      <ul class="sidebar-nav">
-        <li>
-          <a href="index.html" target="_blank">
-            <span class="nav-ico">🏪</span> Ver mi tienda
           </a>
         </li>
         <li>
-          <a href="#" id="btn-logout">
-            <span class="nav-ico">🚪</span> Salir
+          <a href="#" class="nav-link" data-sec="perfil">
+            <span class="nav-ico">⚙️</span> Mi Perfil
           </a>
         </li>
       </ul>
-    </div>
-  </nav>
-
-  <!-- MAIN -->
-  <main class="dash-main">
-
-    <!-- Topbar -->
-    <div class="dash-topbar">
-      <div style="display:flex;align-items:center;gap:10px">
-        <button class="btn btn-ghost btn-sm mob-menu-btn" id="mob-menu"
-                aria-label="Abrir menú">☰</button>
-        <div>
-          <h1 id="dash-titulo">Mi Panel</h1>
-          <p id="dash-sub" style="color:var(--gris);font-size:0.9rem;margin-top:2px">
-            Bienvenido/a de vuelta
-          </p>
-        </div>
+      <div class="sidebar-bottom">
+        <ul class="sidebar-nav">
+          <li>
+            <a href="index.html" target="_blank">
+              <span class="nav-ico">🏪</span> Ver mi tienda
+            </a>
+          </li>
+          <li>
+            <a href="#" id="btn-logout">
+              <span class="nav-ico">🚪</span> Salir
+            </a>
+          </li>
+        </ul>
       </div>
-    </div>
+    </nav>
 
-    <!-- ONBOARDING -->
-    <div class="onboarding" id="onboarding">
-      <button class="ob-cerrar" id="ob-cerrar" aria-label="Cerrar">✕</button>
-      <h2>¡Bienvenido/a a PanaderiaMarket! 🥖</h2>
-      <p>Seguí estos pasos para empezar a vender hoy mismo</p>
-      <div class="ob-steps">
-        <div class="ob-step">
-          <div class="ob-step-ico">⚙️</div>
-          <div class="ob-step-txt">
-            <strong>1. Completá tu perfil</strong>
-            <span>Agregá foto, descripción y contacto</span>
-          </div>
-        </div>
-        <div class="ob-step">
-          <div class="ob-step-ico">📸</div>
-          <div class="ob-step-txt">
-            <strong>2. Publicá tu primer producto</strong>
-            <span>Con foto, precio y descripción</span>
-          </div>
-        </div>
-        <div class="ob-step">
-          <div class="ob-step-ico">📲</div>
-          <div class="ob-step-txt">
-            <strong>3. Compartí tu tienda</strong>
-            <span>Mandá el link por WhatsApp o Instagram</span>
+    <!-- MAIN -->
+    <main class="dash-main">
+
+      <!-- Topbar -->
+      <div class="dash-topbar">
+        <div style="display:flex;align-items:center;gap:10px">
+          <button class="btn btn-ghost btn-sm mob-menu-btn" id="mob-menu" aria-label="Abrir menú">☰</button>
+          <div>
+            <h1 id="dash-titulo">Mi Panel</h1>
+            <p id="dash-sub" style="color:var(--gris);font-size:0.9rem;margin-top:2px">
+              Bienvenido/a de vuelta
+            </p>
           </div>
         </div>
       </div>
-      <div class="ob-actions">
-        <button class="btn btn-naranja btn-sm" id="ob-ir-perfil">
-          Completar perfil →
-        </button>
-        <button class="btn btn-ghost btn-sm"
-                style="border-color:rgba(255,255,255,0.4);color:white"
-                id="ob-ir-agregar">
-          Agregar producto →
-        </button>
-      </div>
-    </div>
 
-    <!-- INICIO -->
-    <section id="sec-inicio">
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-label">Productos activos</div>
-          <div class="stat-value" id="st-activos">—</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Total productos</div>
-          <div class="stat-value" id="st-total">—</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Pedidos pendientes</div>
-          <div class="stat-value" id="st-pedidos">—</div>
-        </div>
-      </div>
-      <div class="sec-card">
-        <div class="sec-card-top"><h2>Últimos pedidos</h2></div>
-        <div id="ultimos-pedidos">
-          <p style="color:var(--gris)">Cargando...</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- MIS PRODUCTOS -->
-    <section id="sec-productos" style="display:none">
-      <div class="sec-card">
-        <div class="sec-card-top">
-          <h2>Mis Productos</h2>
-          <button class="btn btn-naranja btn-sm" id="btn-ir-agregar">
-            + Nuevo
-          </button>
-        </div>
-        <div class="tabla-wrap">
-          <table class="tabla" aria-label="Mis productos">
-            <thead>
-              <tr>
-                <th>Producto</th>
-                <th>Categoría</th>
-                <th>Precio</th>
-                <th>Stock</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody id="tbody-productos">
-              <tr><td colspan="6"
-                      style="text-align:center;padding:32px;color:var(--gris)">
-                Cargando...
-              </td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <!-- AGREGAR / EDITAR -->
-    <section id="sec-agregar" style="display:none">
-      <div class="sec-card" style="max-width:680px">
-        <div class="sec-card-top">
-          <h2 id="form-titulo">➕ Agregar Producto</h2>
-          <button class="btn btn-ghost btn-sm" id="btn-cancelar"
-                  style="display:none">Cancelar</button>
-        </div>
-        <input type="hidden" id="edit-id">
-
-        <div class="form-row">
-          <div class="field">
-            <label for="p-nombre">Nombre *</label>
-            <input type="text" id="p-nombre" placeholder="Ej: Pan Francés">
+      <!-- ONBOARDING -->
+      <div class="onboarding" id="onboarding">
+        <button class="ob-cerrar" id="ob-cerrar" aria-label="Cerrar">✕</button>
+        <h2>¡Bienvenido/a a PanaderiaMarket! 🥖</h2>
+        <p>Seguí estos pasos para empezar a vender hoy mismo</p>
+        <div class="ob-steps">
+          <div class="ob-step">
+            <div class="ob-step-ico">⚙️</div>
+            <div class="ob-step-txt">
+              <strong>1. Completá tu perfil</strong>
+              <span>Agregá foto, descripción y contacto</span>
+            </div>
           </div>
-          <div class="field">
-            <label for="p-cat">Categoría *</label>
-            <select id="p-cat">
-              <option value="">Seleccionar...</option>
-              <option value="pan">🍞 Pan</option>
-              <option value="facturas">🥐 Facturas</option>
-              <option value="galletas">🍪 Galletas</option>
-              <option value="cakes">🎂 Cakes</option>
-              <option value="otro">✨ Otro</option>
-            </select>
+          <div class="ob-step">
+            <div class="ob-step-ico">📸</div>
+            <div class="ob-step-txt">
+              <strong>2. Publicá tu primer producto</strong>
+              <span>Con foto, precio y descripción</span>
+            </div>
           </div>
-        </div>
-
-        <div class="form-row">
-          <div class="field">
-            <label for="p-unidad">Se vende por *</label>
-            <select id="p-unidad">
-              <option value="unidad">Unidad / Media doc. / Docena</option>
-              <option value="kilo">Kilo (precio por kg)</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="p-stock">Cantidad disponible</label>
-            <input type="number" id="p-stock" placeholder="0" min="0">
-          </div>
-        </div>
-
-        <div class="field">
-          <label for="p-desc">Descripción</label>
-          <textarea id="p-desc" rows="2"
-            placeholder="Contale al cliente qué hace especial este producto..."></textarea>
-        </div>
-
-        <div class="form-row">
-          <div class="field">
-            <label for="p-precio">
-              <span id="label-precio-completo">Precio *</span>
-              <span id="label-precio-hint"
-                    style="font-weight:400;color:var(--gris)">(por unidad)</span>
-            </label>
-            <input type="number" id="p-precio" placeholder="0" min="0" step="50">
-            <div id="hint-kilo"
-                 style="display:none;margin-top:6px;font-size:0.78rem;
-                        background:var(--crema);padding:7px 11px;
-                        border-radius:8px;color:var(--marron-mid)">
-              💡 Ej: ponés <strong>$2.500</strong> → 1kg = $2.500
+          <div class="ob-step">
+            <div class="ob-step-ico">📲</div>
+            <div class="ob-step-txt">
+              <strong>3. Compartí tu tienda</strong>
+              <span>Mandá el link por WhatsApp o Instagram</span>
             </div>
           </div>
         </div>
-
-        <div class="form-row" id="campos-docena">
-          <div class="field">
-            <label for="p-media-doc">Precio media docena</label>
-            <input type="number" id="p-media-doc" placeholder="Opcional"
-                   min="0" step="50">
-          </div>
-          <div class="field">
-            <label for="p-docena">Precio por docena</label>
-            <input type="number" id="p-docena" placeholder="Opcional"
-                   min="0" step="50">
-          </div>
-        </div>
-
-        <div class="field">
-          <label for="p-extra">Dato extra 💡</label>
-          <input type="text" id="p-extra"
-                 placeholder="Sin TACC · Vegano · Horneado a leña · Por encargo...">
-        </div>
-
-        <div class="field">
-          <label>Imagen principal</label>
-          <div style="margin-bottom:10px">
-            <label for="p-img-file" class="btn btn-ghost btn-sm"
-                   style="cursor:pointer;display:inline-flex">
-              📁 Subir desde galería
-            </label>
-            <input type="file" id="p-img-file" accept="image/*" style="display:none">
-            <span style="font-size:0.78rem;color:var(--gris);margin-left:10px">
-              JPG, PNG — máx 5MB
-            </span>
-          </div>
-          <input type="url" id="p-img-url" placeholder="O pegá una URL (https://...)">
-          <img id="img-preview" class="img-preview" style="display:none" alt="Preview">
-        </div>
-
-        <div class="field">
-          <label>Fotos adicionales</label>
-          <label for="p-fotos-extra" class="btn btn-ghost btn-sm"
-                 style="cursor:pointer;display:inline-flex">
-            📁 Agregar más fotos
-          </label>
-          <input type="file" id="p-fotos-extra"
-                 accept="image/*" multiple style="display:none">
-          <span style="font-size:0.78rem;color:var(--gris);margin-left:10px">
-            Hasta 4 fotos
-          </span>
-          <div id="fotos-extra-preview"
-               style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"></div>
-        </div>
-
-        <div style="display:flex;gap:12px;margin-top:8px">
-          <button class="btn btn-naranja" id="btn-guardar">
-            💾 Guardar producto
+        <div class="ob-actions">
+          <button class="btn btn-naranja btn-sm" id="ob-ir-perfil">
+            Completar perfil →
+          </button>
+          <button class="btn btn-ghost btn-sm" style="border-color:rgba(255,255,255,0.4);color:white"
+            id="ob-ir-agregar">
+            Agregar producto →
           </button>
         </div>
       </div>
-    </section>
 
-    <!-- PEDIDOS -->
-    <section id="sec-pedidos" style="display:none">
-      <div class="sec-card">
-        <div class="sec-card-top"><h2>📦 Pedidos recibidos</h2></div>
-        <div id="lista-pedidos">
-          <p style="color:var(--gris)">Cargando...</p>
+      <!-- INICIO -->
+      <section id="sec-inicio">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-label">Productos activos</div>
+            <div class="stat-value" id="st-activos">—</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Total productos</div>
+            <div class="stat-value" id="st-total">—</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Pedidos pendientes</div>
+            <div class="stat-value" id="st-pedidos">—</div>
+          </div>
         </div>
-      </div>
-    </section>
+        <div class="sec-card">
+          <div class="sec-card-top">
+            <h2>Últimos pedidos</h2>
+          </div>
+          <div id="ultimos-pedidos">
+            <p style="color:var(--gris)">Cargando...</p>
+          </div>
+        </div>
+      </section>
 
-    <!-- PERFIL -->
-    <section id="sec-perfil" style="display:none">
-      <div class="sec-card perfil-wrap">
-        <div class="sec-card-top"><h2>⚙️ Mi Perfil</h2></div>
+      <!-- MIS PRODUCTOS -->
+      <section id="sec-productos" style="display:none">
+        <div class="sec-card">
+          <div class="sec-card-top">
+            <h2>Mis Productos</h2>
+            <button class="btn btn-naranja btn-sm" id="btn-ir-agregar">
+              + Nuevo
+            </button>
+          </div>
+          <div class="tabla-wrap">
+            <table class="tabla" aria-label="Mis productos">
+              <thead>
+                <tr>
+                  <th>Producto</th>
+                  <th>Categoría</th>
+                  <th>Precio</th>
+                  <th>Stock</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-productos">
+                <tr>
+                  <td colspan="6" style="text-align:center;padding:32px;color:var(--gris)">
+                    Cargando...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
 
-        <div style="display:flex;align-items:center;gap:20px;margin-bottom:24px">
-          <div id="avatar-preview"
-               style="width:80px;height:80px;border-radius:50%;
+      <!-- AGREGAR / EDITAR -->
+      <section id="sec-agregar" style="display:none">
+        <div class="sec-card" style="max-width:680px">
+          <div class="sec-card-top">
+            <h2 id="form-titulo">➕ Agregar Producto</h2>
+            <button class="btn btn-ghost btn-sm" id="btn-cancelar" style="display:none">Cancelar</button>
+          </div>
+          <input type="hidden" id="edit-id">
+
+          <div class="form-row">
+            <div class="field">
+              <label for="p-nombre">Nombre *</label>
+              <input type="text" id="p-nombre" placeholder="Ej: Pan Francés">
+            </div>
+            <div class="field">
+              <label for="p-cat">Categoría *</label>
+              <select id="p-cat">
+                <option value="">Seleccionar...</option>
+                <option value="pan">🍞 Pan</option>
+                <option value="facturas">🥐 Facturas</option>
+                <option value="galletas">🍪 Galletas</option>
+                <option value="cakes">🎂 Cakes</option>
+                <option value="otro">✨ Otro</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="field">
+              <label for="p-unidad">Se vende por *</label>
+              <select id="p-unidad">
+                <option value="unidad">Unidad / Media doc. / Docena</option>
+                <option value="kilo">Kilo (precio por kg)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="p-stock">Cantidad disponible</label>
+              <input type="number" id="p-stock" placeholder="0" min="0">
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="p-desc">Descripción</label>
+            <textarea id="p-desc" rows="2"
+              placeholder="Contale al cliente qué hace especial este producto..."></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="field">
+              <label for="p-precio">
+                <span id="label-precio-completo">Precio *</span>
+                <span id="label-precio-hint" style="font-weight:400;color:var(--gris)">(por unidad)</span>
+              </label>
+              <input type="number" id="p-precio" placeholder="0" min="0" step="50">
+              <div id="hint-kilo" style="display:none;margin-top:6px;font-size:0.78rem;
+                        background:var(--crema);padding:7px 11px;
+                        border-radius:8px;color:var(--marron-mid)">
+                💡 Ej: ponés <strong>$2.500</strong> → 1kg = $2.500
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row" id="campos-docena">
+            <div class="field">
+              <label for="p-media-doc">Precio media docena</label>
+              <input type="number" id="p-media-doc" placeholder="Opcional" min="0" step="50">
+            </div>
+            <div class="field">
+              <label for="p-docena">Precio por docena</label>
+              <input type="number" id="p-docena" placeholder="Opcional" min="0" step="50">
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="p-extra">Dato extra 💡</label>
+            <input type="text" id="p-extra" placeholder="Sin TACC · Vegano · Horneado a leña · Por encargo...">
+          </div>
+
+          <div class="field">
+            <label>Imagen principal</label>
+            <div style="margin-bottom:10px">
+              <label for="p-img-file" class="btn btn-ghost btn-sm" style="cursor:pointer;display:inline-flex">
+                📁 Subir desde galería
+              </label>
+              <input type="file" id="p-img-file" accept="image/*" style="display:none">
+              <span style="font-size:0.78rem;color:var(--gris);margin-left:10px">
+                JPG, PNG — máx 5MB
+              </span>
+            </div>
+            <input type="url" id="p-img-url" placeholder="O pegá una URL (https://...)">
+            <img id="img-preview" class="img-preview" style="display:none" alt="Preview">
+          </div>
+
+          <div class="field">
+            <label>Fotos adicionales</label>
+            <label for="p-fotos-extra" class="btn btn-ghost btn-sm" style="cursor:pointer;display:inline-flex">
+              📁 Agregar más fotos
+            </label>
+            <input type="file" id="p-fotos-extra" accept="image/*" multiple style="display:none">
+            <span style="font-size:0.78rem;color:var(--gris);margin-left:10px">
+              Hasta 4 fotos
+            </span>
+            <div id="fotos-extra-preview" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"></div>
+          </div>
+
+          <div style="display:flex;gap:12px;margin-top:8px">
+            <button class="btn btn-naranja" id="btn-guardar">
+              💾 Guardar producto
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- PEDIDOS -->
+      <section id="sec-pedidos" style="display:none">
+        <div class="sec-card">
+          <div class="sec-card-top">
+            <h2>📦 Pedidos recibidos</h2>
+          </div>
+
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px" id="filtros-pedidos">
+            <button class="filtro on" data-estado="todos">Todos</button>
+            <button class="filtro" data-estado="pendiente">Pendiente</button>
+            <button class="filtro" data-estado="confirmado">Confirmado</button>
+            <button class="filtro" data-estado="listo">Listo</button>
+            <button class="filtro" data-estado="entregado">Entregado</button>
+          </div>
+
+          <div style="max-width:320px;margin-bottom:16px">
+            <input type="search" id="buscar-pedidos" placeholder="Buscar por ticket o nombre del comprador...">
+          </div>
+
+          <div id="lista-pedidos">
+            <p style="color:var(--gris)">Cargando...</p>
+          </div>
+          <div id="empty-pedidos" style="display:none;text-align:center;padding:40px 0;color:var(--gris)">
+            No hay pedidos que coincidan con el filtro.
+          </div>
+        </div>
+      </section>
+
+      <!-- PERFIL -->
+      <section id="sec-perfil" style="display:none">
+        <div class="sec-card perfil-wrap">
+          <div class="sec-card-top">
+            <h2>⚙️ Mi Perfil</h2>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:20px;margin-bottom:24px">
+            <div id="avatar-preview" style="width:80px;height:80px;border-radius:50%;
                       background:var(--naranja);display:flex;
                       align-items:center;justify-content:center;
                       font-size:1.8rem;font-weight:900;color:white;
                       flex-shrink:0;overflow:hidden;
                       border:3px solid var(--crema-dark)">
+            </div>
+            <div>
+              <label for="pf-avatar-file" class="btn btn-ghost btn-sm" style="cursor:pointer;display:inline-flex">
+                📷 Cambiar foto de perfil
+              </label>
+              <input type="file" id="pf-avatar-file" accept="image/*" style="display:none">
+              <p style="font-size:0.78rem;color:var(--gris);margin-top:6px">
+                JPG o PNG — máx 2MB
+              </p>
+            </div>
           </div>
-          <div>
-            <label for="pf-avatar-file" class="btn btn-ghost btn-sm"
-                   style="cursor:pointer;display:inline-flex">
-              📷 Cambiar foto de perfil
+
+          <div class="field">
+            <label for="pf-nombre">Nombre completo</label>
+            <input type="text" id="pf-nombre">
+          </div>
+          <div class="field">
+            <label for="pf-panaderia">Nombre de la panadería</label>
+            <input type="text" id="pf-panaderia">
+          </div>
+          <div class="field">
+            <label for="pf-desc">Descripción</label>
+            <textarea id="pf-desc" rows="3" placeholder="Contales quiénes son, qué los hace únicos..."></textarea>
+          </div>
+
+          <div class="field">
+            <label for="pf-banner">
+              📢 Banner de anuncio
+              <span style="font-weight:400;color:var(--gris)">
+                (aparece en tu tienda)
+              </span>
             </label>
-            <input type="file" id="pf-avatar-file"
-                   accept="image/*" style="display:none">
-            <p style="font-size:0.78rem;color:var(--gris);margin-top:6px">
-              JPG o PNG — máx 2MB
-            </p>
+            <input type="text" id="pf-banner" placeholder="Ej: ¡Esta semana 10% off en medialunas! 🥐" maxlength="120">
+            <div style="font-size:0.75rem;color:var(--gris);margin-top:4px">
+              Máx 120 caracteres. Dejalo vacío para no mostrar nada.
+            </div>
           </div>
-        </div>
 
-        <div class="field">
-          <label for="pf-nombre">Nombre completo</label>
-          <input type="text" id="pf-nombre">
-        </div>
-        <div class="field">
-          <label for="pf-panaderia">Nombre de la panadería</label>
-          <input type="text" id="pf-panaderia">
-        </div>
-        <div class="field">
-          <label for="pf-desc">Descripción</label>
-          <textarea id="pf-desc" rows="3"
-            placeholder="Contales quiénes son, qué los hace únicos..."></textarea>
-        </div>
-
-        <div class="field">
-          <label for="pf-banner">
-            📢 Banner de anuncio
-            <span style="font-weight:400;color:var(--gris)">
-              (aparece en tu tienda)
-            </span>
-          </label>
-          <input type="text" id="pf-banner"
-                 placeholder="Ej: ¡Esta semana 10% off en medialunas! 🥐"
-                 maxlength="120">
-          <div style="font-size:0.75rem;color:var(--gris);margin-top:4px">
-            Máx 120 caracteres. Dejalo vacío para no mostrar nada.
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="field">
-            <label for="pf-ig">Instagram (sin @)</label>
-            <input type="text" id="pf-ig" placeholder="mibakery">
-          </div>
-          <div class="field">
-            <label for="pf-tel">
-              Teléfono
-              <span style="font-weight:400;color:var(--gris)">(para WhatsApp)</span>
-            </label>
-            <input type="text" id="pf-tel" placeholder="+54 9 383 ...">
-          </div>
-        </div>
-        <div class="field">
-          <label for="pf-email">Email de contacto</label>
-          <input type="email" id="pf-email">
-        </div>
-
-        <div class="checkout-sep" style="height:1px;background:var(--crema-dark);margin:22px 0"></div>
-
-        <h3 style="margin-bottom:6px">💳 Medios de pago que aceptás</h3>
-        <p class="medios-pago-hint">
-          El efectivo siempre está disponible para tus compradores. Activá los demás que aceptes.
-        </p>
-
-        <div class="medios-pago-grid">
-          <label class="medio-check on" style="cursor:not-allowed;opacity:0.75">
-            <input type="checkbox" checked disabled>
-            <span class="medio-ico">💵</span> Efectivo
-          </label>
-          <label class="medio-check" id="lbl-pago-transferencia">
-            <input type="checkbox" id="pf-pago-transferencia">
-            <span class="medio-ico">📲</span> Transferencia
-          </label>
-          <label class="medio-check" id="lbl-pago-debito">
-            <input type="checkbox" id="pf-pago-debito">
-            <span class="medio-ico">💳</span> Débito
-          </label>
-          <label class="medio-check" id="lbl-pago-credito">
-            <input type="checkbox" id="pf-pago-credito">
-            <span class="medio-ico">💳</span> Crédito
-          </label>
-        </div>
-
-        <div id="pf-transferencia-datos" style="display:none;margin-top:16px">
-          <div class="field">
-            <label for="pf-cbu">CBU</label>
-            <input type="text" id="pf-cbu" placeholder="0000003100000000000000"
-                   maxlength="22" inputmode="numeric">
-          </div>
           <div class="form-row">
             <div class="field">
-              <label for="pf-alias">Alias</label>
-              <input type="text" id="pf-alias" placeholder="mi.alias.mp">
+              <label for="pf-ig">Instagram (sin @)</label>
+              <input type="text" id="pf-ig" placeholder="mibakery">
             </div>
             <div class="field">
-              <label for="pf-titular">Titular de la cuenta</label>
-              <input type="text" id="pf-titular" placeholder="Nombre completo">
+              <label for="pf-tel">
+                Teléfono
+                <span style="font-weight:400;color:var(--gris)">(para WhatsApp)</span>
+              </label>
+              <input type="text" id="pf-tel" placeholder="+54 9 383 ...">
             </div>
           </div>
-          <div style="font-size:0.78rem;color:var(--gris);margin-top:-6px;margin-bottom:10px">
-            Ingresá al menos el CBU o el alias para que los compradores puedan transferirte.
+          <div class="field">
+            <label for="pf-email">Email de contacto</label>
+            <input type="email" id="pf-email">
           </div>
+
+          <div class="checkout-sep" style="height:1px;background:var(--crema-dark);margin:22px 0"></div>
+
+          <h3 style="margin-bottom:6px">💳 Medios de pago que aceptás</h3>
+          <p class="medios-pago-hint">
+            El efectivo siempre está disponible para tus compradores. Activá los demás que aceptes.
+          </p>
+
+          <div class="medios-pago-grid">
+            <label class="medio-check on" style="cursor:not-allowed;opacity:0.75">
+              <input type="checkbox" checked disabled>
+              <span class="medio-ico">💵</span> Efectivo
+            </label>
+            <label class="medio-check" id="lbl-pago-transferencia">
+              <input type="checkbox" id="pf-pago-transferencia">
+              <span class="medio-ico">📲</span> Transferencia
+            </label>
+            <label class="medio-check" id="lbl-pago-debito">
+              <input type="checkbox" id="pf-pago-debito">
+              <span class="medio-ico">💳</span> Débito
+            </label>
+            <label class="medio-check" id="lbl-pago-credito">
+              <input type="checkbox" id="pf-pago-credito">
+              <span class="medio-ico">💳</span> Crédito
+            </label>
+          </div>
+
+          <div id="pf-transferencia-datos" style="display:none;margin-top:16px">
+            <div class="field">
+              <label for="pf-cbu">CBU</label>
+              <input type="text" id="pf-cbu" placeholder="0000003100000000000000" maxlength="22" inputmode="numeric">
+            </div>
+            <div class="form-row">
+              <div class="field">
+                <label for="pf-alias">Alias</label>
+                <input type="text" id="pf-alias" placeholder="mi.alias.mp">
+              </div>
+              <div class="field">
+                <label for="pf-titular">Titular de la cuenta</label>
+                <input type="text" id="pf-titular" placeholder="Nombre completo">
+              </div>
+            </div>
+            <div style="font-size:0.78rem;color:var(--gris);margin-top:-6px;margin-bottom:10px">
+              Ingresá al menos el CBU o el alias para que los compradores puedan transferirte.
+            </div>
+          </div>
+
+          <div class="checkout-sep" style="height:1px;background:var(--crema-dark);margin:22px 0"></div>
+
+          <button class="btn btn-marron" id="btn-guardar-perfil">
+            Guardar cambios
+          </button>
         </div>
+      </section>
 
-        <div class="checkout-sep" style="height:1px;background:var(--crema-dark);margin:22px 0"></div>
+      <footer style="text-align:center;padding:24px;font-size:0.8rem;color:var(--gris)">
+        <a href="terminos.html" style="color:var(--gris)">Términos y Condiciones</a> ·
+        <a href="privacidad.html" style="color:var(--gris)">Privacidad</a> ·
+        <a href="nosotros.html" style="color:var(--gris)">Sobre nosotros</a>
+      </footer>
 
-        <button class="btn btn-marron" id="btn-guardar-perfil">
-          Guardar cambios
-        </button>
-      </div>
-    </section>
+    </main>
+  </div>
 
-  </main>
-</div>
-
-<div id="toast-box"></div>
-<script type="module" src="js/vendedor.js"></script>
+  <div id="toast-box"></div>
+  <script type="module" src="js/vendedor.js"></script>
 </body>
+
 </html>
