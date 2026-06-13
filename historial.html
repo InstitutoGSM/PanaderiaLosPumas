@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,39 +8,84 @@
   <link rel="stylesheet" href="css/global.css">
   <link rel="stylesheet" href="css/historial.css">
   <style>
-    html,body { overflow-x: hidden; }
+    html,
+    body {
+      overflow-x: hidden;
+    }
+
     .perfil-comprador {
       background: var(--blanco);
       border-radius: var(--radio-lg);
-      padding: 24px; box-shadow: var(--sombra);
+      padding: 24px;
+      box-shadow: var(--sombra);
       margin-bottom: 28px;
-      display: flex; align-items: center; gap: 20px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
       flex-wrap: wrap;
     }
+
     .perfil-avatar {
-      width: 72px; height: 72px; border-radius: 50%;
-      background: var(--naranja); color: white;
-      display: flex; align-items: center; justify-content: center;
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: var(--naranja);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-family: 'Playfair Display', serif;
-      font-size: 1.6rem; font-weight: 900;
-      flex-shrink: 0; overflow: hidden;
+      font-size: 1.6rem;
+      font-weight: 900;
+      flex-shrink: 0;
+      overflow: hidden;
       border: 3px solid var(--crema-dark);
     }
-    .perfil-avatar img { width: 100%; height: 100%; object-fit: cover; }
-    .perfil-info { flex: 1; min-width: 200px; }
+
+    .perfil-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .perfil-info {
+      flex: 1;
+      min-width: 200px;
+    }
+
     .perfil-nombre {
       font-family: 'Playfair Display', serif;
-      font-size: 1.3rem; font-weight: 700; margin-bottom: 2px;
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 2px;
     }
-    .perfil-email { font-size: 0.85rem; color: var(--gris); }
-    .perfil-acciones { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+
+    .perfil-email {
+      font-size: 0.85rem;
+      color: var(--gris);
+    }
+
+    .perfil-acciones {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
     .edit-perfil-form {
-      background: var(--crema); border-radius: var(--radio-lg);
-      padding: 20px; margin-top: 14px; display: none;
+      background: var(--crema);
+      border-radius: var(--radio-lg);
+      padding: 20px;
+      margin-top: 14px;
+      display: none;
     }
-    .edit-perfil-form.open { display: block; }
+
+    .edit-perfil-form.open {
+      display: block;
+    }
   </style>
 </head>
+
 <body>
 
   <nav class="navbar">
@@ -76,8 +122,7 @@
       <div class="skeleton" style="height:120px;border-radius:var(--radio-lg)"></div>
     </div>
 
-    <div id="empty-historial"
-         style="display:none;text-align:center;padding:70px 0">
+    <div id="empty-historial" style="display:none;text-align:center;padding:70px 0">
       <div style="font-size:3.5rem">📦</div>
       <h3 style="margin:14px 0 8px">Aún no hiciste pedidos</h3>
       <p style="color:var(--gris);margin-bottom:20px">
@@ -88,14 +133,20 @@
 
   </main>
 
+  <footer style="text-align:center;padding:24px;font-size:0.8rem;color:var(--gris)">
+    <a href="terminos.html" style="color:var(--gris)">Términos y Condiciones</a>
+  </footer>
+
   <div id="toast-box"></div>
 
   <script type="module">
-    import { supabase }              from './js/supabase.js'
-    import { toast, formatPrecio,
-             getIniciales }          from './js/utils.js'
-    import { getUser, logout }       from './js/auth.js'
-    import { abrirTicket }           from './js/ticket.js'
+    import { supabase } from './js/supabase.js'
+    import {
+      toast, formatPrecio,
+      getIniciales
+    } from './js/utils.js'
+    import { getUser, logout } from './js/auth.js'
+    import { abrirTicket } from './js/ticket.js'
 
     document.getElementById('nav-logout').addEventListener('click', logout)
 
@@ -112,8 +163,8 @@
       wrap.innerHTML = `
         <div class="perfil-avatar" id="hist-avatar">
           ${p?.avatar_url
-            ? `<img src="${p.avatar_url}" alt="Foto de perfil">`
-            : getIniciales(nombreMostrar)}
+          ? `<img src="${p.avatar_url}" alt="Foto de perfil">`
+          : getIniciales(nombreMostrar)}
         </div>
         <div class="perfil-info">
           <div class="perfil-nombre">${nombreMostrar}</div>
@@ -187,7 +238,7 @@
         .eq('comprador_id', user.id)
         .order('created_at', { ascending: false })
 
-      const el    = document.getElementById('lista-historial')
+      const el = document.getElementById('lista-historial')
       const empty = document.getElementById('empty-historial')
 
       if (error) {
@@ -254,15 +305,15 @@
       supabase
         .channel('historial-comprador')
         .on('postgres_changes', {
-          event:  'UPDATE',
+          event: 'UPDATE',
           schema: 'public',
-          table:  'pedidos',
+          table: 'pedidos',
           filter: `comprador_id=eq.${user.id}`
         }, payload => {
-          const card  = document.querySelector(`[data-pedido-id="${payload.new.id}"]`)
+          const card = document.querySelector(`[data-pedido-id="${payload.new.id}"]`)
           const badge = card?.querySelector('.estado-badge')
           if (badge) {
-            badge.className   = `estado-badge estado-${payload.new.estado}`
+            badge.className = `estado-badge estado-${payload.new.estado}`
             badge.textContent = payload.new.estado
             toast(`Tu pedido cambió a: ${payload.new.estado} 📦`, 'ok')
           } else {
@@ -285,4 +336,5 @@
     init()
   </script>
 </body>
+
 </html>

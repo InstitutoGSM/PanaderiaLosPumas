@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,30 +8,59 @@
   <link rel="stylesheet" href="css/global.css">
   <link rel="stylesheet" href="css/checkout.css">
   <style>
-    html,body{overflow-x:hidden}
+    html,
+    body {
+      overflow-x: hidden
+    }
 
     .vendor-pago-group {
-      margin-bottom: 18px; padding-bottom: 14px;
+      margin-bottom: 18px;
+      padding-bottom: 14px;
       border-bottom: 1px solid var(--crema-dark);
     }
-    .vendor-pago-group:last-of-type { border-bottom: none; margin-bottom: 0; }
+
+    .vendor-pago-group:last-of-type {
+      border-bottom: none;
+      margin-bottom: 0;
+    }
+
     .vendor-pago-titulo {
       font-family: 'Playfair Display', serif;
-      font-size: 0.95rem; margin: 4px 0 8px; color: var(--marron);
+      font-size: 0.95rem;
+      margin: 4px 0 8px;
+      color: var(--marron);
     }
-    .pago-opts-vendor { margin-top: 8px; }
+
+    .pago-opts-vendor {
+      margin-top: 8px;
+    }
+
     .cbu-box {
-      margin-top: 10px; font-size: 0.82rem; background: var(--crema);
-      padding: 10px 12px; border-radius: 8px; line-height: 1.6;
+      margin-top: 10px;
+      font-size: 0.82rem;
+      background: var(--crema);
+      padding: 10px 12px;
+      border-radius: 8px;
+      line-height: 1.6;
     }
-    .cbu-box strong { display:block; margin-bottom:4px; color: var(--marron); }
+
+    .cbu-box strong {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--marron);
+    }
+
     .subtotal-row {
-      display: flex; justify-content: space-between;
-      padding: 8px 0; font-weight: 700; font-size: 0.88rem;
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      font-weight: 700;
+      font-size: 0.88rem;
       border-top: 1px solid var(--crema-dark);
     }
   </style>
 </head>
+
 <body>
 
   <nav class="navbar">
@@ -114,24 +144,22 @@
             <div class="tarjeta-form">
               <div class="field">
                 <label for="t-numero">Número de tarjeta</label>
-                <input type="text" id="t-numero" placeholder="1234 5678 9012 3456"
-                       maxlength="19" autocomplete="cc-number" inputmode="numeric">
+                <input type="text" id="t-numero" placeholder="1234 5678 9012 3456" maxlength="19"
+                  autocomplete="cc-number" inputmode="numeric">
               </div>
               <div class="field">
                 <label for="t-nombre">Nombre del titular</label>
-                <input type="text" id="t-nombre" placeholder="Como figura en la tarjeta"
-                       autocomplete="cc-name">
+                <input type="text" id="t-nombre" placeholder="Como figura en la tarjeta" autocomplete="cc-name">
               </div>
               <div class="form-row">
                 <div class="field">
                   <label for="t-vence">Vencimiento</label>
-                  <input type="text" id="t-vence" placeholder="MM/AA"
-                         maxlength="5" autocomplete="cc-exp">
+                  <input type="text" id="t-vence" placeholder="MM/AA" maxlength="5" autocomplete="cc-exp">
                 </div>
                 <div class="field">
                   <label for="t-cvv">CVV</label>
-                  <input type="password" id="t-cvv" placeholder="123"
-                         maxlength="4" inputmode="numeric" autocomplete="cc-csc">
+                  <input type="password" id="t-cvv" placeholder="123" maxlength="4" inputmode="numeric"
+                    autocomplete="cc-csc">
                 </div>
               </div>
               <div class="tarjeta-aviso">
@@ -153,22 +181,30 @@
     </div>
   </div>
 
+  <footer style="text-align:center;padding:24px;font-size:0.8rem;color:var(--gris)">
+    <a href="terminos.html" style="color:var(--gris)">Términos y Condiciones</a>
+  </footer>
+
   <div id="toast-box"></div>
 
   <script type="module">
-    import { supabase }                     from './js/supabase.js'
-    import { toast, formatPrecio }          from './js/utils.js'
-    import { getCarrito, totalCarrito,
-             vaciarCarrito }                from './js/carrito.js'
-    import { getUser, getPerfil,
-             requireAuthParaComprar }       from './js/auth.js'
-    import { abrirTicket }                  from './js/ticket.js'
+    import { supabase } from './js/supabase.js'
+    import { toast, formatPrecio } from './js/utils.js'
+    import {
+      getCarrito, totalCarrito,
+      vaciarCarrito
+    } from './js/carrito.js'
+    import {
+      getUser, getPerfil,
+      requireAuthParaComprar
+    } from './js/auth.js'
+    import { abrirTicket } from './js/ticket.js'
 
     const LABELS_PAGO = {
-      efectivo:      { ico:'💵', label:'Efectivo' },
-      transferencia: { ico:'📲', label:'Transferencia' },
-      debito:        { ico:'💳', label:'Débito' },
-      credito:       { ico:'💳', label:'Crédito' },
+      efectivo: { ico: '💵', label: 'Efectivo' },
+      transferencia: { ico: '📲', label: 'Transferencia' },
+      debito: { ico: '💳', label: 'Débito' },
+      credito: { ico: '💳', label: 'Crédito' },
     }
 
     let grupos = {}
@@ -221,11 +257,11 @@
         if (!medios.includes('efectivo')) medios.unshift('efectivo')
 
         grupos[vid] = {
-          nombre:  p.nombre_panaderia || p.nombre || 'Panadería',
-          items:   porVendedor[vid],
+          nombre: p.nombre_panaderia || p.nombre || 'Panadería',
+          items: porVendedor[vid],
           medios,
-          cbu:     p.cbu     || null,
-          alias:   p.alias_cbu   || null,
+          cbu: p.cbu || null,
+          alias: p.alias_cbu || null,
           titular: p.titular_cuenta || null,
           pagoSel: 'efectivo'
         }
@@ -251,7 +287,7 @@
         `).join('')
 
         const pagoOpts = g.medios.map(m => {
-          const info = LABELS_PAGO[m] || { ico:'💰', label:m }
+          const info = LABELS_PAGO[m] || { ico: '💰', label: m }
           return `
             <div class="pago-opt ${g.pagoSel === m ? 'on' : ''}"
                  data-vendedor="${vid}" data-pago="${m}"
@@ -263,12 +299,12 @@
         const cbuBox = g.pagoSel === 'transferencia' ? `
           <div class="cbu-box">
             <strong>Datos para transferir a ${escapeHtml(g.nombre)}:</strong>
-            ${g.cbu     ? `<div>CBU: <strong>${escapeHtml(g.cbu)}</strong></div>` : ''}
-            ${g.alias   ? `<div>Alias: <strong>${escapeHtml(g.alias)}</strong></div>` : ''}
+            ${g.cbu ? `<div>CBU: <strong>${escapeHtml(g.cbu)}</strong></div>` : ''}
+            ${g.alias ? `<div>Alias: <strong>${escapeHtml(g.alias)}</strong></div>` : ''}
             ${g.titular ? `<div>Titular: ${escapeHtml(g.titular)}</div>` : ''}
             ${!g.cbu && !g.alias
-              ? '<div style="color:var(--gris)">Este vendedor no completó sus datos de transferencia. Coordiná por WhatsApp.</div>'
-              : ''}
+            ? '<div style="color:var(--gris)">Este vendedor no completó sus datos de transferencia. Coordiná por WhatsApp.</div>'
+            : ''}
           </div>` : ''
 
         return `
@@ -312,25 +348,25 @@
     async function prellenarDatos(user) {
       const p = await getPerfil(user.id)
       if (p) {
-        document.getElementById('co-nombre').value = p.nombre   || ''
-        document.getElementById('co-email').value  = user.email || ''
+        document.getElementById('co-nombre').value = p.nombre || ''
+        document.getElementById('co-email').value = user.email || ''
       }
       const { data: tarjetas } = await supabase
         .from('tarjetas').select('*').eq('user_id', user.id).limit(1)
       if (tarjetas && tarjetas.length > 0) {
         const t = tarjetas[0]
         document.getElementById('tv-numero').textContent = t.numero_enmascarado
-        document.getElementById('tv-brand').textContent  = t.tipo || 'CARD'
+        document.getElementById('tv-brand').textContent = t.tipo || 'CARD'
       }
     }
 
     document.getElementById('t-numero').addEventListener('input', e => {
-      let v = e.target.value.replace(/\D/g,'').slice(0,16)
-      const fmt = v.replace(/(.{4})/g,'$1 ').trim()
+      let v = e.target.value.replace(/\D/g, '').slice(0, 16)
+      const fmt = v.replace(/(.{4})/g, '$1 ').trim()
       e.target.value = fmt
       document.getElementById('tv-numero').textContent = fmt || '•••• •••• •••• ••••'
-      const brand = v[0]==='4' ? 'VISA' : v[0]==='5' ? 'MASTERCARD' :
-                    v.startsWith('34')||v.startsWith('37') ? 'AMEX' : 'CARD'
+      const brand = v[0] === '4' ? 'VISA' : v[0] === '5' ? 'MASTERCARD' :
+        v.startsWith('34') || v.startsWith('37') ? 'AMEX' : 'CARD'
       document.getElementById('tv-brand').textContent = brand
     })
 
@@ -340,14 +376,14 @@
     })
 
     document.getElementById('t-vence').addEventListener('input', e => {
-      let v = e.target.value.replace(/\D/g,'').slice(0,4)
-      if (v.length >= 3) v = v.slice(0,2) + '/' + v.slice(2)
+      let v = e.target.value.replace(/\D/g, '').slice(0, 4)
+      if (v.length >= 3) v = v.slice(0, 2) + '/' + v.slice(2)
       e.target.value = v
       document.getElementById('tv-vence').textContent = v || 'MM/AA'
     })
 
     document.getElementById('t-cvv').addEventListener('input', e => {
-      e.target.value = e.target.value.replace(/\D/g,'').slice(0,4)
+      e.target.value = e.target.value.replace(/\D/g, '').slice(0, 4)
     })
 
     document.getElementById('btn-finalizar').addEventListener('click', async () => {
@@ -356,7 +392,7 @@
       if (Object.keys(grupos).length === 0) { toast('Error al cargar el carrito', 'err'); return }
 
       const nombre = document.getElementById('co-nombre').value.trim()
-      const email  = document.getElementById('co-email').value.trim()
+      const email = document.getElementById('co-email').value.trim()
       if (!nombre || !email) { toast('Completá nombre y email', 'err'); return }
 
       for (const g of Object.values(grupos)) {
@@ -370,14 +406,14 @@
         .some(g => g.pagoSel === 'debito' || g.pagoSel === 'credito')
 
       if (necesitaTarjeta) {
-        const num       = document.getElementById('t-numero').value.replace(/\s/g,'')
-        const vence     = document.getElementById('t-vence').value
-        const cvv       = document.getElementById('t-cvv').value
+        const num = document.getElementById('t-numero').value.replace(/\s/g, '')
+        const vence = document.getElementById('t-vence').value
+        const cvv = document.getElementById('t-cvv').value
         const nombreTit = document.getElementById('t-nombre').value.trim()
-        if (num.length < 16)  { toast('Ingresá un número de tarjeta válido', 'err'); return }
+        if (num.length < 16) { toast('Ingresá un número de tarjeta válido', 'err'); return }
         if (vence.length < 5) { toast('Ingresá la fecha de vencimiento', 'err'); return }
-        if (cvv.length < 3)   { toast('Ingresá el CVV', 'err'); return }
-        if (!nombreTit)       { toast('Ingresá el nombre del titular', 'err'); return }
+        if (cvv.length < 3) { toast('Ingresá el CVV', 'err'); return }
+        if (!nombreTit) { toast('Ingresá el nombre del titular', 'err'); return }
       }
 
       const btn = document.getElementById('btn-finalizar')
@@ -391,44 +427,44 @@
       }
 
       if (necesitaTarjeta) {
-        const num      = document.getElementById('t-numero').value.replace(/\s/g,'')
+        const num = document.getElementById('t-numero').value.replace(/\s/g, '')
         const ultimos4 = num.slice(-4)
-        const masked   = '•••• •••• •••• ' + ultimos4
-        const tipo     = document.getElementById('tv-brand').textContent
+        const masked = '•••• •••• •••• ' + ultimos4
+        const tipo = document.getElementById('tv-brand').textContent
         await supabase.from('tarjetas').upsert({
-          user_id:            user.id,
+          user_id: user.id,
           numero_enmascarado: masked,
-          ultimos_4:          ultimos4,
+          ultimos_4: ultimos4,
           tipo
         }, { onConflict: 'user_id' })
       }
 
       let pedidoCreado = null
-      let todoBien     = true
+      let todoBien = true
 
       for (const [vid, g] of Object.entries(grupos)) {
         const total = g.items.reduce((acc, i) => acc + i.precio * i.cantidad, 0)
         const ticketId = 'TK-' + Date.now().toString(36).toUpperCase() +
-                         '-' + Math.random().toString(36).slice(2,6).toUpperCase()
+          '-' + Math.random().toString(36).slice(2, 6).toUpperCase()
 
         const { data, error } = await supabase.from('pedidos').insert({
-          comprador_id:     user.id,
-          vendedor_id:      vid,
-          items:            g.items.map(i => ({
-            nombre:   i.nombre,
+          comprador_id: user.id,
+          vendedor_id: vid,
+          items: g.items.map(i => ({
+            nombre: i.nombre,
             cantidad: i.cantidad,
-            precio:   i.precio,
+            precio: i.precio,
             variante: i.variante
           })),
           total,
-          estado:           'pendiente',
-          medio_pago:       g.pagoSel,
-          ticket_id:        ticketId,
-          codigo_postal:    document.getElementById('co-cp').value.trim()    || null,
-          direccion:        document.getElementById('co-dir').value.trim()   || null,
-          notas:            document.getElementById('co-notas').value.trim() || null,
+          estado: 'pendiente',
+          medio_pago: g.pagoSel,
+          ticket_id: ticketId,
+          codigo_postal: document.getElementById('co-cp').value.trim() || null,
+          direccion: document.getElementById('co-dir').value.trim() || null,
+          notas: document.getElementById('co-notas').value.trim() || null,
           nombre_comprador: nombre,
-          email_comprador:  email,
+          email_comprador: email,
         }).select().single()
 
         if (error) { console.error(error); todoBien = false }
@@ -461,4 +497,5 @@
     init()
   </script>
 </body>
+
 </html>

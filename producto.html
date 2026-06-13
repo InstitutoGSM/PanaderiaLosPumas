@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,53 +8,95 @@
   <link rel="stylesheet" href="css/global.css">
   <link rel="stylesheet" href="css/tienda.css">
   <style>
-    html,body{overflow-x:hidden}
+    html,
+    body {
+      overflow-x: hidden
+    }
+
     .prod-layout {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 40px; padding: 40px 0 60px;
+      gap: 40px;
+      padding: 40px 0 60px;
       align-items: start;
     }
+
     .prod-galeria-main {
-      width: 100%; border-radius: var(--radio-lg);
-      aspect-ratio: 1; object-fit: cover;
+      width: 100%;
+      border-radius: var(--radio-lg);
+      aspect-ratio: 1;
+      object-fit: cover;
       background: var(--crema-dark);
     }
+
     .prod-thumbs {
-      display: flex; gap: 8px; margin-top: 10px;
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
       flex-wrap: wrap;
     }
+
     .prod-thumb {
-      width: 64px; height: 64px; border-radius: 8px;
-      object-fit: cover; cursor: pointer;
+      width: 64px;
+      height: 64px;
+      border-radius: 8px;
+      object-fit: cover;
+      cursor: pointer;
       border: 2px solid transparent;
       transition: border-color 0.2s;
     }
-    .prod-thumb.on { border-color: var(--naranja); }
-    .prod-info h1  { font-size: 2rem; margin-bottom: 6px; }
-    .prod-precios  { margin: 18px 0; }
+
+    .prod-thumb.on {
+      border-color: var(--naranja);
+    }
+
+    .prod-info h1 {
+      font-size: 2rem;
+      margin-bottom: 6px;
+    }
+
+    .prod-precios {
+      margin: 18px 0;
+    }
+
     .prod-precio-row {
-      display: flex; justify-content: space-between;
-      padding: 10px 0; border-bottom: 1px solid var(--crema-dark);
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--crema-dark);
       font-size: 1rem;
     }
-    .prod-precio-row:last-child { border-bottom: none; }
-    .prod-precio-val {
-      font-weight: 900; color: var(--verde);
-      font-family: 'Playfair Display', serif; font-size: 1.2rem;
+
+    .prod-precio-row:last-child {
+      border-bottom: none;
     }
+
+    .prod-precio-val {
+      font-weight: 900;
+      color: var(--verde);
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+    }
+
     .sin-stock-overlay {
-      background: rgba(245,236,215,0.85);
+      background: rgba(245, 236, 215, 0.85);
       border-radius: var(--radio-lg);
-      padding: 20px; text-align: center;
+      padding: 20px;
+      text-align: center;
       border: 2px dashed var(--crema-dark);
       margin-bottom: 16px;
     }
-    @media(max-width:700px){
-      .prod-layout { grid-template-columns:1fr; gap:20px; padding:24px 0 40px; }
+
+    @media(max-width:700px) {
+      .prod-layout {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 24px 0 40px;
+      }
     }
   </style>
 </head>
+
 <body>
 
   <nav class="navbar">
@@ -97,20 +140,28 @@
     <div id="cart-footer"></div>
   </aside>
 
+  <footer style="text-align:center;padding:24px;font-size:0.8rem;color:var(--gris)">
+    <a href="terminos.html" style="color:var(--gris)">Términos y Condiciones</a>
+  </footer>
+
   <div id="toast-box"></div>
 
   <script type="module">
-    import { supabase }                          from './js/supabase.js'
-    import { toast, formatPrecio, catLabel,
-             catEmoji, getIniciales }            from './js/utils.js'
-    import { agregarItem, actualizarBadge,
-             renderCarrito }                     from './js/carrito.js'
-    import { renderEstrellas }                   from './js/calificaciones.js'
+    import { supabase } from './js/supabase.js'
+    import {
+      toast, formatPrecio, catLabel,
+      catEmoji, getIniciales
+    } from './js/utils.js'
+    import {
+      agregarItem, actualizarBadge,
+      renderCarrito
+    } from './js/carrito.js'
+    import { renderEstrellas } from './js/calificaciones.js'
 
     actualizarBadge()
 
     const params = new URLSearchParams(location.search)
-    const id     = params.get('id')
+    const id = params.get('id')
     if (!id) location.href = 'index.html'
 
     async function cargar() {
@@ -137,7 +188,7 @@
       const sinStock = p.cantidad_disponible === 0
 
       const nombrePan = p.profiles?.nombre_panaderia || p.profiles?.nombre || 'Panadería'
-      const telefono  = p.profiles?.telefono || null
+      const telefono = p.profiles?.telefono || null
 
       document.getElementById('prod-wrap').innerHTML = `
         <div class="prod-layout">
@@ -145,21 +196,21 @@
           <!-- Galería -->
           <div>
             ${todas.length > 0
-              ? `<img id="main-img" class="prod-galeria-main"
+          ? `<img id="main-img" class="prod-galeria-main"
                       src="${todas[0].url}" alt="${p.nombre}">`
-              : `<div class="prod-galeria-main"
+          : `<div class="prod-galeria-main"
                       style="display:flex;align-items:center;
                              justify-content:center;font-size:5rem">
                    ${catEmoji(p.categoria)}
                  </div>`}
             ${todas.length > 1
-              ? `<div class="prod-thumbs">
+          ? `<div class="prod-thumbs">
                    ${todas.map((f, i) => `
-                     <img src="${f.url}" class="prod-thumb ${i===0?'on':''}"
-                          data-src="${f.url}" alt="Foto ${i+1}">
+                     <img src="${f.url}" class="prod-thumb ${i === 0 ? 'on' : ''}"
+                          data-src="${f.url}" alt="Foto ${i + 1}">
                    `).join('')}
                  </div>`
-              : ''}
+          : ''}
           </div>
 
           <!-- Info -->
@@ -176,14 +227,14 @@
             <div id="estrellas-prod"></div>
 
             ${p.descripcion
-              ? `<p style="color:var(--gris);margin:14px 0;
+          ? `<p style="color:var(--gris);margin:14px 0;
                            line-height:1.7">${p.descripcion}</p>`
-              : ''}
+          : ''}
             ${p.dato_extra
-              ? `<div style="background:var(--crema);padding:10px 14px;
+          ? `<div style="background:var(--crema);padding:10px 14px;
                              border-radius:var(--radio);font-size:0.88rem;
                              margin-bottom:16px">ℹ️ ${p.dato_extra}</div>`
-              : ''}
+          : ''}
 
             <!-- Precios -->
             <div class="prod-precios">
@@ -233,10 +284,9 @@
                 </button>
               ` : ''}
               ${telefono ? `
-                <a href="https://wa.me/${telefono.replace(/\D/g,'')}?text=${
-                  encodeURIComponent(
-                    `Hola! Vi el producto "${p.nombre}" en PanaderiaMarket y me interesa 🥖`
-                  )}"
+                <a href="https://wa.me/${telefono.replace(/\D/g, '')}?text=${encodeURIComponent(
+            `Hola! Vi el producto "${p.nombre}" en PanaderiaMarket y me interesa 🥖`
+          )}"
                    target="_blank" rel="noopener"
                    class="btn btn-full"
                    style="background:#25D366;color:white;justify-content:center">
@@ -294,11 +344,12 @@
       document.getElementById('cart-overlay').classList.toggle('open', abrir)
       if (abrir) renderCarrito()
     }
-    document.getElementById('cart-toggle').addEventListener('click',  () => toggleCart(true))
-    document.getElementById('cart-close').addEventListener('click',   () => toggleCart(false))
+    document.getElementById('cart-toggle').addEventListener('click', () => toggleCart(true))
+    document.getElementById('cart-close').addEventListener('click', () => toggleCart(false))
     document.getElementById('cart-overlay').addEventListener('click', () => toggleCart(false))
 
     cargar()
   </script>
 </body>
+
 </html>

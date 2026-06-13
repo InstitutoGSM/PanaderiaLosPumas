@@ -1,13 +1,20 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PanaderiaMarket — Panes artesanales</title>
   <link rel="stylesheet" href="css/global.css">
   <link rel="stylesheet" href="css/index.css">
-  <style>html,body{overflow-x:hidden}</style>
+  <style>
+    html,
+    body {
+      overflow-x: hidden
+    }
+  </style>
 </head>
+
 <body>
 
   <!-- NAVBAR -->
@@ -19,19 +26,15 @@
       </a>
       <div class="navbar-search" role="search">
         <span class="ico" aria-hidden="true">🔍</span>
-        <input type="search" id="search-nav"
-               placeholder="Buscar panes, panaderías..."
-               aria-label="Buscar productos"
-               autocomplete="off">
+        <input type="search" id="search-nav" placeholder="Buscar panes, panaderías..." aria-label="Buscar productos"
+          autocomplete="off">
       </div>
       <div class="navbar-actions">
         <a href="login.html" id="nav-btn" class="btn btn-ghost btn-sm">Ingresar</a>
-        <a href="historial.html" id="nav-historial"
-           class="btn btn-ghost btn-sm" style="display:none">
+        <a href="historial.html" id="nav-historial" class="btn btn-ghost btn-sm" style="display:none">
           Mis pedidos 📦
         </a>
-        <button id="nav-logout" class="btn btn-ghost btn-sm"
-                style="display:none" aria-label="Cerrar sesión">
+        <button id="nav-logout" class="btn btn-ghost btn-sm" style="display:none" aria-label="Cerrar sesión">
           Salir 🚪
         </button>
         <button class="cart-btn" id="cart-toggle" aria-label="Abrir carrito">
@@ -49,14 +52,12 @@
         <div class="hero-texto">
           <h1>El antojo que<br>estabas buscando 🥐</h1>
           <p>Comprá directo a panaderías artesanales.<br>
-             Todo hecho con amor y bajo pedido.</p>
+            Todo hecho con amor y bajo pedido.</p>
         </div>
         <div class="hero-search-wrap">
           <div class="hero-search">
-            <input type="search" id="search-hero"
-                   placeholder="¿Qué se te antoja hoy?"
-                   aria-label="Buscar productos"
-                   autocomplete="off">
+            <input type="search" id="search-hero" placeholder="¿Qué se te antoja hoy?" aria-label="Buscar productos"
+              autocomplete="off">
             <button class="btn btn-naranja" id="btn-buscar">Buscar</button>
           </div>
         </div>
@@ -72,8 +73,7 @@
       <div style="display:flex;align-items:center;justify-content:space-between;
                   margin-bottom:12px;flex-wrap:wrap;gap:10px">
         <h2 class="sec-titulo" style="margin:0">🏪 Panaderías</h2>
-        <button id="btn-toggle-pan" class="btn btn-ghost btn-sm"
-                aria-expanded="false" aria-controls="panel-panaderias">
+        <button id="btn-toggle-pan" class="btn btn-ghost btn-sm" aria-expanded="false" aria-controls="panel-panaderias">
           Ver panaderías ▾
         </button>
       </div>
@@ -82,10 +82,8 @@
           <span style="position:absolute;left:13px;top:50%;
                        transform:translateY(-50%);color:var(--gris);
                        pointer-events:none">🔍</span>
-          <input type="search" id="search-panaderias"
-                 placeholder="Buscar panadería..."
-                 style="padding-left:40px"
-                 aria-label="Buscar panadería">
+          <input type="search" id="search-panaderias" placeholder="Buscar panadería..." style="padding-left:40px"
+            aria-label="Buscar panadería">
         </div>
         <div id="panaderias-row" class="panaderias-row"></div>
       </div>
@@ -93,12 +91,12 @@
 
     <!-- Filtros -->
     <div class="filtros sec-sm" role="group" aria-label="Filtrar por categoría">
-      <button class="filtro on" data-cat="todos"    aria-pressed="true">Todos</button>
-      <button class="filtro"    data-cat="pan"      aria-pressed="false">🍞 Pan</button>
-      <button class="filtro"    data-cat="facturas" aria-pressed="false">🥐 Facturas</button>
-      <button class="filtro"    data-cat="galletas" aria-pressed="false">🍪 Galletas</button>
-      <button class="filtro"    data-cat="cakes"    aria-pressed="false">🎂 Cakes</button>
-      <button class="filtro"    data-cat="otro"     aria-pressed="false">✨ Otro</button>
+      <button class="filtro on" data-cat="todos" aria-pressed="true">Todos</button>
+      <button class="filtro" data-cat="pan" aria-pressed="false">🍞 Pan</button>
+      <button class="filtro" data-cat="facturas" aria-pressed="false">🥐 Facturas</button>
+      <button class="filtro" data-cat="galletas" aria-pressed="false">🍪 Galletas</button>
+      <button class="filtro" data-cat="cakes" aria-pressed="false">🎂 Cakes</button>
+      <button class="filtro" data-cat="otro" aria-pressed="false">✨ Otro</button>
     </div>
 
     <!-- Toolbar -->
@@ -114,8 +112,7 @@
     </div>
 
     <!-- Grid -->
-    <div id="productos-grid" class="grid-productos sec-sm"
-         role="list" aria-label="Productos disponibles">
+    <div id="productos-grid" class="grid-productos sec-sm" role="list" aria-label="Productos disponibles">
     </div>
 
     <!-- Estado vacío -->
@@ -138,15 +135,21 @@
     <div id="cart-footer"></div>
   </aside>
 
+  <footer style="text-align:center;padding:24px;font-size:0.8rem;color:var(--gris)">
+    <a href="terminos.html" style="color:var(--gris)">Términos y Condiciones</a>
+  </footer>
+
   <div id="toast-box"></div>
 
   <script type="module">
-    import { debounce, formatPrecio }           from './js/utils.js'
-    import { actualizarBadge, renderCarrito }   from './js/carrito.js'
-    import { cargarPanaderias, cargarProductos,
-             renderProductos, setCat, setBusq } from './js/productos.js'
-    import { getUser, getPerfil }               from './js/auth.js'
-    import { initSugerencias }                  from './js/sugerencias.js'
+    import { debounce, formatPrecio } from './js/utils.js'
+    import { actualizarBadge, renderCarrito } from './js/carrito.js'
+    import {
+      cargarPanaderias, cargarProductos,
+      renderProductos, setCat, setBusq
+    } from './js/productos.js'
+    import { getUser, getPerfil } from './js/auth.js'
+    import { initSugerencias } from './js/sugerencias.js'
 
     actualizarBadge()
     cargarPanaderias()
@@ -154,12 +157,12 @@
 
     // ── Nav usuario ──
     getUser().then(async user => {
-      const btn     = document.getElementById('nav-btn')
+      const btn = document.getElementById('nav-btn')
       const logoutB = document.getElementById('nav-logout')
       const histBtn = document.getElementById('nav-historial')
 
       if (!user) {
-        btn.href        = 'login.html'
+        btn.href = 'login.html'
         btn.textContent = 'Ingresar'
         if (logoutB) logoutB.style.display = 'none'
         if (histBtn) histBtn.style.display = 'none'
@@ -168,10 +171,10 @@
 
       const perfil = await getPerfil(user.id)
       if (perfil?.tipo === 'vendedor') {
-        btn.href        = 'vendedor.html'
+        btn.href = 'vendedor.html'
         btn.textContent = 'Mi panel 📊'
       } else {
-        btn.href        = '#'
+        btn.href = '#'
         btn.textContent = `Hola, ${perfil?.nombre?.split(' ')[0]} 👋`
       }
       if (logoutB) logoutB.style.display = 'inline-flex'
@@ -200,30 +203,30 @@
           .limit(3)
       ])
 
-      const emojis = { pan:'🍞', facturas:'🥐', galletas:'🍪', cakes:'🎂', otro:'✨' }
-      const sugs   = []
+      const emojis = { pan: '🍞', facturas: '🥐', galletas: '🍪', cakes: '🎂', otro: '✨' }
+      const sugs = []
 
-      ;(pans || []).forEach(p => sugs.push({
-        label: p.nombre_panaderia || p.nombre,
-        sub:   'Panadería',
-        ico:   '🏪',
-        href:  `tienda.html?id=${p.id}`
-      }))
+        ; (pans || []).forEach(p => sugs.push({
+          label: p.nombre_panaderia || p.nombre,
+          sub: 'Panadería',
+          ico: '🏪',
+          href: `tienda.html?id=${p.id}`
+        }))
 
-      ;(prods || []).forEach(p => sugs.push({
-        label:  p.nombre,
-        sub:    p.categoria,
-        ico:    emojis[p.categoria] || '🛒',
-        href:   `producto.html?id=${p.id}`,
-        precio: p.unidad_venta === 'kilo'
-          ? `${formatPrecio(p.precio)}/kg`
-          : formatPrecio(p.precio)
-      }))
+        ; (prods || []).forEach(p => sugs.push({
+          label: p.nombre,
+          sub: p.categoria,
+          ico: emojis[p.categoria] || '🛒',
+          href: `producto.html?id=${p.id}`,
+          precio: p.unidad_venta === 'kilo'
+            ? `${formatPrecio(p.precio)}/kg`
+            : formatPrecio(p.precio)
+        }))
 
       return sugs
     }
 
-    initSugerencias('search-nav',  buscarSugerencias)
+    initSugerencias('search-nav', buscarSugerencias)
     initSugerencias('search-hero', buscarSugerencias)
 
     // ── Búsqueda ──
@@ -243,9 +246,9 @@
     document.querySelectorAll('.filtro').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.filtro').forEach(b => {
-          b.classList.remove('on'); b.setAttribute('aria-pressed','false')
+          b.classList.remove('on'); b.setAttribute('aria-pressed', 'false')
         })
-        btn.classList.add('on'); btn.setAttribute('aria-pressed','true')
+        btn.classList.add('on'); btn.setAttribute('aria-pressed', 'true')
         setCat(btn.dataset.cat)
       })
     })
@@ -259,17 +262,17 @@
       document.getElementById('cart-overlay').classList.toggle('open', abrir)
       if (abrir) renderCarrito()
     }
-    document.getElementById('cart-toggle').addEventListener('click',  () => toggleCart(true))
-    document.getElementById('cart-close').addEventListener('click',   () => toggleCart(false))
+    document.getElementById('cart-toggle').addEventListener('click', () => toggleCart(true))
+    document.getElementById('cart-close').addEventListener('click', () => toggleCart(false))
     document.getElementById('cart-overlay').addEventListener('click', () => toggleCart(false))
 
     // ── Panaderías toggle ──
     document.getElementById('btn-toggle-pan').addEventListener('click', () => {
-      const panel   = document.getElementById('panel-panaderias')
-      const btn     = document.getElementById('btn-toggle-pan')
+      const panel = document.getElementById('panel-panaderias')
+      const btn = document.getElementById('btn-toggle-pan')
       const abierto = panel.style.display !== 'none'
       panel.style.display = abierto ? 'none' : 'block'
-      btn.textContent     = abierto ? 'Ver panaderías ▾' : 'Ocultar ▴'
+      btn.textContent = abierto ? 'Ver panaderías ▾' : 'Ocultar ▴'
       btn.setAttribute('aria-expanded', !abierto)
     })
 
@@ -286,4 +289,5 @@
   </script>
 
 </body>
+
 </html>

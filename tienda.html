@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,8 +8,14 @@
   <link rel="stylesheet" href="css/global.css">
   <link rel="stylesheet" href="css/tienda.css">
   <link rel="stylesheet" href="css/index.css">
-  <style>html,body{overflow-x:hidden}</style>
+  <style>
+    html,
+    body {
+      overflow-x: hidden
+    }
+  </style>
 </head>
+
 <body>
 
   <nav class="navbar" role="navigation">
@@ -19,9 +26,7 @@
       </a>
       <div class="navbar-search" role="search">
         <span class="ico" aria-hidden="true">🔍</span>
-        <input type="search" id="search-tienda"
-               placeholder="Buscar en esta tienda..."
-               aria-label="Buscar en la tienda">
+        <input type="search" id="search-tienda" placeholder="Buscar en esta tienda..." aria-label="Buscar en la tienda">
       </div>
       <div class="navbar-actions">
         <a href="index.html" class="btn btn-ghost btn-sm">← Volver</a>
@@ -50,8 +55,7 @@
   <!-- MAIN -->
   <main class="container">
 
-    <div id="filtros-tienda" class="filtros sec-sm"
-         role="group" aria-label="Categorías"></div>
+    <div id="filtros-tienda" class="filtros sec-sm" role="group" aria-label="Categorías"></div>
 
     <div class="toolbar">
       <span class="toolbar-count" id="count-tienda"></span>
@@ -78,25 +82,33 @@
     <div id="cart-footer"></div>
   </aside>
 
+  <footer style="text-align:center;padding:24px;font-size:0.8rem;color:var(--gris)">
+    <a href="terminos.html" style="color:var(--gris)">Términos y Condiciones</a>
+  </footer>
+
   <div id="toast-box"></div>
 
   <script type="module">
-    import { supabase }                         from './js/supabase.js'
-    import { toast, formatPrecio, catEmoji,
-             catLabel, getIniciales, debounce } from './js/utils.js'
-    import { agregarItem, actualizarBadge,
-             renderCarrito }                    from './js/carrito.js'
+    import { supabase } from './js/supabase.js'
+    import {
+      toast, formatPrecio, catEmoji,
+      catLabel, getIniciales, debounce
+    } from './js/utils.js'
+    import {
+      agregarItem, actualizarBadge,
+      renderCarrito
+    } from './js/carrito.js'
 
     actualizarBadge()
 
-    const params     = new URLSearchParams(location.search)
+    const params = new URLSearchParams(location.search)
     const vendedorId = params.get('id')
     if (!vendedorId) location.href = 'index.html'
 
-    let productos   = []
-    let catActual   = 'todos'
-    let busqueda    = ''
-    let nombrePan   = ''
+    let productos = []
+    let catActual = 'todos'
+    let busqueda = ''
+    let nombrePan = ''
 
     // ── Cargar perfil ──
     async function cargarPerfil() {
@@ -114,8 +126,8 @@
       document.getElementById('tienda-info').innerHTML = `
         <div class="tienda-avatar"
              style="${p.avatar_url
-               ? `background:url('${p.avatar_url}') center/cover;font-size:0`
-               : ''}">
+          ? `background:url('${p.avatar_url}') center/cover;font-size:0`
+          : ''}">
           ${p.avatar_url ? '' : getIniciales(p.nombre_panaderia || p.nombre)}
         </div>
         <div>
@@ -123,18 +135,17 @@
           <p class="tienda-desc">${p.descripcion || 'Panadería artesanal'}</p>
           <div class="tienda-meta">
             ${p.instagram
-              ? `<a href="https://instagram.com/${p.instagram}"
+          ? `<a href="https://instagram.com/${p.instagram}"
                     target="_blank" rel="noopener">
                    📸 @${p.instagram}
                  </a>` : ''}
             ${p.telefono
-              ? `<a href="tel:${p.telefono}">📞 ${p.telefono}</a>` : ''}
+          ? `<a href="tel:${p.telefono}">📞 ${p.telefono}</a>` : ''}
             ${p.email_contacto
-              ? `<a href="mailto:${p.email_contacto}">✉️ ${p.email_contacto}</a>` : ''}
+          ? `<a href="mailto:${p.email_contacto}">✉️ ${p.email_contacto}</a>` : ''}
           </div>
           ${p.telefono ? `
-            <a href="https://wa.me/${p.telefono.replace(/\D/g,'')}?text=${
-              encodeURIComponent('Hola! Vi tu tienda en PanaderiaMarket 🥖')}"
+            <a href="https://wa.me/${p.telefono.replace(/\D/g, '')}?text=${encodeURIComponent('Hola! Vi tu tienda en PanaderiaMarket 🥖')}"
                target="_blank" rel="noopener"
                style="display:inline-flex;align-items:center;gap:8px;
                       background:#25D366;color:white;padding:9px 18px;
@@ -180,8 +191,8 @@
     function generarFiltros() {
       const cats = ['todos', ...new Set(productos.map(p => p.categoria).filter(Boolean))]
       const labels = {
-        todos:'Todos', pan:'🍞 Pan', facturas:'🥐 Facturas',
-        galletas:'🍪 Galletas', cakes:'🎂 Cakes', otro:'✨ Otro'
+        todos: 'Todos', pan: '🍞 Pan', facturas: '🥐 Facturas',
+        galletas: '🍪 Galletas', cakes: '🎂 Cakes', otro: '✨ Otro'
       }
       document.getElementById('filtros-tienda').innerHTML = cats.map(c => `
         <button class="filtro ${c === 'todos' ? 'on' : ''}"
@@ -216,7 +227,7 @@
         )
       }
 
-      const grid  = document.getElementById('grid-tienda')
+      const grid = document.getElementById('grid-tienda')
       const empty = document.getElementById('empty-tienda')
       const count = document.getElementById('count-tienda')
 
@@ -236,32 +247,32 @@
               ${catLabel(p.categoria)}
             </span>
             ${p.imagen_url
-              ? `<img class="card-img" src="${p.imagen_url}"
+            ? `<img class="card-img" src="${p.imagen_url}"
                       alt="${p.nombre}" loading="lazy">`
-              : `<div class="card-img-ph">${catEmoji(p.categoria)}</div>`}
+            : `<div class="card-img-ph">${catEmoji(p.categoria)}</div>`}
             <div class="card-body">
               <div class="card-nombre">${p.nombre}</div>
               ${p.descripcion
-                ? `<div style="font-size:0.8rem;color:var(--gris);
+            ? `<div style="font-size:0.8rem;color:var(--gris);
                                margin-bottom:6px;line-height:1.4">
                      ${p.descripcion}
                    </div>`
-                : ''}
+            : ''}
               <div class="card-precio">
                 ${p.unidad_venta === 'kilo'
-                  ? `${formatPrecio(p.precio)} / kg`
-                  : formatPrecio(p.precio)}
+            ? `${formatPrecio(p.precio)} / kg`
+            : formatPrecio(p.precio)}
               </div>
               ${p.precio_media_docena && p.unidad_venta !== 'kilo'
-                ? `<div style="font-size:0.78rem;color:var(--gris)">
+            ? `<div style="font-size:0.78rem;color:var(--gris)">
                      Media doc: ${formatPrecio(p.precio_media_docena)}
                    </div>` : ''}
               ${p.precio_docena && p.unidad_venta !== 'kilo'
-                ? `<div style="font-size:0.78rem;color:var(--gris);margin-bottom:8px">
+            ? `<div style="font-size:0.78rem;color:var(--gris);margin-bottom:8px">
                      Docena: ${formatPrecio(p.precio_docena)}
                    </div>` : ''}
               ${p.dato_extra
-                ? `<div style="font-size:0.78rem;background:var(--crema);
+            ? `<div style="font-size:0.78rem;background:var(--crema);
                                padding:5px 9px;border-radius:6px;margin-bottom:8px">
                      ℹ️ ${p.dato_extra}
                    </div>` : ''}
@@ -317,8 +328,8 @@
       document.getElementById('cart-overlay').classList.toggle('open', abrir)
       if (abrir) renderCarrito()
     }
-    document.getElementById('cart-toggle').addEventListener('click',  () => toggleCart(true))
-    document.getElementById('cart-close').addEventListener('click',   () => toggleCart(false))
+    document.getElementById('cart-toggle').addEventListener('click', () => toggleCart(true))
+    document.getElementById('cart-close').addEventListener('click', () => toggleCart(false))
     document.getElementById('cart-overlay').addEventListener('click', () => toggleCart(false))
 
     cargarPerfil()
@@ -326,4 +337,5 @@
   </script>
 
 </body>
+
 </html>
