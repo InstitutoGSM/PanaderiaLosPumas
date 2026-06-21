@@ -1,295 +1,689 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PanaderiaMarket — Panes artesanales</title>
+  <title>PanaderiaMarket — Panes artesanales de Catamarca</title>
   <link rel="stylesheet" href="css/global.css">
-  <link rel="stylesheet" href="css/index.css">
   <style>
-    html,
-    body {
-      overflow-x: hidden
+    html, body { overflow-x: hidden; }
+
+    /* ── Navbar landing ── */
+    .landing-nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(253,250,244,0.95);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 2px 12px rgba(59,26,10,0.08);
+    }
+    .landing-nav-inner {
+      max-width: 1100px; margin: 0 auto;
+      padding: 0 24px; height: 64px;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    }
+    .landing-nav-logo {
+      display: flex; align-items: center; gap: 8px;
+      font-family: 'Playfair Display', serif;
+      font-weight: 900; font-size: 1.1rem;
+      color: var(--marron); text-decoration: none;
+    }
+    .landing-nav-logo img { height: 34px; }
+    .landing-nav-logo .marca { color: var(--naranja); }
+    .landing-nav-actions { display: flex; align-items: center; gap: 10px; }
+
+    /* ── Hero ── */
+    .hero-landing {
+      background: linear-gradient(135deg, var(--marron) 0%, #5C2E0E 100%);
+      min-height: 92vh;
+      display: flex; align-items: center;
+      position: relative; overflow: hidden;
+    }
+    .hero-landing::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 70% 50%, rgba(200,96,26,0.25) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .hero-landing::after {
+      content: '🥖🥐🍞🎂🍪';
+      position: absolute; bottom: -20px; right: -20px;
+      font-size: 12rem; opacity: 0.06; line-height: 1;
+      pointer-events: none; letter-spacing: -10px;
+    }
+    .hero-content {
+      max-width: 1100px; margin: 0 auto; padding: 60px 24px;
+      position: relative; z-index: 1;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+    }
+    .hero-texto h1 {
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      color: white; line-height: 1.15; margin-bottom: 18px;
+    }
+    .hero-texto h1 span { color: var(--naranja-lt); }
+    .hero-texto p {
+      color: rgba(255,255,255,0.75); font-size: 1.1rem;
+      line-height: 1.7; margin-bottom: 32px;
+    }
+    .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn-hero-primary {
+      background: var(--naranja); color: white;
+      padding: 16px 32px; border-radius: 50px;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem; font-weight: 700;
+      text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(200,96,26,0.4);
+    }
+    .btn-hero-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(200,96,26,0.5); }
+    .btn-hero-secondary {
+      background: rgba(255,255,255,0.12); color: white;
+      padding: 16px 28px; border-radius: 50px;
+      font-size: 0.95rem; font-weight: 700;
+      text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+      border: 2px solid rgba(255,255,255,0.25);
+      transition: background 0.2s;
+    }
+    .btn-hero-secondary:hover { background: rgba(255,255,255,0.2); }
+
+    /* Stats hero */
+    .hero-stats {
+      display: flex; gap: 28px; margin-top: 36px; flex-wrap: wrap;
+    }
+    .hero-stat { text-align: center; }
+    .hero-stat .num {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem; font-weight: 900; color: var(--naranja-lt);
+    }
+    .hero-stat .lbl { font-size: 0.78rem; color: rgba(255,255,255,0.6); }
+
+    /* Imagen hero */
+    .hero-visual {
+      display: flex; justify-content: center; align-items: center;
+    }
+    .hero-emoji-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 16px; max-width: 340px;
+    }
+    .hero-emoji-card {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 20px; padding: 24px;
+      text-align: center;
+      transition: transform 0.3s;
+    }
+    .hero-emoji-card:hover { transform: translateY(-6px); }
+    .hero-emoji-card .e { font-size: 2.8rem; display: block; margin-bottom: 8px; }
+    .hero-emoji-card .n { font-size: 0.82rem; color: rgba(255,255,255,0.8); font-weight: 600; }
+    .hero-emoji-card:nth-child(2) { margin-top: 24px; }
+    .hero-emoji-card:nth-child(4) { margin-top: -24px; }
+
+    /* ── Sección cómo funciona ── */
+    .como-sec {
+      padding: 72px 0; background: var(--crema);
+    }
+    .como-inner {
+      max-width: 1100px; margin: 0 auto; padding: 0 24px;
+    }
+    .sec-label {
+      font-size: 0.78rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.15em; color: var(--naranja); margin-bottom: 10px;
+    }
+    .sec-titulo-lg {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      color: var(--marron); margin-bottom: 10px;
+    }
+    .sec-sub {
+      color: var(--gris); font-size: 0.95rem; margin-bottom: 48px; max-width: 520px;
+    }
+    .pasos-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
+      gap: 24px;
+    }
+    .paso-card {
+      background: var(--blanco); border-radius: var(--radio-lg);
+      padding: 28px 24px; box-shadow: var(--sombra);
+      position: relative; overflow: hidden;
+    }
+    .paso-card::before {
+      content: attr(data-num);
+      position: absolute; top: -10px; right: 12px;
+      font-family: 'Playfair Display', serif;
+      font-size: 5rem; font-weight: 900;
+      color: var(--crema-dark); line-height: 1;
+    }
+    .paso-ico { font-size: 2.2rem; margin-bottom: 14px; display: block; }
+    .paso-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem; margin-bottom: 8px; color: var(--marron);
+    }
+    .paso-card p { font-size: 0.88rem; color: #555; line-height: 1.7; }
+
+    /* ── Carrusel destacados ── */
+    .destacados-sec {
+      padding: 72px 0; background: var(--blanco);
+    }
+    .destacados-inner {
+      max-width: 1100px; margin: 0 auto; padding: 0 24px;
+    }
+    .carrusel-wrap { position: relative; overflow: hidden; }
+    .carrusel-track {
+      display: flex; gap: 18px;
+      transition: transform 0.45s cubic-bezier(0.4,0,0.2,1);
+      will-change: transform;
+    }
+    .carrusel-card {
+      flex: 0 0 calc(33.333% - 12px);
+      background: var(--crema); border-radius: var(--radio-lg);
+      overflow: hidden; box-shadow: var(--sombra);
+      cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
+      text-decoration: none; color: inherit; display: block;
+    }
+    .carrusel-card:hover { transform: translateY(-4px); box-shadow: var(--sombra-lg); }
+    .carrusel-img {
+      width: 100%; height: 180px; object-fit: cover;
+      display: block;
+    }
+    .carrusel-img-ph {
+      width: 100%; height: 180px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 4rem; background: var(--crema-dark);
+    }
+    .carrusel-body { padding: 16px; }
+    .carrusel-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 0.72rem; font-weight: 700; padding: 3px 10px;
+      border-radius: 50px; margin-bottom: 8px;
+    }
+    .badge-vendido   { background: #FFF8E1; color: #F57F17; }
+    .badge-calificado { background: #E8F5E9; color: #2E7D32; }
+    .badge-tendencia { background: #FCE4EC; color: #C62828; }
+    .carrusel-nombre { font-weight: 700; font-size: 1rem; margin-bottom: 4px; }
+    .carrusel-pan    { font-size: 0.78rem; color: var(--gris); margin-bottom: 8px; }
+    .carrusel-precio {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem; font-weight: 900; color: var(--verde);
+    }
+
+    /* Controles carrusel */
+    .carrusel-controles {
+      display: flex; justify-content: center; align-items: center;
+      gap: 12px; margin-top: 24px;
+    }
+    .carrusel-btn {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--blanco); border: 2px solid var(--crema-dark);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 1rem; transition: all var(--trans);
+    }
+    .carrusel-btn:hover { background: var(--naranja); border-color: var(--naranja); color: white; }
+    .carrusel-dots { display: flex; gap: 6px; }
+    .carrusel-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--crema-dark); cursor: pointer; transition: background 0.2s;
+    }
+    .carrusel-dot.on { background: var(--naranja); width: 20px; border-radius: 4px; }
+
+    /* ── Panaderías destacadas ── */
+    .pans-sec {
+      padding: 72px 0; background: var(--crema);
+    }
+    .pans-inner {
+      max-width: 1100px; margin: 0 auto; padding: 0 24px;
+    }
+    .pans-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr));
+      gap: 16px; margin-top: 32px;
+    }
+    .pan-landing-card {
+      background: var(--blanco); border-radius: var(--radio-lg);
+      padding: 20px; box-shadow: var(--sombra);
+      text-align: center; text-decoration: none; color: inherit;
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: block;
+    }
+    .pan-landing-card:hover { transform: translateY(-4px); box-shadow: var(--sombra-lg); }
+    .pan-landing-avatar {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: var(--naranja); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem; font-weight: 900; margin: 0 auto 12px;
+      overflow: hidden;
+    }
+    .pan-landing-avatar img { width:100%; height:100%; object-fit:cover; }
+    .pan-landing-nombre { font-weight: 700; font-size: 0.95rem; color: var(--marron); }
+    .pan-landing-desc   { font-size: 0.78rem; color: var(--gris); margin-top: 4px; }
+
+    /* ── CTA final ── */
+    .cta-sec {
+      background: linear-gradient(135deg, var(--marron) 0%, var(--marron-mid) 100%);
+      padding: 72px 24px; text-align: center;
+    }
+    .cta-sec h2 { color: white; font-size: clamp(1.6rem, 3vw, 2.2rem); margin-bottom: 12px; }
+    .cta-sec p  { color: rgba(255,255,255,0.7); margin-bottom: 28px; font-size: 0.95rem; }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .hero-content { grid-template-columns: 1fr; gap: 32px; padding: 48px 20px; }
+      .hero-visual  { display: none; }
+      .hero-landing { min-height: auto; }
+      .carrusel-card { flex: 0 0 calc(80% - 9px); }
+    }
+    @media (max-width: 480px) {
+      .carrusel-card { flex: 0 0 calc(90% - 9px); }
+      .hero-btns { flex-direction: column; }
+      .btn-hero-primary, .btn-hero-secondary { justify-content: center; }
     }
   </style>
 </head>
-
 <body>
 
-  <!-- NAVBAR -->
-  <nav class="navbar" role="navigation" aria-label="Navegación principal">
-    <div class="navbar-inner">
-      <a href="index.html" class="navbar-logo" aria-label="Inicio">
+  <!-- NAVBAR LANDING -->
+  <nav class="landing-nav" role="navigation" aria-label="Navegación principal">
+    <div class="landing-nav-inner">
+      <a href="index.html" class="landing-nav-logo">
         <img src="assets/logo.png" alt="Logo" onerror="this.style.display='none'">
         Panaderia<span class="marca">PUMA</span>
       </a>
-      <div class="navbar-search" role="search">
-        <span class="ico" aria-hidden="true">🔍</span>
-        <input type="search" id="search-nav" placeholder="Buscar panes, panaderías..." aria-label="Buscar productos"
-          autocomplete="off">
-      </div>
-      <div class="navbar-actions">
+      <div class="landing-nav-actions">
+        <a href="nosotros.html" class="btn btn-ghost btn-sm">Nosotros</a>
         <a href="login.html" id="nav-btn" class="btn btn-ghost btn-sm">Ingresar</a>
-        <a href="historial.html" id="nav-historial" class="btn btn-ghost btn-sm" style="display:none">
-          Mis pedidos 📦
+        <a href="catalogo.html" class="btn btn-naranja btn-sm">
+          Ver productos →
         </a>
-        <button id="nav-logout" class="btn btn-ghost btn-sm" style="display:none" aria-label="Cerrar sesión">
-          Salir 🚪
-        </button>
-        <button class="cart-btn" id="cart-toggle" aria-label="Abrir carrito">
-          🛒 Carrito
-          <span class="cart-badge">0</span>
-        </button>
       </div>
     </div>
   </nav>
 
   <!-- HERO -->
-  <section class="hero" aria-label="Bienvenida">
-    <div class="container">
-      <div class="hero-inner">
-        <div class="hero-texto">
-          <h1>El antojo que<br>estabas buscando 🥐</h1>
-          <p>Comprá directo a panaderías artesanales.<br>
-            Todo hecho con amor y bajo pedido.</p>
+  <section class="hero-landing" aria-label="Bienvenida">
+    <div class="hero-content">
+      <div class="hero-texto">
+        <h1>El pan artesanal<br>que <span>estabas buscando</span> 🥖</h1>
+        <p>
+          Conectamos panaderías artesanales de Catamarca con vos.
+          Productos frescos, hechos con amor y entregados bajo pedido.
+        </p>
+        <div class="hero-btns">
+          <a href="catalogo.html" class="btn-hero-primary">
+            🛍️ Ver productos
+          </a>
+          <a href="login.html?tab=registro" class="btn-hero-secondary">
+            Registrá tu panadería →
+          </a>
         </div>
-        <div class="hero-search-wrap">
-          <div class="hero-search">
-            <input type="search" id="search-hero" placeholder="¿Qué se te antoja hoy?" aria-label="Buscar productos"
-              autocomplete="off">
-            <button class="btn btn-naranja" id="btn-buscar">Buscar</button>
+        <div class="hero-stats" id="hero-stats">
+          <div class="hero-stat">
+            <div class="num" id="stat-productos">—</div>
+            <div class="lbl">Productos</div>
+          </div>
+          <div class="hero-stat">
+            <div class="num" id="stat-panaderias">—</div>
+            <div class="lbl">Panaderías</div>
+          </div>
+          <div class="hero-stat">
+            <div class="num" id="stat-pedidos">—</div>
+            <div class="lbl">Pedidos realizados</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-visual" aria-hidden="true">
+        <div class="hero-emoji-grid">
+          <div class="hero-emoji-card">
+            <span class="e">🍞</span>
+            <span class="n">Pan artesanal</span>
+          </div>
+          <div class="hero-emoji-card">
+            <span class="e">🥐</span>
+            <span class="n">Facturas</span>
+          </div>
+          <div class="hero-emoji-card">
+            <span class="e">🎂</span>
+            <span class="n">Tortas</span>
+          </div>
+          <div class="hero-emoji-card">
+            <span class="e">🍪</span>
+            <span class="n">Galletas</span>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- MAIN -->
-  <main class="container">
-
-    <!-- Panaderías colapsable -->
-    <section class="sec" aria-label="Panaderías disponibles">
-      <div style="display:flex;align-items:center;justify-content:space-between;
-                  margin-bottom:12px;flex-wrap:wrap;gap:10px">
-        <h2 class="sec-titulo" style="margin:0">🏪 Panaderías</h2>
-        <button id="btn-toggle-pan" class="btn btn-ghost btn-sm" aria-expanded="false" aria-controls="panel-panaderias">
-          Ver panaderías ▾
-        </button>
-      </div>
-      <div id="panel-panaderias" style="display:none">
-        <div style="position:relative;max-width:340px;margin-bottom:14px">
-          <span style="position:absolute;left:13px;top:50%;
-                       transform:translateY(-50%);color:var(--gris);
-                       pointer-events:none">🔍</span>
-          <input type="search" id="search-panaderias" placeholder="Buscar panadería..." style="padding-left:40px"
-            aria-label="Buscar panadería">
+  <!-- CÓMO FUNCIONA -->
+  <section class="como-sec" aria-label="Cómo funciona">
+    <div class="como-inner">
+      <div class="sec-label">Simple y rápido</div>
+      <h2 class="sec-titulo-lg">¿Cómo funciona? 🤔</h2>
+      <p class="sec-sub">
+        En tres pasos tenés tu pedido listo para retirar o recibir.
+      </p>
+      <div class="pasos-grid">
+        <div class="paso-card" data-num="1">
+          <span class="paso-ico">🔍</span>
+          <h3>Explorá</h3>
+          <p>Navegá el catálogo de panaderías y productos artesanales de Catamarca.</p>
         </div>
-        <div id="panaderias-row" class="panaderias-row"></div>
+        <div class="paso-card" data-num="2">
+          <span class="paso-ico">🛒</span>
+          <h3>Elegí</h3>
+          <p>Agregá lo que querés al carrito y elegí cómo querés pagarlo.</p>
+        </div>
+        <div class="paso-card" data-num="3">
+          <span class="paso-ico">📦</span>
+          <h3>Recibí</h3>
+          <p>El vendedor prepara tu pedido y coordinan la entrega directamente.</p>
+        </div>
+        <div class="paso-card" data-num="4">
+          <span class="paso-ico">⭐</span>
+          <h3>Calificá</h3>
+          <p>Dejá tu opinión para ayudar a otros compradores a elegir mejor.</p>
+        </div>
       </div>
-    </section>
-
-    <!-- Filtros -->
-    <div class="filtros sec-sm" role="group" aria-label="Filtrar por categoría">
-      <button class="filtro on" data-cat="todos" aria-pressed="true">Todos</button>
-      <button class="filtro" data-cat="pan" aria-pressed="false">🍞 Pan</button>
-      <button class="filtro" data-cat="facturas" aria-pressed="false">🥐 Facturas</button>
-      <button class="filtro" data-cat="galletas" aria-pressed="false">🍪 Galletas</button>
-      <button class="filtro" data-cat="cakes" aria-pressed="false">🎂 Cakes</button>
-      <button class="filtro" data-cat="otro" aria-pressed="false">✨ Otro</button>
     </div>
+  </section>
 
-    <!-- Toolbar -->
-    <div class="toolbar">
-      <span class="toolbar-count" id="count"></span>
-      <select id="ordenar" aria-label="Ordenar productos">
-        <option value="reciente">Más recientes</option>
-        <option value="precio_asc">Menor precio</option>
-        <option value="precio_desc">Mayor precio</option>
-        <option value="nombre">A–Z</option>
-        <option value="calificacion">Mejor calificados ⭐</option>
-      </select>
+  <!-- CARRUSEL DESTACADOS -->
+  <section class="destacados-sec" aria-label="Productos destacados">
+    <div class="destacados-inner">
+      <div class="sec-label">Lo mejor de la semana</div>
+      <h2 class="sec-titulo-lg">Productos destacados ✨</h2>
+      <p class="sec-sub">
+        🏆 Más vendidos · ⭐ Mejor calificados · 🔥 Tendencia
+      </p>
+
+      <div class="carrusel-wrap" id="carrusel-wrap">
+        <div class="carrusel-track" id="carrusel-track">
+          <!-- Se carga por JS -->
+          <div class="carrusel-card" style="pointer-events:none">
+            <div class="skeleton" style="height:180px"></div>
+            <div class="carrusel-body">
+              <div class="skeleton" style="height:14px;width:60%;margin-bottom:8px"></div>
+              <div class="skeleton" style="height:20px;margin-bottom:6px"></div>
+              <div class="skeleton" style="height:14px;width:40%"></div>
+            </div>
+          </div>
+          <div class="carrusel-card" style="pointer-events:none">
+            <div class="skeleton" style="height:180px"></div>
+            <div class="carrusel-body">
+              <div class="skeleton" style="height:14px;width:60%;margin-bottom:8px"></div>
+              <div class="skeleton" style="height:20px;margin-bottom:6px"></div>
+              <div class="skeleton" style="height:14px;width:40%"></div>
+            </div>
+          </div>
+          <div class="carrusel-card" style="pointer-events:none">
+            <div class="skeleton" style="height:180px"></div>
+            <div class="carrusel-body">
+              <div class="skeleton" style="height:14px;width:60%;margin-bottom:8px"></div>
+              <div class="skeleton" style="height:20px;margin-bottom:6px"></div>
+              <div class="skeleton" style="height:14px;width:40%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="carrusel-controles">
+        <button class="carrusel-btn" id="carr-prev" aria-label="Anterior">←</button>
+        <div class="carrusel-dots" id="carrusel-dots"></div>
+        <button class="carrusel-btn" id="carr-next" aria-label="Siguiente">→</button>
+      </div>
     </div>
+  </section>
 
-    <!-- Grid -->
-    <div id="productos-grid" class="grid-productos sec-sm" role="list" aria-label="Productos disponibles">
+  <!-- PANADERÍAS -->
+  <section class="pans-sec" aria-label="Panaderías disponibles">
+    <div class="pans-inner">
+      <div class="sec-label">Quiénes somos</div>
+      <h2 class="sec-titulo-lg">Nuestras panaderías 🏪</h2>
+      <p class="sec-sub">
+        Todas verificadas y habilitadas para elaborar productos alimenticios en Catamarca.
+      </p>
+      <div class="pans-grid" id="pans-grid">
+        <div class="skeleton" style="height:130px;border-radius:var(--radio-lg)"></div>
+        <div class="skeleton" style="height:130px;border-radius:var(--radio-lg)"></div>
+        <div class="skeleton" style="height:130px;border-radius:var(--radio-lg)"></div>
+      </div>
     </div>
+  </section>
 
-    <!-- Estado vacío -->
-    <div id="empty-state" class="empty-state" aria-live="polite">
-      <span class="ico">🔍</span>
-      <h3>Sin resultados</h3>
-      <p>Probá con otra búsqueda o categoría</p>
-    </div>
+  <!-- CTA FINAL -->
+  <section class="cta-sec" aria-label="Llamada a la acción">
+    <h2>¿Tenés una panadería? 🥖</h2>
+    <p>
+      Registrate gratis, subí tus productos y empezá a recibir pedidos hoy mismo.
+    </p>
+    <a href="login.html" class="btn-hero-primary" style="display:inline-flex">
+      Registrar mi panadería →
+    </a>
+  </section>
 
-  </main>
-
-  <!-- CARRITO -->
-  <div class="cart-overlay" id="cart-overlay" aria-hidden="true"></div>
-  <aside class="cart-drawer" id="cart-drawer" aria-label="Carrito de compras">
-    <div class="cart-header">
-      <h3>Tu carrito 🛒</h3>
-      <button class="cart-close" id="cart-close" aria-label="Cerrar carrito">✕</button>
-    </div>
-    <div id="cart-body"></div>
-    <div id="cart-footer"></div>
-  </aside>
-
-  <footer style="text-align:center;padding:24px;font-size:0.8rem;color:var(--gris)">
-    <a href="terminos.html" style="color:var(--gris)">Términos y Condiciones</a> ·
+  <footer style="text-align:center;padding:24px;font-size:0.8rem;color:var(--gris);background:var(--blanco)">
+    <a href="terminos.html"  style="color:var(--gris)">Términos y Condiciones</a> ·
     <a href="privacidad.html" style="color:var(--gris)">Privacidad</a> ·
-    <a href="nosotros.html" style="color:var(--gris)">Sobre nosotros</a>
+    <a href="nosotros.html"  style="color:var(--gris)">Sobre nosotros</a>
   </footer>
 
   <div id="toast-box"></div>
 
   <script type="module">
-    import { debounce, formatPrecio } from './js/utils.js'
-    import { actualizarBadge, renderCarrito } from './js/carrito.js'
-    import {
-      cargarPanaderias, cargarProductos,
-      renderProductos, setCat, setBusq
-    } from './js/productos.js'
-    import { getUser, getPerfil } from './js/auth.js'
-    import { initSugerencias } from './js/sugerencias.js'
-
-    actualizarBadge()
-    cargarPanaderias()
-    cargarProductos()
+    import { supabase }    from './js/supabase.js'
+    import { formatPrecio, getIniciales } from './js/utils.js'
+    import { getUser, getPerfil }         from './js/auth.js'
 
     // ── Nav usuario ──
     getUser().then(async user => {
       const btn = document.getElementById('nav-btn')
-      const logoutB = document.getElementById('nav-logout')
-      const histBtn = document.getElementById('nav-historial')
+      if (!user) { btn.href = 'login.html'; btn.textContent = 'Ingresar'; return }
+      const perfil = await getPerfil(user.id)
+      if (perfil?.tipo === 'vendedor') {
+        btn.href = 'vendedor.html'; btn.textContent = 'Mi panel 📊'
+      } else if (perfil?.tipo === 'admin') {
+        btn.href = 'admin.html'; btn.textContent = 'Admin ⚙️'
+      } else {
+        btn.href = 'catalogo.html'
+        btn.textContent = `Hola, ${perfil?.nombre?.split(' ')[0]} 👋`
+      }
+    })
 
-      if (!user) {
-        btn.href = 'login.html'
-        btn.textContent = 'Ingresar'
-        if (logoutB) logoutB.style.display = 'none'
-        if (histBtn) histBtn.style.display = 'none'
+    // ── Stats hero ──
+    async function cargarStats() {
+      const [
+        { count: cProds },
+        { count: cPans },
+        { count: cPeds }
+      ] = await Promise.all([
+        supabase.from('productos').select('id', { count:'exact', head:true }).eq('activo', true),
+        supabase.from('profiles').select('id', { count:'exact', head:true })
+          .eq('tipo','vendedor').eq('estado_verificacion','aprobado'),
+        supabase.from('pedidos').select('id', { count:'exact', head:true })
+          .eq('estado','entregado')
+      ])
+      document.getElementById('stat-productos').textContent  = cProds  || 0
+      document.getElementById('stat-panaderias').textContent = cPans   || 0
+      document.getElementById('stat-pedidos').textContent    = cPeds   || 0
+    }
+
+    // ── Carrusel destacados ──
+    let carruselItems  = []
+    let carruselIdx    = 0
+    let carruselTimer  = null
+    const VISIBLE      = window.innerWidth < 768 ? 1 : window.innerWidth < 1024 ? 2 : 3
+
+    async function cargarDestacados() {
+      const { data: cals } = await supabase
+        .from('calificaciones').select('producto_id, estrellas')
+
+      const calMap = {}
+      ;(cals || []).forEach(c => {
+        if (!calMap[c.producto_id]) calMap[c.producto_id] = []
+        calMap[c.producto_id].push(c.estrellas)
+      })
+
+      const { data: pedItems } = await supabase
+        .from('pedidos').select('items').eq('estado','entregado')
+
+      const ventasMap = {}
+      ;(pedItems || []).forEach(p => {
+        ;(p.items || []).forEach(i => {
+          ventasMap[i.id || i.producto_id] = (ventasMap[i.id || i.producto_id] || 0) + i.cantidad
+        })
+      })
+
+      const { data: prods } = await supabase
+        .from('productos')
+        .select('*, profiles!inner(nombre_panaderia, nombre, estado_verificacion)')
+        .eq('activo', true)
+        .eq('profiles.estado_verificacion', 'aprobado')
+        .limit(20)
+
+      if (!prods || prods.length === 0) {
+        document.getElementById('carrusel-track').innerHTML =
+          '<p style="color:var(--gris);padding:20px">Aún no hay productos destacados</p>'
         return
       }
 
-      const perfil = await getPerfil(user.id)
-      if (perfil?.tipo === 'vendedor') {
-        btn.href = 'vendedor.html'
-        btn.textContent = 'Mi panel 📊'
-      } else {
-        btn.href = '#'
-        btn.textContent = `Hola, ${perfil?.nombre?.split(' ')[0]} 👋`
-      }
-      if (logoutB) logoutB.style.display = 'inline-flex'
-      if (histBtn) histBtn.style.display = 'inline-flex'
-    })
+      // Calcular score y badge
+      carruselItems = prods.map(p => {
+        const calsP   = calMap[p.id] || []
+        const promedio = calsP.length
+          ? calsP.reduce((a,b) => a+b, 0) / calsP.length : 0
+        const ventas  = ventasMap[p.id] || 0
+        const score   = promedio * 2 + ventas * 0.5
 
-    document.getElementById('nav-logout')?.addEventListener('click', e => {
-      e.preventDefault()
-      import('./js/auth.js').then(m => m.logout())
-    })
+        let badge, badgeClass
+        if (ventas >= 5) {
+          badge = '🏆 Más vendido'; badgeClass = 'badge-vendido'
+        } else if (promedio >= 4) {
+          badge = '⭐ Mejor calificado'; badgeClass = 'badge-calificado'
+        } else {
+          badge = '🔥 Tendencia'; badgeClass = 'badge-tendencia'
+        }
 
-    // ── Sugerencias en tiempo real ──
-    async function buscarSugerencias(q) {
-      const { supabase } = await import('./js/supabase.js')
+        return {
+          ...p,
+          nombre_panaderia: p.profiles?.nombre_panaderia || p.profiles?.nombre || 'Panadería',
+          promedio, ventas, score, badge, badgeClass
+        }
+      }).sort((a,b) => b.score - a.score).slice(0, 9)
 
-      const [{ data: prods }, { data: pans }] = await Promise.all([
-        supabase.from('productos')
-          .select('id,nombre,categoria,precio,unidad_venta')
-          .ilike('nombre', `%${q}%`)
-          .eq('activo', true)
-          .limit(5),
-        supabase.from('profiles')
-          .select('id,nombre_panaderia,nombre')
-          .ilike('nombre_panaderia', `%${q}%`)
-          .eq('tipo', 'vendedor')
-          .limit(3)
-      ])
-
-      const emojis = { pan: '🍞', facturas: '🥐', galletas: '🍪', cakes: '🎂', otro: '✨' }
-      const sugs = []
-
-        ; (pans || []).forEach(p => sugs.push({
-          label: p.nombre_panaderia || p.nombre,
-          sub: 'Panadería',
-          ico: '🏪',
-          href: `tienda.html?id=${p.id}`
-        }))
-
-        ; (prods || []).forEach(p => sugs.push({
-          label: p.nombre,
-          sub: p.categoria,
-          ico: emojis[p.categoria] || '🛒',
-          href: `producto.html?id=${p.id}`,
-          precio: p.unidad_venta === 'kilo'
-            ? `${formatPrecio(p.precio)}/kg`
-            : formatPrecio(p.precio)
-        }))
-
-      return sugs
+      renderCarrusel()
+      renderDots()
+      iniciarAutoAvance()
     }
 
-    initSugerencias('search-nav', buscarSugerencias)
-    initSugerencias('search-hero', buscarSugerencias)
+    function renderCarrusel() {
+      const track = document.getElementById('carrusel-track')
+      track.innerHTML = carruselItems.map(p => `
+        <a class="carrusel-card" href="producto.html?id=${p.id}">
+          ${p.imagen_url
+            ? `<img class="carrusel-img" src="${p.imagen_url}" alt="${p.nombre}" loading="lazy">`
+            : `<div class="carrusel-img-ph">
+                 ${p.categoria === 'pan' ? '🍞' : p.categoria === 'facturas' ? '🥐'
+                   : p.categoria === 'galletas' ? '🍪' : p.categoria === 'cakes' ? '🎂' : '✨'}
+               </div>`}
+          <div class="carrusel-body">
+            <span class="carrusel-badge ${p.badgeClass}">${p.badge}</span>
+            <div class="carrusel-nombre">${p.nombre}</div>
+            <div class="carrusel-pan">🏪 ${p.nombre_panaderia}</div>
+            <div class="carrusel-precio">
+              ${p.unidad_venta === 'kilo'
+                ? `${formatPrecio(p.precio)}/kg`
+                : formatPrecio(p.precio)}
+            </div>
+          </div>
+        </a>
+      `).join('')
+      moverCarrusel()
+    }
 
-    // ── Búsqueda ──
-    const onBusq = debounce(v => setBusq(v), 250)
-    document.getElementById('search-nav').addEventListener('input',
-      e => onBusq(e.target.value))
-    document.getElementById('search-hero').addEventListener('input', e => {
-      onBusq(e.target.value)
-      document.getElementById('search-nav').value = e.target.value
-    })
-    document.getElementById('btn-buscar').addEventListener('click', () => {
-      setBusq(document.getElementById('search-hero').value)
-      document.querySelector('main').scrollIntoView({ behavior: 'smooth' })
-    })
+    function moverCarrusel() {
+      const track    = document.getElementById('carrusel-track')
+      const cardW    = track.querySelector('.carrusel-card')?.offsetWidth || 0
+      const gap      = 18
+      track.style.transform = `translateX(-${carruselIdx * (cardW + gap)}px)`
 
-    // ── Filtros ──
-    document.querySelectorAll('.filtro').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.filtro').forEach(b => {
-          b.classList.remove('on'); b.setAttribute('aria-pressed', 'false')
-        })
-        btn.classList.add('on'); btn.setAttribute('aria-pressed', 'true')
-        setCat(btn.dataset.cat)
+      document.querySelectorAll('.carrusel-dot').forEach((d, i) => {
+        d.classList.toggle('on', i === carruselIdx)
       })
-    })
-
-    // ── Ordenar ──
-    document.getElementById('ordenar').addEventListener('change', renderProductos)
-
-    // ── Carrito ──
-    function toggleCart(abrir) {
-      document.getElementById('cart-drawer').classList.toggle('open', abrir)
-      document.getElementById('cart-overlay').classList.toggle('open', abrir)
-      if (abrir) renderCarrito()
     }
-    document.getElementById('cart-toggle').addEventListener('click', () => toggleCart(true))
-    document.getElementById('cart-close').addEventListener('click', () => toggleCart(false))
-    document.getElementById('cart-overlay').addEventListener('click', () => toggleCart(false))
 
-    // ── Panaderías toggle ──
-    document.getElementById('btn-toggle-pan').addEventListener('click', () => {
-      const panel = document.getElementById('panel-panaderias')
-      const btn = document.getElementById('btn-toggle-pan')
-      const abierto = panel.style.display !== 'none'
-      panel.style.display = abierto ? 'none' : 'block'
-      btn.textContent = abierto ? 'Ver panaderías ▾' : 'Ocultar ▴'
-      btn.setAttribute('aria-expanded', !abierto)
+    function renderDots() {
+      const total = Math.max(0, carruselItems.length - VISIBLE + 1)
+      const dots  = document.getElementById('carrusel-dots')
+      dots.innerHTML = Array(total).fill(0).map((_, i) => `
+        <div class="carrusel-dot ${i === 0 ? 'on' : ''}" data-i="${i}"></div>
+      `).join('')
+      dots.querySelectorAll('.carrusel-dot').forEach(d => {
+        d.addEventListener('click', () => {
+          carruselIdx = parseInt(d.dataset.i)
+          moverCarrusel()
+          reiniciarTimer()
+        })
+      })
+    }
+
+    function iniciarAutoAvance() {
+      carruselTimer = setInterval(() => {
+        const maxIdx = Math.max(0, carruselItems.length - VISIBLE)
+        carruselIdx  = carruselIdx >= maxIdx ? 0 : carruselIdx + 1
+        moverCarrusel()
+      }, 4000)
+    }
+
+    function reiniciarTimer() {
+      clearInterval(carruselTimer)
+      iniciarAutoAvance()
+    }
+
+    document.getElementById('carr-prev').addEventListener('click', () => {
+      const maxIdx = Math.max(0, carruselItems.length - VISIBLE)
+      carruselIdx  = carruselIdx <= 0 ? maxIdx : carruselIdx - 1
+      moverCarrusel(); reiniciarTimer()
+    })
+    document.getElementById('carr-next').addEventListener('click', () => {
+      const maxIdx = Math.max(0, carruselItems.length - VISIBLE)
+      carruselIdx  = carruselIdx >= maxIdx ? 0 : carruselIdx + 1
+      moverCarrusel(); reiniciarTimer()
     })
 
-    // ── Buscador panaderías ──
-    document.getElementById('search-panaderias').addEventListener('input',
-      debounce(e => {
-        const q = e.target.value.toLowerCase()
-        document.querySelectorAll('#panaderias-row .panaderia-chip').forEach(chip => {
-          const nombre = chip.querySelector('.chip-nombre').textContent.toLowerCase()
-          chip.style.display = nombre.includes(q) ? 'inline-flex' : 'none'
-        })
-      }, 200)
-    )
+    // Pausa al hacer hover
+    document.getElementById('carrusel-wrap').addEventListener('mouseenter', () => clearInterval(carruselTimer))
+    document.getElementById('carrusel-wrap').addEventListener('mouseleave', iniciarAutoAvance)
+
+    // ── Panaderías grid ──
+    async function cargarPanaderias() {
+      const { data } = await supabase
+        .from('profiles')
+        .select('id, nombre_panaderia, nombre, avatar_url, descripcion')
+        .eq('tipo', 'vendedor')
+        .eq('estado_verificacion', 'aprobado')
+
+      const el = document.getElementById('pans-grid')
+      if (!data || data.length === 0) {
+        el.innerHTML = '<p style="color:var(--gris)">Aún no hay panaderías registradas</p>'
+        return
+      }
+
+      el.innerHTML = data.map(p => `
+        <a href="tienda.html?id=${p.id}" class="pan-landing-card">
+          <div class="pan-landing-avatar">
+            ${p.avatar_url
+              ? `<img src="${p.avatar_url}" alt="${p.nombre_panaderia || p.nombre}">`
+              : getIniciales(p.nombre_panaderia || p.nombre)}
+          </div>
+          <div class="pan-landing-nombre">${p.nombre_panaderia || p.nombre}</div>
+          <div class="pan-landing-desc">${p.descripcion || 'Panadería artesanal'}</div>
+        </a>
+      `).join('')
+    }
+
+    // ── Init ──
+    cargarStats()
+    cargarDestacados()
+    cargarPanaderias()
   </script>
 
 </body>
-
 </html>

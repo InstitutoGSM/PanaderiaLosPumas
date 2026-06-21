@@ -16,7 +16,7 @@ export async function getPerfil(userId) {
 
 export async function logout() {
   await supabase.auth.signOut()
-  window.location.href = 'login.html'
+  window.location.href = 'catalogo.html'
 }
 
 export async function requireAuth(redirigirSi = null) {
@@ -33,14 +33,20 @@ export async function requireAuth(redirigirSi = null) {
   return { user, perfil }
 }
 
-// Devuelve user real o un objeto "invitado"
-export async function getUsuarioOInvitado() {
+export async function requireAdmin() {
   const user = await getUser()
-  if (user) return user
-  return { id: null, esInvitado: true }
+  if (!user) {
+    window.location.href = 'admin-login.html'
+    return null
+  }
+  const perfil = await getPerfil(user.id)
+  if (perfil?.tipo !== 'admin') {
+    window.location.href = 'index.html'
+    return null
+  }
+  return { user, perfil }
 }
 
-// Verifica si hay sesión real, si no redirige a login con mensaje
 export async function requireAuthParaComprar() {
   const user = await getUser()
   if (!user) {

@@ -2,7 +2,6 @@ import { supabase }                        from './supabase.js'
 import { toast, formatPrecio, catEmoji,
          catLabel, getIniciales }          from './utils.js'
 import { agregarItem, actualizarBadge }    from './carrito.js'
-import { renderEstrellas }                 from './calificaciones.js'
 
 let todos = []
 let cat   = 'todos'
@@ -21,6 +20,7 @@ export async function cargarPanaderias() {
     .from('profiles')
     .select('id, nombre_panaderia, nombre, avatar_url')
     .eq('tipo', 'vendedor')
+    .eq('estado_verificacion', 'aprobado')  // solo aprobados
 
   if (error || !data || data.length === 0) {
     el.innerHTML = '<p style="color:var(--gris);font-size:0.9rem">Aún no hay panaderías registradas</p>'
@@ -48,10 +48,12 @@ export async function cargarProductos() {
     `).join('')
   }
 
+  // Solo productos de vendedores aprobados
   const { data, error } = await supabase
     .from('productos')
-    .select('*, profiles(nombre_panaderia, nombre, avatar_url)')
+    .select('*, profiles!inner(nombre_panaderia, nombre, avatar_url, estado_verificacion)')
     .eq('activo', true)
+    .eq('profiles.estado_verificacion', 'aprobado')
     .order('created_at', { ascending: false })
 
   if (error) {
@@ -131,7 +133,7 @@ export function renderProductos() {
     return `
       <article class="card ${sinStock ? 'sin-stock' : ''}"
                data-id="${p.id}" tabindex="0"
-               role="article" aria-label="${p.nombre}, ${formatPrecio(p.precio)}">
+               aria-label="${p.nombre}, ${formatPrecio(p.precio)}">
         <span class="card-cat badge badge-${p.categoria || 'otro'}">
           ${catLabel(p.categoria)}
         </span>
@@ -166,6 +168,7 @@ export function renderProductos() {
             <a href="producto.html?id=${p.id}"
                class="btn btn-ghost btn-sm"
                onclick="event.stopPropagation()"
+               aria-label="Ver ${p.nombre}"
                style="flex:1;justify-content:center">
               Ver
             </a>
@@ -180,7 +183,6 @@ export function renderProductos() {
     `
   }).join('')
 
-  // Eventos click en card
   grid.querySelectorAll('.card').forEach(card => {
     card.addEventListener('click', e => {
       if (e.target.closest('button') || e.target.closest('a')) return
@@ -200,6 +202,5 @@ export function renderProductos() {
   })
 }
 
-// ── Setters ──
 export function setCat(c)  { cat  = c; renderProductos() }
 export function setBusq(b) { busq = b; renderProductos() }

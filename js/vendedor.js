@@ -71,6 +71,7 @@ async function init() {
   rellenarPerfil()
   initEventos()
   initRealtime()
+  initDocumentos() 
 
   const { count, error: countErr } = await supabase
     .from('productos')
@@ -118,11 +119,12 @@ function initRealtime() {
 
 // ══ NAVEGACIÓN ══
 const TITULOS = {
-  inicio:   'Mi Panel',
-  productos:'Mis Productos',
-  agregar:  'Agregar Producto',
-  pedidos:  'Pedidos',
-  perfil:   'Mi Perfil'
+  inicio:      'Mi Panel',
+  productos:   'Mis Productos',
+  agregar:     'Agregar Producto',
+  pedidos:     'Pedidos',
+  perfil:      'Mi Perfil',
+  documentos:  'Mis Documentos'
 }
 
 function mostrarSec(nombre) {
@@ -751,6 +753,197 @@ async function guardarPerfil() {
 
 function catEmojiSimple(c) {
   return { pan:'🍞', facturas:'🥐', galletas:'🍪', cakes:'🎂', otro:'✨' }[c] || '🛒'
+}
+
+// ══ DOCUMENTOS ══
+let docsPendientes = { doc1: null, doc2: null, doc3: null }
+
+export function initDocumentos() {
+  cargarEstadoDocs()
+
+  // Importar Archivos
+  ;[
+    { inputId: 'file-doc-1', key: 'doc1', previewId: 'preview-doc-1', icoId: 'ico-doc-1' },
+    { inputId: 'file-doc-2', key: 'doc2', previewId: 'preview-doc-2', icoId: 'ico-doc-2' },
+    { inputId: 'file-doc-3', key: 'doc3', previewId: 'preview-doc-3', icoId: 'ico-doc-3' },
+  ].forEach(({ inputId, key, previewId, icoId }) => {
+    document.getElementById(inputId)?.addEventListener('change', e => {
+      const file = e.target.files[0]
+      if (!file) return
+      if (file.size > 5 * 1024 * 1024) { toast('Máx 5MB', 'err'); return }
+
+      docsPendientes[key] = file
+
+      const prev  = document.getElementById(previewId)
+      const ico   = document.getElementById(icoId)
+      if (ico) ico.textContent = '✅'
+
+      if (file.type.startsWith('image/')) {
+        const reader = new FileReader()
+        reader.onload = ev => {
+          prev.innerHTML = `
+            <img src="${ev.target.result}"
+                 style="width:100%;max-height:140px;object-fit:cover;
+                        border-radius:8px;border:2px solid var(--crema-dark)">`
+        }
+        reader.readAsDataURL(file)
+      } else {
+        prev.innerHTML = `
+          <div style="padding:10px;background:var(--crema);border-radius:8px;
+                      font-size:0.82rem;color:var(--marron)">
+            📄 ${file.name}
+          </div>`
+      }
+
+      actualizarBtnEnviar()
+    })
+  })
+
+  document.getElementById('btn-enviar-docs')?.addEventListener('click', enviarDocumentos)
+}
+
+async function cargarEstadoDocs() {
+  const wrap = document.getElementById('doc-estado-wrap')
+  if (!wrap) return
+
+  const estado = perfil?.estado_verificacion || 'sin_enviar'
+  const nota   = perfil?.doc_notas_rechazo
+
+  const configs = {
+    sin_enviar: {
+      ico: '📂', color: '#757575', bg: '#F5F5F5',
+      titulo: 'Documentos no enviados',
+      msg: 'Subí tus 3 documentos y enviálos para que podamos verificar tu panadería.'
+    },
+    pendiente: {
+      ico: '🕐', color: '#F57F17', bg: '#FFF8E1',
+      titulo: 'Documentos en revisión',
+      msg: 'Recibimos tu documentación. Te notificaremos por email cuando esté lista la revisión.'
+    },
+    aprobado: {
+      ico: '✅', color: '#2E7D32', bg: '#E8F5E9',
+      titulo: '¡Panadería verificada!',
+      msg: 'Tu documentación fue aprobada. Tus productos ya son visibles en el catálogo.'
+    },
+    rechazado: {
+      ico: '❌', color: '#C62828', bg: '#FFEBEE',
+      titulo: 'Documentación rechazada',
+      msg: 'Tu documentación fue rechazada. Revisá el mensaje del administrador y volvé a subir los documentos.'
+    },
+  }
+
+  const cfg = configs[estado] || configs['sin_enviar']
+
+  wrap.innerHTML = `
+    <div style="background:${cfg.bg};border-radius:var(--radio);
+                padding:14px 18px;display:flex;gap:12px;align-items:flex-start">
+      <span style="font-size:1.5rem;flex-shrink:0">${cfg.ico}</span>
+      <div>
+        <div style="font-weight:700;color:${cfg.color};margin-bottom:3px">
+          ${cfg.titulo}
+        </div>
+        <div style="font-size:0.85rem;color:#444">${cfg.msg}</div>
+        ${nota ? `
+          <div style="margin-top:10px;padding:10px;background:white;
+                      border-radius:6px;font-size:0.82rem;
+                      border-left:3px solid var(--naranja)">
+            <strong>Mensaje del administrador:</strong><br>${nota}
+          </div>` : ''}
+      </div>
+    </div>
+  `
+
+  // Precargar docs ya subidos
+  if (perfil?.doc_bromatologia)         mostrarDocExistente('preview-doc-1', 'ico-doc-1', perfil.doc_bromatologia)
+  if (perfil?.doc_carnet_manipulador)   mostrarDocExistente('preview-doc-2', 'ico-doc-2', perfil.doc_carnet_manipulador)
+  if (perfil?.doc_habilitacion_comercial) mostrarDocExistente('preview-doc-3', 'ico-doc-3', perfil.doc_habilitacion_comercial)
+
+  // Mostrar punto naranja en sidebar si está pendiente
+  const badge = document.getElementById('badge-docs')
+  if (badge) badge.style.display = estado === 'sin_enviar' ? 'block' : 'none'
+
+  // Deshabilitar subida si ya está aprobado
+  if (estado === 'aprobado') {
+    ;['file-doc-1','file-doc-2','file-doc-3'].forEach(id => {
+      const el = document.getElementById(id)
+      if (el) el.disabled = true
+    })
+    const btn = document.getElementById('btn-enviar-docs')
+    if (btn) { btn.disabled = true; btn.textContent = '✅ Documentación aprobada' }
+  }
+}
+
+function mostrarDocExistente(previewId, icoId, url) {
+  const prev = document.getElementById(previewId)
+  const ico  = document.getElementById(icoId)
+  if (ico) ico.textContent = '✅'
+  if (!prev) return
+
+  const esImagen = /\.(jpg|jpeg|png|webp|gif)$/i.test(url)
+  if (esImagen) {
+    prev.innerHTML = `
+      <img src="${url}"
+           style="width:100%;max-height:140px;object-fit:cover;
+                  border-radius:8px;border:2px solid var(--crema-dark)">`
+  } else {
+    prev.innerHTML = `
+      <a href="${url}" target="_blank"
+         style="font-size:0.82rem;color:var(--naranja);font-weight:700">
+        📄 Ver documento subido →
+      </a>`
+  }
+}
+
+function actualizarBtnEnviar() {
+  const btn = document.getElementById('btn-enviar-docs')
+  if (!btn) return
+  const tieneTodo =
+    (docsPendientes.doc1 || perfil?.doc_bromatologia) &&
+    (docsPendientes.doc2 || perfil?.doc_carnet_manipulador) &&
+    (docsPendientes.doc3 || perfil?.doc_habilitacion_comercial)
+  btn.disabled = !tieneTodo
+}
+
+async function enviarDocumentos() {
+  const btn = document.getElementById('btn-enviar-docs')
+  btn.disabled = true; btn.textContent = 'Subiendo documentos...'
+
+  const updates = {}
+
+  try {
+    if (docsPendientes.doc1) {
+      const url = await subirImagen(docsPendientes.doc1, uid, 'documentos')
+      if (!url) throw new Error('Error subiendo Habilitación Bromatológica')
+      updates.doc_bromatologia = url
+    }
+    if (docsPendientes.doc2) {
+      const url = await subirImagen(docsPendientes.doc2, uid, 'documentos')
+      if (!url) throw new Error('Error subiendo Carnet de Manipulador')
+      updates.doc_carnet_manipulador = url
+    }
+    if (docsPendientes.doc3) {
+      const url = await subirImagen(docsPendientes.doc3, uid, 'documentos')
+      if (!url) throw new Error('Error subiendo Habilitación Comercial')
+      updates.doc_habilitacion_comercial = url
+    }
+
+    updates.estado_verificacion = 'pendiente'
+    updates.doc_notas_rechazo   = null
+
+    const { error } = await supabase.from('profiles').update(updates).eq('id', uid)
+    if (error) throw error
+
+    // Actualizar perfil local
+    Object.assign(perfil, updates)
+    docsPendientes = { doc1: null, doc2: null, doc3: null }
+
+    toast('¡Documentos enviados! Te avisaremos cuando sean revisados 📬', 'ok')
+    cargarEstadoDocs()
+
+  } catch (err) {
+    toast(err.message || 'Error al subir documentos', 'err')
+    btn.disabled = false; btn.textContent = '📤 Enviar documentos para revisión'
+  }
 }
 
 init()

@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel Admin — PanaderiaMarket</title>
+  <link rel="stylesheet" href="css/global.css">
+  <style>
+    html, body { overflow-x: hidden; background: var(--crema); }
+
+    .admin-navbar {
+      background: var(--marron); padding: 0 24px; height: 60px;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .admin-navbar-brand {
+      font-family: 'Playfair Display', serif;
+      color: white; font-size: 1.1rem; font-weight: 900;
+    }
+    .admin-navbar-brand span { color: var(--naranja-lt); }
+
+    .admin-wrap { max-width: 1100px; margin: 0 auto; padding: 32px 20px 60px; }
+
+    .admin-stats {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(160px,1fr));
+      gap: 14px; margin-bottom: 28px;
+    }
+    .admin-stat {
+      background: var(--blanco); border-radius: var(--radio-lg);
+      padding: 18px; box-shadow: var(--sombra); text-align: center;
+    }
+    .admin-stat .num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem; font-weight: 900; color: var(--marron);
+    }
+    .admin-stat .lbl { font-size: 0.8rem; color: var(--gris); margin-top: 3px; }
+
+    .admin-filtros {
+      display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;
+    }
+
+    .vendedor-card {
+      background: var(--blanco); border-radius: var(--radio-lg);
+      box-shadow: var(--sombra); margin-bottom: 16px; overflow: hidden;
+    }
+    .vendedor-card-header {
+      display: flex; align-items: center; gap: 16px;
+      padding: 18px 20px; border-bottom: 1px solid var(--crema-dark);
+      flex-wrap: wrap;
+    }
+    .vendedor-avatar {
+      width: 56px; height: 56px; border-radius: 50%;
+      background: var(--naranja); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem; font-weight: 900; flex-shrink: 0; overflow: hidden;
+    }
+    .vendedor-avatar img { width:100%; height:100%; object-fit:cover; }
+    .vendedor-info { flex: 1; min-width: 0; }
+    .vendedor-nombre { font-weight: 700; font-size: 1rem; }
+    .vendedor-email  { font-size: 0.82rem; color: var(--gris); }
+    .vendedor-fecha  { font-size: 0.78rem; color: var(--gris); margin-top: 2px; }
+
+    .estado-badge-admin {
+      padding: 5px 12px; border-radius: 50px;
+      font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+    }
+    .estado-sin_enviar  { background: #F5F5F5; color: #757575; }
+    .estado-pendiente   { background: #FFF8E1; color: #F57F17; }
+    .estado-aprobado    { background: #E8F5E9; color: #2E7D32; }
+    .estado-rechazado   { background: #FFEBEE; color: #C62828; }
+
+    .vendedor-docs {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
+      gap: 14px; padding: 18px 20px;
+    }
+    .doc-item {
+      border: 2px solid var(--crema-dark); border-radius: var(--radio);
+      padding: 12px; text-align: center;
+    }
+    .doc-item .doc-ico { font-size: 2rem; display: block; margin-bottom: 6px; }
+    .doc-item .doc-nombre {
+      font-size: 0.78rem; font-weight: 700; color: var(--marron);
+      margin-bottom: 8px; display: block;
+    }
+    .doc-item.sin-doc {
+      border-style: dashed; opacity: 0.5;
+    }
+    .doc-item img {
+      width: 100%; height: 120px; object-fit: cover;
+      border-radius: 6px; cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .doc-item img:hover { opacity: 0.85; }
+    .doc-item a.ver-doc {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 0.8rem; color: var(--naranja); font-weight: 700;
+      margin-top: 8px;
+    }
+
+    .vendedor-acciones {
+      padding: 14px 20px; border-top: 1px solid var(--crema-dark);
+      display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+    }
+
+    /* Modal corregir */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+      z-index: 500; display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+    }
+    .modal-box {
+      background: var(--blanco); border-radius: var(--radio-lg);
+      padding: 28px; width: 100%; max-width: 480px;
+      box-shadow: var(--sombra-lg);
+    }
+    .modal-box h3 { font-family:'Playfair Display',serif; margin-bottom: 14px; }
+    .modal-box textarea { min-height: 120px; }
+    .modal-acciones { display: flex; gap: 10px; margin-top: 16px; }
+
+    @media (max-width: 600px) {
+      .vendedor-docs { grid-template-columns: 1fr; }
+      .vendedor-acciones { flex-direction: column; }
+      .vendedor-acciones .btn { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="admin-navbar">
+    <div class="admin-navbar-brand">
+      🥖 Panaderia<span>PUMA</span> — Admin
+    </div>
+    <button class="btn btn-ghost btn-sm"
+            style="border-color:rgba(255,255,255,0.3);color:white"
+            id="btn-logout">
+      Salir 🚪
+    </button>
+  </nav>
+
+  <div class="admin-wrap">
+
+    <div style="margin-bottom:24px">
+      <h1>Panel de Administración</h1>
+      <p style="color:var(--gris)">Verificación de vendedores y documentos</p>
+    </div>
+
+    <div class="admin-stats">
+      <div class="admin-stat">
+        <div class="num" id="st-pendientes">—</div>
+        <div class="lbl">Pendientes</div>
+      </div>
+      <div class="admin-stat">
+        <div class="num" id="st-aprobados">—</div>
+        <div class="lbl">Aprobados</div>
+      </div>
+      <div class="admin-stat">
+        <div class="num" id="st-rechazados">—</div>
+        <div class="lbl">Rechazados</div>
+      </div>
+      <div class="admin-stat">
+        <div class="num" id="st-sin-enviar">—</div>
+        <div class="lbl">Sin documentos</div>
+      </div>
+    </div>
+
+    <div class="admin-filtros">
+      <button class="filtro on" data-estado="todos">Todos</button>
+      <button class="filtro" data-estado="pendiente">🕐 Pendientes</button>
+      <button class="filtro" data-estado="aprobado">✅ Aprobados</button>
+      <button class="filtro" data-estado="rechazado">❌ Rechazados</button>
+      <button class="filtro" data-estado="sin_enviar">📂 Sin docs</button>
+    </div>
+
+    <div id="lista-vendedores">
+      <div class="skeleton" style="height:200px;border-radius:var(--radio-lg);margin-bottom:14px"></div>
+      <div class="skeleton" style="height:200px;border-radius:var(--radio-lg);margin-bottom:14px"></div>
+    </div>
+
+    <div id="empty-vendedores"
+         style="display:none;text-align:center;padding:60px 0;color:var(--gris)">
+      No hay vendedores que coincidan con el filtro.
+    </div>
+
+  </div>
+
+  <!-- Modal Corregir -->
+  <div class="modal-overlay" id="modal-corregir" style="display:none">
+    <div class="modal-box">
+      <h3>✏️ Solicitar corrección</h3>
+      <p style="font-size:0.88rem;color:var(--gris);margin-bottom:14px">
+        Escribí un mensaje explicando al vendedor
+        <strong id="modal-nombre-vendedor"></strong>
+        qué debe corregir en su documentación.
+      </p>
+      <textarea id="modal-mensaje"
+                placeholder="Ej: El Carnet de Manipulador de Alimentos no se ve claramente. Por favor volvé a subir una foto más nítida..."></textarea>
+      <div class="modal-acciones">
+        <button class="btn btn-naranja" id="btn-enviar-correccion">
+          📧 Enviar email y notificar
+        </button>
+        <button class="btn btn-ghost" id="btn-cerrar-modal">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-box"></div>
+
+  <script type="module">
+    import { supabase }            from './js/supabase.js'
+    import { toast, getIniciales } from './js/utils.js'
+    import { requireAdmin, logout } from './js/auth.js'
+
+    let todosVendedores      = []
+    let filtroEstado         = 'todos'
+    let vendedorSeleccionado = null
+
+    document.getElementById('btn-logout').addEventListener('click', logout)
+
+    // ── Modal ──
+    document.getElementById('btn-cerrar-modal').addEventListener('click', () => {
+      document.getElementById('modal-corregir').style.display = 'none'
+      vendedorSeleccionado = null
+    })
+
+    document.getElementById('btn-enviar-correccion').addEventListener('click', async () => {
+      const mensaje = document.getElementById('modal-mensaje').value.trim()
+      if (!mensaje) { toast('Escribí un mensaje para el vendedor', 'err'); return }
+      if (!vendedorSeleccionado) { toast('Error: no hay vendedor seleccionado', 'err'); return }
+
+      const btn = document.getElementById('btn-enviar-correccion')
+      btn.disabled = true; btn.textContent = 'Enviando...'
+
+      const vendedor = todosVendedores.find(v => v.id === vendedorSeleccionado)
+
+      const { error } = await supabase
+        .from('profiles')
+        .update({
+          estado_verificacion: 'sin_enviar',
+          doc_notas_rechazo:   mensaje
+        })
+        .eq('id', vendedorSeleccionado)
+
+      if (error) {
+        toast('Error al enviar corrección', 'err')
+        btn.disabled = false; btn.textContent = '📧 Enviar email y notificar'
+        return
+      }
+
+      // Abrir cliente de email con mensaje precargado
+      const emailVendedor = vendedor?.email_contacto
+      if (emailVendedor) {
+        const asunto = encodeURIComponent('PanaderiaMarket — Corrección de documentos requerida')
+        const cuerpo = encodeURIComponent(
+          `Hola ${vendedor?.nombre_panaderia || vendedor?.nombre},\n\n` +
+          `Revisamos tu documentación y encontramos lo siguiente:\n\n` +
+          `${mensaje}\n\n` +
+          `Por favor corregí los documentos e iniciá sesión en PanaderiaMarket ` +
+          `para volver a subirlos desde "Mis Documentos".\n\n` +
+          `Saludos,\nEquipo PanaderiaMarket`
+        )
+        window.open(`mailto:${emailVendedor}?subject=${asunto}&body=${cuerpo}`, '_blank')
+      } else {
+        toast('Este vendedor no tiene email de contacto registrado', 'inf')
+      }
+
+      btn.disabled = false; btn.textContent = '📧 Enviar email y notificar'
+      document.getElementById('modal-corregir').style.display = 'none'
+      toast('Corrección registrada ✏️', 'ok')
+
+      actualizarLocal(vendedorSeleccionado, {
+        estado_verificacion: 'sin_enviar',
+        doc_notas_rechazo:   mensaje
+      })
+      vendedorSeleccionado = null
+    })
+
+    // ── Init ──
+    async function init() {
+      const session = await requireAdmin()
+      if (!session) return
+      await cargarVendedores()
+      initFiltros()
+      initRealtime()
+    }
+
+    // ── Cargar vendedores ──
+    async function cargarVendedores() {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('tipo', 'vendedor')
+        .order('created_at', { ascending: false })
+
+      if (error) { toast('Error al cargar vendedores', 'err'); return }
+      todosVendedores = data || []
+      actualizarStats()
+      renderVendedores()
+    }
+
+    // ── Stats ──
+    function actualizarStats() {
+      document.getElementById('st-pendientes').textContent =
+        todosVendedores.filter(v => v.estado_verificacion === 'pendiente').length
+      document.getElementById('st-aprobados').textContent =
+        todosVendedores.filter(v => v.estado_verificacion === 'aprobado').length
+      document.getElementById('st-rechazados').textContent =
+        todosVendedores.filter(v => v.estado_verificacion === 'rechazado').length
+      document.getElementById('st-sin-enviar').textContent =
+        todosVendedores.filter(v => v.estado_verificacion === 'sin_enviar').length
+    }
+
+    // ── Filtros ──
+    function initFiltros() {
+      document.querySelectorAll('.admin-filtros .filtro').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.admin-filtros .filtro')
+            .forEach(b => b.classList.remove('on'))
+          btn.classList.add('on')
+          filtroEstado = btn.dataset.estado
+          renderVendedores()
+        })
+      })
+    }
+
+    // ── Render ──
+    function renderVendedores() {
+      const lista = filtroEstado === 'todos'
+        ? todosVendedores
+        : todosVendedores.filter(v => v.estado_verificacion === filtroEstado)
+
+      const el    = document.getElementById('lista-vendedores')
+      const empty = document.getElementById('empty-vendedores')
+
+      if (lista.length === 0) {
+        el.innerHTML = ''; empty.style.display = 'block'; return
+      }
+      empty.style.display = 'none'
+
+      el.innerHTML = lista.map(v => {
+        const estado     = v.estado_verificacion || 'sin_enviar'
+        const nombreMost = v.nombre_panaderia || v.nombre || 'Sin nombre'
+        const tieneDocs  = v.doc_bromatologia ||
+                           v.doc_carnet_manipulador ||
+                           v.doc_habilitacion_comercial
+
+        return `
+          <div class="vendedor-card" data-id="${v.id}">
+            <div class="vendedor-card-header">
+              <div class="vendedor-avatar">
+                ${v.avatar_url
+                  ? `<img src="${v.avatar_url}" alt="${nombreMost}">`
+                  : getIniciales(nombreMost)}
+              </div>
+              <div class="vendedor-info">
+                <div class="vendedor-nombre">${nombreMost}</div>
+                <div class="vendedor-email">${v.email_contacto || '—'}</div>
+                <div class="vendedor-fecha">
+                  Registrado: ${new Date(v.created_at).toLocaleDateString('es-AR')}
+                </div>
+              </div>
+              <span class="estado-badge-admin estado-${estado}">
+                ${estadoLabel(estado)}
+              </span>
+            </div>
+
+            <div class="vendedor-docs">
+              ${renderDoc(v.doc_bromatologia,           '📋', 'Habilitación Bromatológica')}
+              ${renderDoc(v.doc_carnet_manipulador,     '🪪', 'Carnet Manipulador')}
+              ${renderDoc(v.doc_habilitacion_comercial, '🏪', 'Habilitación Comercial')}
+            </div>
+
+            ${v.doc_notas_rechazo ? `
+              <div style="margin:0 20px 14px;padding:10px 14px;
+                          background:#FFF8E1;border-radius:var(--radio);
+                          font-size:0.85rem;border-left:3px solid var(--naranja)">
+                <strong>Último mensaje enviado:</strong><br>
+                ${v.doc_notas_rechazo}
+              </div>` : ''}
+
+            <div class="vendedor-acciones">
+              ${estado !== 'aprobado' && tieneDocs ? `
+                <button class="btn btn-sm"
+                        style="background:var(--verde);color:white"
+                        data-action="aprobar" data-id="${v.id}">
+                  ✅ Aprobar
+                </button>` : ''}
+              <button class="btn btn-ghost btn-sm"
+                      data-action="corregir"
+                      data-id="${v.id}"
+                      data-nombre="${nombreMost}">
+                ✏️ Solicitar corrección
+              </button>
+              <button class="btn btn-sm"
+                      style="background:#C62828;color:white"
+                      data-action="rechazar" data-id="${v.id}">
+                ❌ Rechazar
+              </button>
+            </div>
+          </div>
+        `
+      }).join('')
+
+      // Eventos botones — delegación en el contenedor
+      el.querySelectorAll('[data-action]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const action  = btn.dataset.action
+          const id      = btn.dataset.id
+          const nombre  = btn.dataset.nombre || ''
+          if (action === 'aprobar')   aprobar(id)
+          if (action === 'rechazar')  rechazar(id)
+          if (action === 'corregir')  abrirCorregir(id, nombre)
+        })
+      })
+    }
+
+    function renderDoc(url, ico, nombre) {
+      if (!url) return `
+        <div class="doc-item sin-doc">
+          <span class="doc-ico">${ico}</span>
+          <span class="doc-nombre">${nombre}</span>
+          <span style="font-size:0.75rem;color:var(--gris)">No enviado</span>
+        </div>`
+
+      const esImagen = /\.(jpg|jpeg|png|webp|gif)$/i.test(url)
+      return `
+        <div class="doc-item">
+          <span class="doc-ico">${ico}</span>
+          <span class="doc-nombre">${nombre}</span>
+          ${esImagen
+            ? `<img src="${url}" alt="${nombre}"
+                    onclick="window.open('${url}','_blank')"
+                    title="Click para ver en tamaño completo">`
+            : `<div style="font-size:0.78rem;color:var(--gris);margin-bottom:6px">
+                 Archivo PDF
+               </div>`}
+          <a href="${url}" target="_blank" class="ver-doc">🔍 Ver completo</a>
+        </div>`
+    }
+
+    function estadoLabel(e) {
+      return {
+        sin_enviar: 'Sin documentos',
+        pendiente:  'Pendiente',
+        aprobado:   'Aprobado',
+        rechazado:  'Rechazado'
+      }[e] || e
+    }
+
+    // ── Aprobar ──
+    async function aprobar(id) {
+      if (!confirm('¿Aprobar este vendedor? Sus productos serán visibles en el catálogo.')) return
+      const { error } = await supabase
+        .from('profiles')
+        .update({ estado_verificacion: 'aprobado', doc_notas_rechazo: null })
+        .eq('id', id)
+      if (error) { toast('Error al aprobar', 'err'); return }
+      toast('Vendedor aprobado ✅', 'ok')
+      actualizarLocal(id, { estado_verificacion: 'aprobado', doc_notas_rechazo: null })
+    }
+
+    // ── Rechazar ──
+    async function rechazar(id) {
+      if (!confirm('¿Rechazar este vendedor? No podrá publicar productos.')) return
+      const { error } = await supabase
+        .from('profiles')
+        .update({ estado_verificacion: 'rechazado' })
+        .eq('id', id)
+      if (error) { toast('Error al rechazar', 'err'); return }
+      toast('Vendedor rechazado ❌', 'ok')
+      actualizarLocal(id, { estado_verificacion: 'rechazado' })
+    }
+
+    // ── Corregir ──
+    function abrirCorregir(id, nombre) {
+      vendedorSeleccionado = id
+      document.getElementById('modal-nombre-vendedor').textContent = nombre
+      document.getElementById('modal-mensaje').value = ''
+      document.getElementById('modal-corregir').style.display = 'flex'
+    }
+
+    // ── Actualizar cache local ──
+    function actualizarLocal(id, cambios) {
+      const idx = todosVendedores.findIndex(v => v.id === id)
+      if (idx >= 0) todosVendedores[idx] = { ...todosVendedores[idx], ...cambios }
+      actualizarStats()
+      renderVendedores()
+    }
+
+    // ── Realtime ──
+    function initRealtime() {
+      supabase
+        .channel('admin-vendedores')
+        .on('postgres_changes', {
+          event:  '*',
+          schema: 'public',
+          table:  'profiles',
+          filter: `tipo=eq.vendedor`
+        }, () => cargarVendedores())
+        .subscribe()
+    }
+
+    init()
+  </script>
+</body>
+</html>
