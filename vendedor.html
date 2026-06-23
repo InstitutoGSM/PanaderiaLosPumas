@@ -201,6 +201,11 @@
                 margin-left:auto"></span>
           </a>
         </li>
+        <li>
+          <a href="#" class="nav-link" data-sec="sucursales">
+            <span class="nav-ico">🏪</span> Sucursales
+          </a>
+        </li>
         </li>
       </ul>
       <div class="sidebar-bottom">
@@ -474,6 +479,16 @@
         </div>
       </section>
 
+      <!-- SUCURSALES -->
+      <section id="sec-sucursales" style="display:none">
+        <div class="sec-card">
+          <div class="sec-card-top">
+            <h2>🏪 Mis Sucursales</h2>
+          </div>
+          <div id="sucursales-content"></div>
+        </div>
+      </section>
+
       <!-- PERFIL -->
       <section id="sec-perfil" style="display:none">
         <div class="sec-card perfil-wrap">
@@ -483,11 +498,11 @@
 
           <div style="display:flex;align-items:center;gap:20px;margin-bottom:24px">
             <div id="avatar-preview" style="width:80px;height:80px;border-radius:50%;
-                      background:var(--naranja);display:flex;
-                      align-items:center;justify-content:center;
-                      font-size:1.8rem;font-weight:900;color:white;
-                      flex-shrink:0;overflow:hidden;
-                      border:3px solid var(--crema-dark)">
+                    background:var(--naranja);display:flex;
+                    align-items:center;justify-content:center;
+                    font-size:1.8rem;font-weight:900;color:white;
+                    flex-shrink:0;overflow:hidden;
+                    border:3px solid var(--crema-dark)">
             </div>
             <div>
               <label for="pf-avatar-file" class="btn btn-ghost btn-sm" style="cursor:pointer;display:inline-flex">
@@ -516,9 +531,7 @@
           <div class="field">
             <label for="pf-banner">
               📢 Banner de anuncio
-              <span style="font-weight:400;color:var(--gris)">
-                (aparece en tu tienda)
-              </span>
+              <span style="font-weight:400;color:var(--gris)">(aparece en tu tienda)</span>
             </label>
             <input type="text" id="pf-banner" placeholder="Ej: ¡Esta semana 10% off en medialunas! 🥐" maxlength="120">
             <div style="font-size:0.75rem;color:var(--gris);margin-top:4px">
@@ -548,7 +561,8 @@
 
           <h3 style="margin-bottom:6px">💳 Medios de pago que aceptás</h3>
           <p class="medios-pago-hint">
-            El efectivo siempre está disponible para tus compradores. Activá los demás que aceptes.
+            El efectivo siempre está disponible para tus compradores.
+            Activá los demás que aceptes.
           </p>
 
           <div class="medios-pago-grid">
@@ -585,7 +599,8 @@
                 <input type="text" id="pf-titular" placeholder="Nombre completo">
               </div>
             </div>
-            <div style="font-size:0.78rem;color:var(--gris);margin-top:-6px;margin-bottom:10px">
+            <div style="font-size:0.78rem;color:var(--gris);
+                      margin-top:-6px;margin-bottom:10px">
               Ingresá al menos el CBU o el alias para que los compradores puedan transferirte.
             </div>
           </div>

@@ -72,7 +72,7 @@ async function init() {
   initEventos()
   initRealtime()
   initDocumentos() 
-
+  initSucursales()
   const { count, error: countErr } = await supabase
     .from('productos')
     .select('id', { count: 'exact', head: true })
@@ -124,7 +124,8 @@ const TITULOS = {
   agregar:     'Agregar Producto',
   pedidos:     'Pedidos',
   perfil:      'Mi Perfil',
-  documentos:  'Mis Documentos'
+  documentos:  'Mis Documentos',
+  sucursales: 'Mis Sucursales'
 }
 
 function mostrarSec(nombre) {
@@ -944,6 +945,384 @@ async function enviarDocumentos() {
     toast(err.message || 'Error al subir documentos', 'err')
     btn.disabled = false; btn.textContent = '📤 Enviar documentos para revisión'
   }
+}
+//══════════════════════ TRABAJANDO ══════════════════════
+// ══ SUCURSALES ══
+
+async function initSucursales() {
+  const content = document.getElementById('sucursales-content')
+  if (!content) return
+
+  // Si es sucursal, mostrar vista reducida
+  if (perfil.es_sucursal && perfil.panaderia_padre_id) {
+    const { data: padre } = await supabase
+      .from('profiles')
+      .select('nombre_panaderia, nombre, avatar_url')
+      .eq('id', perfil.panaderia_padre_id)
+      .single()
+
+    const nombrePadre = padre?.nombre_panaderia || padre?.nombre || 'Panadería principal'
+    content.innerHTML = `
+      <div style="background:var(--crema);border-radius:var(--radio);
+                  padding:16px 20px;margin-bottom:24px;
+                  border-left:4px solid var(--naranja)">
+        <strong>📍 Esta es una sucursal de:</strong> ${nombrePadre}
+      </div>
+      <p style="color:var(--gris);font-size:0.9rem">
+        Las métricas de esta sucursal son visibles para la panadería principal.
+      </p>
+    `
+    return
+  }
+
+  // Vista del PADRE
+  content.innerHTML = `
+    <!-- Stats consolidados -->
+    <div class="stats-grid" id="stats-grupo" style="margin-bottom:24px">
+      <div class="stat-card">
+        <div class="stat-label">Ventas totales del grupo</div>
+        <div class="stat-value" id="sg-ventas">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Pedidos del grupo</div>
+        <div class="stat-value" id="sg-pedidos">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Productos del grupo</div>
+        <div class="stat-value" id="sg-productos">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Sucursales activas</div>
+        <div class="stat-value" id="sg-sucursales">—</div>
+      </div>
+    </div>
+
+    <!-- Vincular sucursal -->
+    <div class="sec-card" style="box-shadow:none;border:2px solid var(--crema-dark);
+                                  margin-bottom:20px;padding:18px">
+      <h3 style="margin-bottom:14px">➕ Agregar sucursal</h3>
+      <div style="display:grid;grid-template-columns:1fr auto;gap:10px;margin-bottom:12px">
+        <input type="email" id="input-buscar-sucursal"
+               placeholder="Email de la panadería a vincular...">
+        <button class="btn btn-ghost btn-sm" id="btn-buscar-sucursal">
+          Buscar
+        </button>
+      </div>
+      <div id="resultado-busqueda-sucursal"></div>
+
+      <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--crema-dark)">
+        <p style="font-size:0.82rem;color:var(--gris);margin-bottom:10px">
+          ¿O preferís crear una cuenta nueva para la sucursal?
+        </p>
+        <button class="btn btn-ghost btn-sm" id="btn-crear-sucursal">
+          ✨ Crear nueva sucursal
+        </button>
+        <div id="form-crear-sucursal" style="display:none;margin-top:14px">
+          <div class="form-row">
+            <div class="field">
+              <label>Nombre de la sucursal</label>
+              <input type="text" id="suc-nombre-pan" placeholder="Ej: Panadería PUMA — Sucursal Norte">
+            </div>
+            <div class="field">
+              <label>Nombre del responsable</label>
+              <input type="text" id="suc-nombre" placeholder="Juan Pérez">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="field">
+              <label>Email</label>
+              <input type="email" id="suc-email" placeholder="sucursal@email.com">
+            </div>
+            <div class="field">
+              <label>Contraseña temporal</label>
+              <input type="password" id="suc-pass" placeholder="Mínimo 8 caracteres">
+            </div>
+          </div>
+          <button class="btn btn-naranja btn-sm" id="btn-confirmar-crear-sucursal">
+            Crear sucursal
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lista de sucursales -->
+    <h3 style="margin-bottom:14px">Sucursales vinculadas</h3>
+    <div id="lista-sucursales">
+      <p style="color:var(--gris)">Cargando...</p>
+    </div>
+  `
+
+  cargarMetricasGrupo()
+  cargarListaSucursales()
+  initEventosSucursales()
+}
+
+async function cargarMetricasGrupo() {
+  // IDs del grupo: padre + todas las sucursales
+  const { data: sucursales } = await supabase
+    .from('profiles').select('id')
+    .eq('panaderia_padre_id', uid)
+
+  const ids = [uid, ...(sucursales || []).map(s => s.id)]
+
+  const [
+    { data: pedidos },
+    { count: cProds }
+  ] = await Promise.all([
+    supabase.from('pedidos').select('total').in('vendedor_id', ids),
+    supabase.from('productos').select('id', { count:'exact', head:true })
+      .in('vendedor_id', ids).eq('activo', true)
+  ])
+
+  const totalVentas = (pedidos || []).reduce((acc, p) => acc + (p.total || 0), 0)
+
+  document.getElementById('sg-ventas').textContent    = formatPrecio(totalVentas)
+  document.getElementById('sg-pedidos').textContent   = (pedidos || []).length
+  document.getElementById('sg-productos').textContent = cProds || 0
+  document.getElementById('sg-sucursales').textContent = (sucursales || []).length
+}
+
+async function cargarListaSucursales() {
+  const { data } = await supabase
+    .from('profiles').select('*')
+    .eq('panaderia_padre_id', uid)
+
+  const el = document.getElementById('lista-sucursales')
+  if (!data || data.length === 0) {
+    el.innerHTML = `
+      <div style="text-align:center;padding:32px 0;color:var(--gris)">
+        <div style="font-size:2.5rem;margin-bottom:10px">🏪</div>
+        <p>Aún no tenés sucursales vinculadas</p>
+      </div>`
+    return
+  }
+
+  el.innerHTML = data.map(s => `
+    <div class="sec-card" style="box-shadow:none;border:1px solid var(--crema-dark);
+                                  margin-bottom:12px;padding:16px">
+      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+        <div style="width:44px;height:44px;border-radius:50%;background:var(--naranja);
+                    color:white;display:flex;align-items:center;justify-content:center;
+                    font-weight:700;font-size:0.9rem;flex-shrink:0;overflow:hidden">
+          ${s.avatar_url
+            ? `<img src="${s.avatar_url}" style="width:100%;height:100%;object-fit:cover">`
+            : getIniciales(s.nombre_panaderia || s.nombre)}
+        </div>
+        <div style="flex:1;min-width:0">
+          <div style="font-weight:700">${s.nombre_panaderia || s.nombre}</div>
+          <div style="font-size:0.78rem;color:var(--gris)">${s.email_contacto || '—'}</div>
+          <span class="estado-badge estado-${s.estado_verificacion || 'sin_enviar'}"
+                style="font-size:0.7rem">
+            ${s.estado_verificacion || 'sin_enviar'}
+          </span>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-ghost btn-sm"
+                  onclick="verDetalleSucursal('${s.id}', '${s.nombre_panaderia || s.nombre}')">
+            📊 Ver métricas
+          </button>
+          <button class="btn btn-sm" style="background:#C62828;color:white"
+                  onclick="desvincularSucursal('${s.id}')">
+            Desvincular
+          </button>
+        </div>
+      </div>
+      <!-- Panel métricas expandible -->
+      <div id="detalle-suc-${s.id}" style="display:none;margin-top:14px;
+           padding-top:14px;border-top:1px solid var(--crema-dark)">
+      </div>
+    </div>
+  `).join('')
+}
+
+function initEventosSucursales() {
+  // Buscar sucursal por email
+  document.getElementById('btn-buscar-sucursal')?.addEventListener('click', async () => {
+    const email = document.getElementById('input-buscar-sucursal').value.trim()
+    if (!email) { toast('Ingresá un email', 'err'); return }
+
+    const { data } = await supabase
+      .from('profiles')
+      .select('id, nombre_panaderia, nombre, avatar_url, es_sucursal, panaderia_padre_id')
+      .eq('tipo', 'vendedor')
+      .eq('email_contacto', email)
+      .single()
+
+    const el = document.getElementById('resultado-busqueda-sucursal')
+
+    if (!data) {
+      el.innerHTML = `<p style="color:var(--gris);font-size:0.85rem">
+        No se encontró ninguna panadería con ese email.</p>`
+      return
+    }
+    if (data.id === uid) {
+      el.innerHTML = `<p style="color:#C62828;font-size:0.85rem">
+        No podés vincularte a vos mismo.</p>`
+      return
+    }
+    if (data.panaderia_padre_id) {
+      el.innerHTML = `<p style="color:#C62828;font-size:0.85rem">
+        Esta panadería ya está vinculada a otra panadería principal.</p>`
+      return
+    }
+
+    el.innerHTML = `
+      <div style="display:flex;align-items:center;gap:12px;
+                  background:var(--crema);padding:12px;border-radius:var(--radio)">
+        <div style="font-weight:700">${data.nombre_panaderia || data.nombre}</div>
+        <button class="btn btn-naranja btn-sm" style="margin-left:auto"
+                id="btn-confirmar-vincular" data-id="${data.id}">
+          Vincular como sucursal
+        </button>
+      </div>
+    `
+
+    document.getElementById('btn-confirmar-vincular').addEventListener('click', async () => {
+      const { error } = await supabase
+        .from('profiles')
+        .update({ panaderia_padre_id: uid, es_sucursal: true })
+        .eq('id', data.id)
+
+      if (error) { toast('Error al vincular', 'err'); return }
+      toast('Sucursal vinculada ✓', 'ok')
+      el.innerHTML = ''
+      document.getElementById('input-buscar-sucursal').value = ''
+      cargarListaSucursales()
+      cargarMetricasGrupo()
+    })
+  })
+
+  // Toggle form crear sucursal
+  document.getElementById('btn-crear-sucursal')?.addEventListener('click', () => {
+    const form = document.getElementById('form-crear-sucursal')
+    form.style.display = form.style.display === 'none' ? 'block' : 'none'
+  })
+
+  // Crear sucursal nueva
+  document.getElementById('btn-confirmar-crear-sucursal')?.addEventListener('click', async () => {
+    const nombrePan = document.getElementById('suc-nombre-pan').value.trim()
+    const nombre    = document.getElementById('suc-nombre').value.trim()
+    const email     = document.getElementById('suc-email').value.trim()
+    const pass      = document.getElementById('suc-pass').value
+
+    if (!nombrePan || !nombre || !email || !pass) {
+      toast('Completá todos los campos', 'err'); return
+    }
+    if (pass.length < 8) { toast('Contraseña mínimo 8 caracteres', 'err'); return }
+
+    const btn = document.getElementById('btn-confirmar-crear-sucursal')
+    btn.disabled = true; btn.textContent = 'Creando...'
+
+    const { data, error } = await supabase.auth.admin
+      ? await supabase.auth.signUp({ email, password: pass })
+      : await supabase.auth.signUp({ email, password: pass })
+
+    if (error) {
+      toast('Error al crear cuenta: ' + error.message, 'err')
+      btn.disabled = false; btn.textContent = 'Crear sucursal'
+      return
+    }
+
+    await supabase.from('profiles').insert({
+      id:                 data.user.id,
+      nombre,
+      nombre_panaderia:   nombrePan,
+      tipo:               'vendedor',
+      es_sucursal:        true,
+      panaderia_padre_id: uid,
+      estado_verificacion: 'sin_enviar'
+    })
+
+    btn.disabled = false; btn.textContent = 'Crear sucursal'
+    document.getElementById('form-crear-sucursal').style.display = 'none'
+    ;['suc-nombre-pan','suc-nombre','suc-email','suc-pass'].forEach(id => {
+      document.getElementById(id).value = ''
+    })
+
+    toast('¡Sucursal creada! 🎉', 'ok')
+    cargarListaSucursales()
+    cargarMetricasGrupo()
+  })
+}
+
+// Ver métricas de una sucursal individual
+window.verDetalleSucursal = async (sucId, nombre) => {
+  const el = document.getElementById(`detalle-suc-${sucId}`)
+  if (el.style.display !== 'none') { el.style.display = 'none'; return }
+
+  el.innerHTML = '<p style="color:var(--gris)">Cargando métricas...</p>'
+  el.style.display = 'block'
+
+  const [
+    { data: pedidos },
+    { count: cProds },
+    { data: ultimosPeds }
+  ] = await Promise.all([
+    supabase.from('pedidos').select('total, estado, created_at').eq('vendedor_id', sucId),
+    supabase.from('productos').select('id', { count:'exact', head:true })
+      .eq('vendedor_id', sucId).eq('activo', true),
+    supabase.from('pedidos').select('*').eq('vendedor_id', sucId)
+      .order('created_at', { ascending: false }).limit(3)
+  ])
+
+  const totalVentas   = (pedidos || []).reduce((acc, p) => acc + (p.total || 0), 0)
+  const pendientes    = (pedidos || []).filter(p => p.estado === 'pendiente').length
+  const entregados    = (pedidos || []).filter(p => p.estado === 'entregado').length
+
+  el.innerHTML = `
+    <h4 style="margin-bottom:12px;font-family:'Playfair Display',serif">
+      📊 Métricas de ${nombre}
+    </h4>
+    <div class="stats-grid" style="margin-bottom:16px">
+      <div class="stat-card">
+        <div class="stat-label">Ventas totales</div>
+        <div class="stat-value" style="font-size:1.4rem">${formatPrecio(totalVentas)}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Pedidos totales</div>
+        <div class="stat-value" style="font-size:1.4rem">${(pedidos || []).length}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Pendientes</div>
+        <div class="stat-value" style="font-size:1.4rem;color:var(--naranja)">${pendientes}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Entregados</div>
+        <div class="stat-value" style="font-size:1.4rem;color:var(--verde)">${entregados}</div>
+      </div>
+    </div>
+
+    ${ultimosPeds && ultimosPeds.length > 0 ? `
+      <div style="font-weight:700;margin-bottom:8px;font-size:0.88rem">Últimos pedidos:</div>
+      ${ultimosPeds.map(p => `
+        <div style="display:flex;justify-content:space-between;
+                    padding:8px 0;border-bottom:1px solid var(--crema-dark);
+                    font-size:0.82rem">
+          <span>${p.ticket_id || '#' + p.id.slice(-6).toUpperCase()}</span>
+          <span class="estado-badge estado-${p.estado}">${p.estado}</span>
+          <span style="font-weight:700;color:var(--verde)">${formatPrecio(p.total)}</span>
+        </div>
+      `).join('')}
+      <a href="tienda.html?id=${sucId}" target="_blank"
+         class="btn btn-ghost btn-sm" style="margin-top:10px">
+        Ver tienda de esta sucursal →
+      </a>
+    ` : '<p style="color:var(--gris);font-size:0.85rem">Sin pedidos aún</p>'}
+  `
+}
+
+// Desvincular sucursal
+window.desvincularSucursal = async (sucId) => {
+  if (!confirm('¿Desvincular esta sucursal? Seguirá existiendo como panadería independiente.')) return
+  const { error } = await supabase
+    .from('profiles')
+    .update({ panaderia_padre_id: null, es_sucursal: false })
+    .eq('id', sucId)
+
+  if (error) { toast('Error al desvincular', 'err'); return }
+  toast('Sucursal desvinculada', 'ok')
+  cargarListaSucursales()
+  cargarMetricasGrupo()
 }
 
 init()
