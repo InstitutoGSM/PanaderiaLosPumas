@@ -1,11 +1,13 @@
-import { supabase }                        from './supabase.js'
-import { toast, formatPrecio, catEmoji,
-         catLabel, getIniciales }          from './utils.js'
-import { agregarItem, actualizarBadge }    from './carrito.js'
+import { supabase } from './supabase.js'
+import {
+  toast, formatPrecio, catEmoji,
+  catLabel, getIniciales
+} from './utils.js'
+import { agregarItem, actualizarBadge } from './carrito.js'
 
 let todos = []
-let cat   = 'todos'
-let busq  = ''
+let cat = 'todos'
+let busq = ''
 
 // ── Cargar panaderías ──
 export async function cargarPanaderias() {
@@ -30,8 +32,8 @@ export async function cargarPanaderias() {
   el.innerHTML = data.map(p => `
     <a href="tienda.html?id=${p.id}" class="panaderia-chip">
       <div class="chip-avatar" style="${p.avatar_url
-        ? `background:url('${p.avatar_url}') center/cover;color:transparent`
-        : ''}">
+      ? `background:url('${p.avatar_url}') center/cover;color:transparent`
+      : ''}">
         ${p.avatar_url ? '' : getIniciales(p.nombre_panaderia || p.nombre)}
       </div>
       <span class="chip-nombre">${p.nombre_panaderia || p.nombre}</span>
@@ -48,12 +50,30 @@ export async function cargarProductos() {
     `).join('')
   }
 
-  // Solo productos de vendedores aprobados
+  // Primero obtenemos los IDs de vendedores aprobados
+  const { data: vendAprobados } = await supabase
+    .from('profiles')
+    .select('id, nombre_panaderia, nombre, avatar_url')
+    .eq('tipo', 'vendedor')
+    .eq('estado_verificacion', 'aprobado')
+
+  if (!vendAprobados || vendAprobados.length === 0) {
+    todos = []
+    if (grid) grid.innerHTML = ''
+    renderProductos()
+    return
+  }
+
+  const idsAprobados = vendAprobados.map(v => v.id)
+  const mapaPerfiles = {}
+  vendAprobados.forEach(v => { mapaPerfiles[v.id] = v })
+
+  // Luego traemos solo productos de esos vendedores
   const { data, error } = await supabase
     .from('productos')
-    .select('*, profiles!inner(nombre_panaderia, nombre, avatar_url, estado_verificacion)')
+    .select('*')
     .eq('activo', true)
-    .eq('profiles.estado_verificacion', 'aprobado')
+    .in('vendedor_id', idsAprobados)
     .order('created_at', { ascending: false })
 
   if (error) {
@@ -64,10 +84,11 @@ export async function cargarProductos() {
 
   todos = (data || []).map(p => ({
     ...p,
-    nombre_panaderia: p.profiles?.nombre_panaderia || p.profiles?.nombre || 'Panadería'
+    nombre_panaderia: mapaPerfiles[p.vendedor_id]?.nombre_panaderia ||
+      mapaPerfiles[p.vendedor_id]?.nombre || 'Panadería'
   }))
 
-  // Cargar promedios de calificación
+  // Calificaciones
   const { data: cals } = await supabase
     .from('calificaciones')
     .select('producto_id, estrellas')
@@ -102,16 +123,16 @@ function filtrar() {
     )
   }
   const orden = document.getElementById('ordenar')?.value || 'reciente'
-  if (orden === 'precio_asc')   lista = [...lista].sort((a, b) => a.precio - b.precio)
-  if (orden === 'precio_desc')  lista = [...lista].sort((a, b) => b.precio - a.precio)
-  if (orden === 'nombre')       lista = [...lista].sort((a, b) => a.nombre.localeCompare(b.nombre))
+  if (orden === 'precio_asc') lista = [...lista].sort((a, b) => a.precio - b.precio)
+  if (orden === 'precio_desc') lista = [...lista].sort((a, b) => b.precio - a.precio)
+  if (orden === 'nombre') lista = [...lista].sort((a, b) => a.nombre.localeCompare(b.nombre))
   if (orden === 'calificacion') lista = [...lista].sort((a, b) => (b.promedio_cal || 0) - (a.promedio_cal || 0))
   return lista
 }
 
 // ── Render grid ──
 export function renderProductos() {
-  const grid  = document.getElementById('productos-grid')
+  const grid = document.getElementById('productos-grid')
   const empty = document.getElementById('empty-state')
   const count = document.getElementById('count')
   if (!grid) return
@@ -138,9 +159,9 @@ export function renderProductos() {
           ${catLabel(p.categoria)}
         </span>
         ${p.imagen_url
-          ? `<img class="card-img" src="${p.imagen_url}"
+        ? `<img class="card-img" src="${p.imagen_url}"
                   alt="${p.nombre}" loading="lazy">`
-          : `<div class="card-img-ph">${catEmoji(p.categoria)}</div>`}
+        : `<div class="card-img-ph">${catEmoji(p.categoria)}</div>`}
         <div class="card-body">
           <div class="card-nombre">${p.nombre}</div>
           <a href="tienda.html?id=${p.vendedor_id}" class="card-tienda"
@@ -149,8 +170,8 @@ export function renderProductos() {
           </a>
           <div class="card-precio">
             ${p.unidad_venta === 'kilo'
-              ? `${formatPrecio(p.precio)} / kg`
-              : formatPrecio(p.precio)}
+        ? `${formatPrecio(p.precio)} / kg`
+        : formatPrecio(p.precio)}
           </div>
           ${p.promedio_cal > 0 ? `
             <div style="display:flex;align-items:center;gap:4px;
@@ -160,10 +181,10 @@ export function renderProductos() {
             </div>
           ` : ''}
           ${p.dato_extra
-            ? `<div style="font-size:0.78rem;color:var(--gris);margin-bottom:8px">
+        ? `<div style="font-size:0.78rem;color:var(--gris);margin-bottom:8px">
                  ℹ️ ${p.dato_extra}
                </div>`
-            : ''}
+        : ''}
           <div style="display:flex;gap:8px;margin-top:8px">
             <a href="producto.html?id=${p.id}"
                class="btn btn-ghost btn-sm"
@@ -202,5 +223,5 @@ export function renderProductos() {
   })
 }
 
-export function setCat(c)  { cat  = c; renderProductos() }
+export function setCat(c) { cat = c; renderProductos() }
 export function setBusq(b) { busq = b; renderProductos() }
