@@ -25,7 +25,7 @@ async function verificarAcceso() {
   if (!user) { await requireAuthParaComprar(); return null }
   return user
 }
-
+git add .
 async function cargarResumen() {
   const items = getCarrito()
   const el    = document.getElementById('resumen-items')
@@ -159,7 +159,7 @@ async function prellenarDatos(user) {
   }
 }
 
-// ── Tarjeta visual ──
+// -- Tarjeta visual --
 document.getElementById('t-numero').addEventListener('input', e => {
   let v = e.target.value.replace(/\D/g,'').slice(0,16)
   const fmt = v.replace(/(.{4})/g,'$1 ').trim()
@@ -186,7 +186,7 @@ document.getElementById('t-cvv').addEventListener('input', e => {
   e.target.value = e.target.value.replace(/\D/g,'').slice(0,4)
 })
 
-// ── Confirmar pedido ──
+// -- Confirmar pedido --
 document.getElementById('btn-finalizar').addEventListener('click', async () => {
   const items = getCarrito()
   if (items.length === 0) { toast('Tu carrito está vacío', 'err'); return }
@@ -205,6 +205,7 @@ document.getElementById('btn-finalizar').addEventListener('click', async () => {
   const necesitaTarjeta = Object.values(grupos)
     .some(g => g.pagoSel === 'debito' || g.pagoSel === 'credito')
 
+    // --Cosas de la tarjeta--
   if (necesitaTarjeta) {
     const num       = document.getElementById('t-numero').value.replace(/\s/g,'')
     const vence     = document.getElementById('t-vence').value
@@ -257,7 +258,7 @@ document.getElementById('btn-finalizar').addEventListener('click', async () => {
     const total    = g.items.reduce((acc, i) => acc + i.precio * i.cantidad, 0)
     const ticketId = 'TK-' + Date.now().toString(36).toUpperCase() +
                      '-' + Math.random().toString(36).slice(2,6).toUpperCase()
-    // --Carga de productos REVISAR --
+
     const { data, error } = await supabase.from('pedidos').insert({
       comprador_id:     user.id,
       vendedor_id:      vid,

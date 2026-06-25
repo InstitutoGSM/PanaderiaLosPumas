@@ -1,6 +1,6 @@
 html, body { overflow-x: hidden; }
 
-/* -- Header -- */
+/* ── Header ── */
 .catalogo-header {
   background: linear-gradient(135deg, var(--marron) 0%, var(--marron-mid) 100%);
   padding: 28px 0 24px;
@@ -17,7 +17,7 @@ html, body { overflow-x: hidden; }
   margin: 0;
 }
 
-/* -- Barra búsqueda -- */
+/* ── Barra búsqueda ── */
 .catalogo-search-bar {
   background: var(--blanco);
   border-bottom: 1px solid var(--crema-dark);
@@ -57,7 +57,7 @@ html, body { overflow-x: hidden; }
   padding: 8px 12px;
 }
 
-/* -- Layout -- */
+/* ── Layout ── */
 .catalogo-layout {
   display: grid;
   grid-template-columns: 240px 1fr;
@@ -68,7 +68,7 @@ html, body { overflow-x: hidden; }
   align-items: start;
 }
 
-/* -- Sidebar panaderías -- */
+/* ── Sidebar panaderías ── */
 .sidebar-pan {
   background: var(--blanco);
   border-radius: var(--radio-lg);
@@ -102,7 +102,7 @@ html, body { overflow-x: hidden; }
   color: var(--gris);
 }
 
-/* -- Chips panaderías -- */
+/* ── Chips panaderías ── */
 .pan-chip {
   display: flex;
   align-items: center;
@@ -133,7 +133,7 @@ html, body { overflow-x: hidden; }
   flex-shrink: 0;
 }
 
-/* -- Filtros categoría -- */
+/* ── Filtros categoría ── */
 .filtros-cat {
   display: flex;
   gap: 8px;
@@ -141,7 +141,7 @@ html, body { overflow-x: hidden; }
   margin-bottom: 16px;
 }
 
-/* -- Toolbar -- */
+/* ── Toolbar ── */
 .toolbar {
   display: flex;
   justify-content: space-between;
@@ -152,10 +152,10 @@ html, body { overflow-x: hidden; }
 }
 .toolbar-count { font-size: 0.88rem; color: var(--gris); }
 
-/* -- Botón toggle sidebar (solo mobile) -- */
+/* ── Botón toggle sidebar (solo mobile) ── */
 .btn-toggle-sidebar { display: none; }
 
-/* -- Footer legal -- */
+/* ── Footer legal ── */
 .footer-legal {
   text-align: center;
   padding: 24px;
@@ -164,7 +164,7 @@ html, body { overflow-x: hidden; }
 }
 .footer-legal a { color: var(--gris); }
 
-/* -- Responsive -- */
+/* ── Responsive ── */
 @media (max-width: 860px) {
   .catalogo-layout { grid-template-columns: 1fr; }
   .sidebar-pan {

@@ -10,7 +10,7 @@ actualizarBadge()
 cargarProductos()
 cargarPanaderias()
 
-// -- Nav usuario --
+// ── Nav usuario ──
 getUser().then(async user => {
   const btn     = document.getElementById('nav-btn')
   const logoutB = document.getElementById('nav-logout')
@@ -39,7 +39,7 @@ document.getElementById('nav-logout')?.addEventListener('click', e => {
   import('./auth.js').then(m => m.logout())
 })
 
-// -- Cargar panaderías en el sidebar --
+// ── Cargar panaderías en sidebar ──
 async function cargarPanaderias() {
   const { data } = await supabase
     .from('profiles')
@@ -90,7 +90,7 @@ window.filtrarPorPanaderia = (e, id) => {
   renderProductos()
 }
 
-// -- Búsqueda --
+// ── Búsqueda ──
 const onBusq = debounce(v => setBusq(v), 250)
 document.getElementById('search-catalogo').addEventListener('input',
   e => onBusq(e.target.value))
@@ -112,7 +112,7 @@ initSugerencias('search-catalogo', async q => {
   }))
 })
 
-// -- Filtros categoría --
+// ── Filtros categoría ──
 document.querySelectorAll('.filtro').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.filtro').forEach(b => {
@@ -123,10 +123,10 @@ document.querySelectorAll('.filtro').forEach(btn => {
   })
 })
 
-// -- Ordenar --
+// ── Ordenar ──
 document.getElementById('ordenar').addEventListener('change', renderProductos)
 
-// -- Carrito --
+// ── Carrito ──
 function toggleCart(abrir) {
   document.getElementById('cart-drawer').classList.toggle('open', abrir)
   document.getElementById('cart-overlay').classList.toggle('open', abrir)
@@ -136,12 +136,12 @@ document.getElementById('cart-toggle').addEventListener('click',  () => toggleCa
 document.getElementById('cart-close').addEventListener('click',   () => toggleCart(false))
 document.getElementById('cart-overlay').addEventListener('click', () => toggleCart(false))
 
-// -- sidebar CEL --
+// ── Toggle sidebar mobile ──
 document.getElementById('btn-toggle-sidebar').addEventListener('click', () => {
   document.getElementById('sidebar-pan').classList.toggle('open')
 })
 
-// -- Buscador panaderías en sidebar --
+// ── Buscador panaderías en sidebar ──
 document.getElementById('search-panaderias').addEventListener('input',
   debounce(e => {
     const q = e.target.value.toLowerCase()

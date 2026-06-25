@@ -78,7 +78,6 @@ async function cargarPerfil(user) {
   })
 }
 
-// --func cargarPredidos--
 async function cargarPedidos(user) {
   const { data, error } = await supabase
     .from('pedidos').select('*')

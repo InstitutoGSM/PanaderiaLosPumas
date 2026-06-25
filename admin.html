@@ -1,139 +1,295 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Panel Admin — PanaderiaMarket</title>
   <link rel="stylesheet" href="css/global.css">
   <style>
-    html, body { overflow-x: hidden; background: var(--crema); }
+    html,
+    body {
+      overflow-x: hidden;
+      background: var(--crema);
+    }
 
     .admin-navbar {
-      background: var(--marron); padding: 0 24px; height: 60px;
-      display: flex; align-items: center; justify-content: space-between;
-      position: sticky; top: 0; z-index: 100;
+      background: var(--marron);
+      padding: 0 24px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
+
     .admin-navbar-brand {
       font-family: 'Playfair Display', serif;
-      color: white; font-size: 1.1rem; font-weight: 900;
+      color: white;
+      font-size: 1.1rem;
+      font-weight: 900;
     }
-    .admin-navbar-brand span { color: var(--naranja-lt); }
 
-    .admin-wrap { max-width: 1100px; margin: 0 auto; padding: 32px 20px 60px; }
+    .admin-navbar-brand span {
+      color: var(--naranja-lt);
+    }
+
+    .admin-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 32px 20px 60px;
+    }
 
     .admin-stats {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(160px,1fr));
-      gap: 14px; margin-bottom: 28px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 14px;
+      margin-bottom: 28px;
     }
+
     .admin-stat {
-      background: var(--blanco); border-radius: var(--radio-lg);
-      padding: 18px; box-shadow: var(--sombra); text-align: center;
+      background: var(--blanco);
+      border-radius: var(--radio-lg);
+      padding: 18px;
+      box-shadow: var(--sombra);
+      text-align: center;
     }
+
     .admin-stat .num {
       font-family: 'Playfair Display', serif;
-      font-size: 2rem; font-weight: 900; color: var(--marron);
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--marron);
     }
-    .admin-stat .lbl { font-size: 0.8rem; color: var(--gris); margin-top: 3px; }
+
+    .admin-stat .lbl {
+      font-size: 0.8rem;
+      color: var(--gris);
+      margin-top: 3px;
+    }
 
     .admin-filtros {
-      display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
     }
 
     .vendedor-card {
-      background: var(--blanco); border-radius: var(--radio-lg);
-      box-shadow: var(--sombra); margin-bottom: 16px; overflow: hidden;
+      background: var(--blanco);
+      border-radius: var(--radio-lg);
+      box-shadow: var(--sombra);
+      margin-bottom: 16px;
+      overflow: hidden;
     }
+
     .vendedor-card-header {
-      display: flex; align-items: center; gap: 16px;
-      padding: 18px 20px; border-bottom: 1px solid var(--crema-dark);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--crema-dark);
       flex-wrap: wrap;
     }
+
     .vendedor-avatar {
-      width: 56px; height: 56px; border-radius: 50%;
-      background: var(--naranja); color: white;
-      display: flex; align-items: center; justify-content: center;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--naranja);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-family: 'Playfair Display', serif;
-      font-size: 1.3rem; font-weight: 900; flex-shrink: 0; overflow: hidden;
+      font-size: 1.3rem;
+      font-weight: 900;
+      flex-shrink: 0;
+      overflow: hidden;
     }
-    .vendedor-avatar img { width:100%; height:100%; object-fit:cover; }
-    .vendedor-info { flex: 1; min-width: 0; }
-    .vendedor-nombre { font-weight: 700; font-size: 1rem; }
-    .vendedor-email  { font-size: 0.82rem; color: var(--gris); }
-    .vendedor-fecha  { font-size: 0.78rem; color: var(--gris); margin-top: 2px; }
+
+    .vendedor-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .vendedor-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .vendedor-nombre {
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .vendedor-email {
+      font-size: 0.82rem;
+      color: var(--gris);
+    }
+
+    .vendedor-fecha {
+      font-size: 0.78rem;
+      color: var(--gris);
+      margin-top: 2px;
+    }
 
     .estado-badge-admin {
-      padding: 5px 12px; border-radius: 50px;
-      font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+      padding: 5px 12px;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
     }
-    .estado-sin_enviar  { background: #F5F5F5; color: #757575; }
-    .estado-pendiente   { background: #FFF8E1; color: #F57F17; }
-    .estado-aprobado    { background: #E8F5E9; color: #2E7D32; }
-    .estado-rechazado   { background: #FFEBEE; color: #C62828; }
+
+    .estado-sin_enviar {
+      background: #F5F5F5;
+      color: #757575;
+    }
+
+    .estado-pendiente {
+      background: #FFF8E1;
+      color: #F57F17;
+    }
+
+    .estado-aprobado {
+      background: #E8F5E9;
+      color: #2E7D32;
+    }
+
+    .estado-rechazado {
+      background: #FFEBEE;
+      color: #C62828;
+    }
 
     .vendedor-docs {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
-      gap: 14px; padding: 18px 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+      padding: 18px 20px;
     }
+
     .doc-item {
-      border: 2px solid var(--crema-dark); border-radius: var(--radio);
-      padding: 12px; text-align: center;
+      border: 2px solid var(--crema-dark);
+      border-radius: var(--radio);
+      padding: 12px;
+      text-align: center;
     }
-    .doc-item .doc-ico { font-size: 2rem; display: block; margin-bottom: 6px; }
+
+    .doc-item .doc-ico {
+      font-size: 2rem;
+      display: block;
+      margin-bottom: 6px;
+    }
+
     .doc-item .doc-nombre {
-      font-size: 0.78rem; font-weight: 700; color: var(--marron);
-      margin-bottom: 8px; display: block;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--marron);
+      margin-bottom: 8px;
+      display: block;
     }
+
     .doc-item.sin-doc {
-      border-style: dashed; opacity: 0.5;
+      border-style: dashed;
+      opacity: 0.5;
     }
+
     .doc-item img {
-      width: 100%; height: 120px; object-fit: cover;
-      border-radius: 6px; cursor: pointer;
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 6px;
+      cursor: pointer;
       transition: opacity 0.2s;
     }
-    .doc-item img:hover { opacity: 0.85; }
+
+    .doc-item img:hover {
+      opacity: 0.85;
+    }
+
     .doc-item a.ver-doc {
-      display: inline-flex; align-items: center; gap: 5px;
-      font-size: 0.8rem; color: var(--naranja); font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.8rem;
+      color: var(--naranja);
+      font-weight: 700;
       margin-top: 8px;
     }
 
     .vendedor-acciones {
-      padding: 14px 20px; border-top: 1px solid var(--crema-dark);
-      display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+      padding: 14px 20px;
+      border-top: 1px solid var(--crema-dark);
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
     }
 
     /* Modal corregir */
     .modal-overlay {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.5);
-      z-index: 500; display: flex; align-items: center; justify-content: center;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       padding: 20px;
     }
+
     .modal-box {
-      background: var(--blanco); border-radius: var(--radio-lg);
-      padding: 28px; width: 100%; max-width: 480px;
+      background: var(--blanco);
+      border-radius: var(--radio-lg);
+      padding: 28px;
+      width: 100%;
+      max-width: 480px;
       box-shadow: var(--sombra-lg);
     }
-    .modal-box h3 { font-family:'Playfair Display',serif; margin-bottom: 14px; }
-    .modal-box textarea { min-height: 120px; }
-    .modal-acciones { display: flex; gap: 10px; margin-top: 16px; }
+
+    .modal-box h3 {
+      font-family: 'Playfair Display', serif;
+      margin-bottom: 14px;
+    }
+
+    .modal-box textarea {
+      min-height: 120px;
+    }
+
+    .modal-acciones {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+    }
 
     @media (max-width: 600px) {
-      .vendedor-docs { grid-template-columns: 1fr; }
-      .vendedor-acciones { flex-direction: column; }
-      .vendedor-acciones .btn { width: 100%; justify-content: center; }
+      .vendedor-docs {
+        grid-template-columns: 1fr;
+      }
+
+      .vendedor-acciones {
+        flex-direction: column;
+      }
+
+      .vendedor-acciones .btn {
+        width: 100%;
+        justify-content: center;
+      }
     }
   </style>
 </head>
+
 <body>
 
   <nav class="admin-navbar">
     <div class="admin-navbar-brand">
       🥖 Panaderia<span>PUMA</span> — Admin
     </div>
-    <button class="btn btn-ghost btn-sm"
-            style="border-color:rgba(255,255,255,0.3);color:white"
-            id="btn-logout">
+    <button class="btn btn-ghost btn-sm" style="border-color:rgba(255,255,255,0.3);color:white" id="btn-logout">
       Salir 🚪
     </button>
   </nav>
@@ -177,8 +333,7 @@
       <div class="skeleton" style="height:200px;border-radius:var(--radio-lg);margin-bottom:14px"></div>
     </div>
 
-    <div id="empty-vendedores"
-         style="display:none;text-align:center;padding:60px 0;color:var(--gris)">
+    <div id="empty-vendedores" style="display:none;text-align:center;padding:60px 0;color:var(--gris)">
       No hay vendedores que coincidan con el filtro.
     </div>
 
@@ -194,7 +349,7 @@
         qué debe corregir en su documentación.
       </p>
       <textarea id="modal-mensaje"
-                placeholder="Ej: El Carnet de Manipulador de Alimentos no se ve claramente. Por favor volvé a subir una foto más nítida..."></textarea>
+        placeholder="Ej: El Carnet de Manipulador de Alimentos no se ve claramente. Por favor volvé a subir una foto más nítida..."></textarea>
       <div class="modal-acciones">
         <button class="btn btn-naranja" id="btn-enviar-correccion">
           📧 Enviar email y notificar
@@ -207,12 +362,12 @@
   <div id="toast-box"></div>
 
   <script type="module">
-    import { supabase }            from './js/supabase.js'
+    import { supabase } from './js/supabase.js'
     import { toast, getIniciales } from './js/utils.js'
     import { requireAdmin, logout } from './js/auth.js'
 
-    let todosVendedores      = []
-    let filtroEstado         = 'todos'
+    let todosVendedores = []
+    let filtroEstado = 'todos'
     let vendedorSeleccionado = null
 
     document.getElementById('btn-logout').addEventListener('click', logout)
@@ -237,7 +392,7 @@
         .from('profiles')
         .update({
           estado_verificacion: 'sin_enviar',
-          doc_notas_rechazo:   mensaje
+          doc_notas_rechazo: mensaje
         })
         .eq('id', vendedorSeleccionado)
 
@@ -270,7 +425,7 @@
 
       actualizarLocal(vendedorSeleccionado, {
         estado_verificacion: 'sin_enviar',
-        doc_notas_rechazo:   mensaje
+        doc_notas_rechazo: mensaje
       })
       vendedorSeleccionado = null
     })
@@ -329,7 +484,7 @@
         ? todosVendedores
         : todosVendedores.filter(v => v.estado_verificacion === filtroEstado)
 
-      const el    = document.getElementById('lista-vendedores')
+      const el = document.getElementById('lista-vendedores')
       const empty = document.getElementById('empty-vendedores')
 
       if (lista.length === 0) {
@@ -338,19 +493,19 @@
       empty.style.display = 'none'
 
       el.innerHTML = lista.map(v => {
-        const estado     = v.estado_verificacion || 'sin_enviar'
+        const estado = v.estado_verificacion || 'sin_enviar'
         const nombreMost = v.nombre_panaderia || v.nombre || 'Sin nombre'
-        const tieneDocs  = v.doc_bromatologia ||
-                           v.doc_carnet_manipulador ||
-                           v.doc_habilitacion_comercial
+        const tieneDocs = v.doc_bromatologia ||
+          v.doc_carnet_manipulador ||
+          v.doc_habilitacion_comercial
 
         return `
           <div class="vendedor-card" data-id="${v.id}">
             <div class="vendedor-card-header">
               <div class="vendedor-avatar">
                 ${v.avatar_url
-                  ? `<img src="${v.avatar_url}" alt="${nombreMost}">`
-                  : getIniciales(nombreMost)}
+            ? `<img src="${v.avatar_url}" alt="${nombreMost}">`
+            : getIniciales(nombreMost)}
               </div>
               <div class="vendedor-info">
                 <div class="vendedor-nombre">${nombreMost}</div>
@@ -365,8 +520,8 @@
             </div>
 
             <div class="vendedor-docs">
-              ${renderDoc(v.doc_bromatologia,           '📋', 'Habilitación Bromatológica')}
-              ${renderDoc(v.doc_carnet_manipulador,     '🪪', 'Carnet Manipulador')}
+              ${renderDoc(v.doc_bromatologia, '📋', 'Habilitación Bromatológica')}
+              ${renderDoc(v.doc_carnet_manipulador, '🪪', 'Carnet Manipulador')}
               ${renderDoc(v.doc_habilitacion_comercial, '🏪', 'Habilitación Comercial')}
             </div>
 
@@ -404,12 +559,12 @@
       // Eventos botones — delegación en el contenedor
       el.querySelectorAll('[data-action]').forEach(btn => {
         btn.addEventListener('click', () => {
-          const action  = btn.dataset.action
-          const id      = btn.dataset.id
-          const nombre  = btn.dataset.nombre || ''
-          if (action === 'aprobar')   aprobar(id)
-          if (action === 'rechazar')  rechazar(id)
-          if (action === 'corregir')  abrirCorregir(id, nombre)
+          const action = btn.dataset.action
+          const id = btn.dataset.id
+          const nombre = btn.dataset.nombre || ''
+          if (action === 'aprobar') aprobar(id)
+          if (action === 'rechazar') rechazar(id)
+          if (action === 'corregir') abrirCorregir(id, nombre)
         })
       })
     }
@@ -428,10 +583,10 @@
           <span class="doc-ico">${ico}</span>
           <span class="doc-nombre">${nombre}</span>
           ${esImagen
-            ? `<img src="${url}" alt="${nombre}"
+          ? `<img src="${url}" alt="${nombre}"
                     onclick="window.open('${url}','_blank')"
                     title="Click para ver en tamaño completo">`
-            : `<div style="font-size:0.78rem;color:var(--gris);margin-bottom:6px">
+          : `<div style="font-size:0.78rem;color:var(--gris);margin-bottom:6px">
                  Archivo PDF
                </div>`}
           <a href="${url}" target="_blank" class="ver-doc">🔍 Ver completo</a>
@@ -441,9 +596,9 @@
     function estadoLabel(e) {
       return {
         sin_enviar: 'Sin documentos',
-        pendiente:  'Pendiente',
-        aprobado:   'Aprobado',
-        rechazado:  'Rechazado'
+        pendiente: 'Pendiente',
+        aprobado: 'Aprobado',
+        rechazado: 'Rechazado'
       }[e] || e
     }
 
@@ -492,9 +647,9 @@
       supabase
         .channel('admin-vendedores')
         .on('postgres_changes', {
-          event:  '*',
+          event: '*',
           schema: 'public',
-          table:  'profiles',
+          table: 'profiles',
           filter: `tipo=eq.vendedor`
         }, () => cargarVendedores())
         .subscribe()
@@ -503,4 +658,5 @@
     init()
   </script>
 </body>
+
 </html>
