@@ -3,7 +3,6 @@ import { actualizarBadge, renderCarrito } from './carrito.js'
 import { cargarProductos, renderProductos,
          setCat, setBusq }                from './productos.js'
 import { getUser, getPerfil }             from './auth.js'
-import { initSugerencias }                from './sugerencias.js'
 import { supabase }                       from './supabase.js'
 
 actualizarBadge()
@@ -90,10 +89,48 @@ window.filtrarPorPanaderia = (e, id) => {
   renderProductos()
 }
 
-// ── Búsqueda ──
+// ── Busqueda ──
 const onBusq = debounce(v => setBusq(v), 250)
 document.getElementById('search-catalogo').addEventListener('input',
   e => onBusq(e.target.value))
+
+// ── Sugerencias ──
+function initSugerencias(inputId, getFn) {
+  const input = document.getElementById(inputId)
+  if (!input) return
+
+  const drop = document.createElement('div')
+  drop.className = 'sugerencias-drop'
+  input.parentElement.style.position = 'relative'
+  input.parentElement.appendChild(drop)
+
+  const buscar = debounce(async q => {
+    if (q.trim().length < 2) { drop.style.display = 'none'; return }
+    const items = await getFn(q)
+    if (!items || items.length === 0) { drop.style.display = 'none'; return }
+
+    drop.innerHTML = items.map(item => `
+      <a href="${item.href}" class="sug-item">
+        <span class="sug-ico">${item.ico || '🔍'}</span>
+        <div style="flex:1;min-width:0">
+          <div class="sug-label">${item.label}</div>
+          ${item.sub ? `<div class="sug-sub">${item.sub}</div>` : ''}
+        </div>
+        ${item.precio ? `<span class="sug-precio">${item.precio}</span>` : ''}
+      </a>
+    `).join('')
+
+    drop.style.display = 'block'
+  }, 220)
+
+  input.addEventListener('input',  e => buscar(e.target.value))
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Escape') drop.style.display = 'none'
+  })
+  document.addEventListener('click', e => {
+    if (!input.parentElement.contains(e.target)) drop.style.display = 'none'
+  })
+}
 
 initSugerencias('search-catalogo', async q => {
   const { data: prods } = await supabase
@@ -136,7 +173,7 @@ document.getElementById('cart-toggle').addEventListener('click',  () => toggleCa
 document.getElementById('cart-close').addEventListener('click',   () => toggleCart(false))
 document.getElementById('cart-overlay').addEventListener('click', () => toggleCart(false))
 
-// ── Toggle sidebar mobile ──
+// ── sidebar mobile ──
 document.getElementById('btn-toggle-sidebar').addEventListener('click', () => {
   document.getElementById('sidebar-pan').classList.toggle('open')
 })
@@ -152,7 +189,7 @@ document.getElementById('search-panaderias').addEventListener('input',
   }, 200)
 )
 
-// -- Recarga todo si cambia la verificación del vendedor --
+// ── Recarga si cambia la verificación del vendedor ──
 supabase
   .channel('catalogo-vendedores')
   .on('postgres_changes', {
