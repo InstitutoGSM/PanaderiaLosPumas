@@ -7,19 +7,10 @@
   <title>Panaderia PUMA — Ingresar</title>
   <link rel="stylesheet" href="css/global.css">
   <link rel="stylesheet" href="css/login.css">
-
-  <style>
-    html,
-    body {
-      overflow-x: hidden;
-      min-height: 100vh;
-    }
-  </style>
 </head>
 
 <body>
 
-  <!-- Fondo decorativo -->
   <div class="bg-deco" aria-hidden="true">
     <svg style="top:-30px;left:-50px;width:400px" viewBox="0 0 300 180">
       <ellipse cx="150" cy="90" rx="135" ry="65" fill="#C8601A" />
@@ -31,19 +22,12 @@
     </svg>
   </div>
 
-  <a href="index.html" style="position:fixed;top:16px;left:16px;z-index:999;
-          display:inline-flex;align-items:center;gap:6px;
-          background:rgba(255,255,255,0.9);backdrop-filter:blur(8px);
-          padding:8px 14px;border-radius:50px;
-          font-size:0.82rem;font-weight:700;color:var(--marron);
-          box-shadow:0 2px 10px rgba(0,0,0,0.1);
-          text-decoration:none;transition:all 0.2s">
+  <a href="index.html" class="btn-volver">
     ← Volver al inicio
   </a>
 
   <div class="login-wrap">
 
-    <!-- Ilustración izquierda -->
     <div class="side" aria-hidden="true">
       <svg viewBox="0 0 300 460" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M10 115 L150 75 L290 115 L290 155 L10 155Z" fill="#A0522D" />
@@ -76,15 +60,12 @@
       </svg>
     </div>
 
-    <!-- Columna central -->
     <div class="login-col">
 
-      <!-- Logo -->
       <div class="logo-wrap">
         <div class="logo-circle">
           <img src="assets/logo.png" alt="Logo Panaderia PUMA"
             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-          <!-- SVG de fallback si no hay logo.png -->
           <svg style="display:none;width:100%;height:100%" viewBox="0 0 120 120">
             <circle cx="60" cy="60" r="58" fill="#FDFAF4" stroke="#3B1A0A" stroke-width="2" />
             <ellipse cx="60" cy="65" rx="24" ry="26" fill="#D4904A" />
@@ -113,7 +94,6 @@
         </div>
       </div>
 
-      <!-- Card -->
       <div class="login-card">
 
         <div class="tabs" role="tablist" aria-label="Modo de acceso">
@@ -121,7 +101,6 @@
           <button class="tab" data-tab="registro" role="tab" aria-selected="false">Registrarse</button>
         </div>
 
-        <!-- Login -->
         <div class="panel on" id="panel-login" role="tabpanel">
           <p class="panel-title">Iniciar Sesión</p>
           <div class="field">
@@ -140,10 +119,9 @@
           </p>
           <p class="help">¡Si no tenés una cuenta <a id="ir-registro">registrate!</a></p>
         </div>
-        <!-- Recuperar contraseña -->
         <div class="panel" id="panel-recuperar" role="tabpanel">
           <p class="panel-title">Recuperar acceso</p>
-          <p style="font-size:0.88rem;color:var(--gris);text-align:center;margin-bottom:18px">
+          <p class="panel-desc">
             Ingresá tu email y te enviamos un link para restablecer tu contraseña.
           </p>
           <div class="field">
@@ -154,7 +132,6 @@
           <p class="help"><a id="ir-login-from-recuperar">← Volver a iniciar sesión</a></p>
         </div>
 
-        <!-- Registro -->
         <div class="panel" id="panel-registro" role="tabpanel">
           <p class="panel-title">Registrarse</p>
 
@@ -182,9 +159,7 @@
           <div class="field" id="campo-panaderia" style="display:none">
             <label for="r-panaderia">Nombre de tu panadería</label>
             <input type="text" id="r-panaderia" placeholder="Ej: Panadería El Amasijo">
-            <div id="aviso-vendedor" style="margin-top:10px;padding:10px 13px;background:#FFF8E1;
-                      border-radius:var(--radio);font-size:0.78rem;
-                      border-left:3px solid var(--naranja);display:none">
+            <div id="aviso-vendedor" class="aviso-vendedor" style="display:none">
               📋 <strong>Importante:</strong> una vez registrado, deberás subir tu
               Habilitación Bromatológica, Carnet de Manipulador de Alimentos y
               Habilitación Comercial desde tu panel. Tus productos no serán visibles
@@ -204,7 +179,7 @@
             <div id="pass-label" class="pass-label"></div>
           </div>
 
-          <p style="font-size:0.78rem;color:var(--gris);text-align:center;margin-bottom:12px">
+          <p class="terminos-desc">
             Al registrarte aceptás nuestros
             <a href="terminos.html" target="_blank" style="color:var(--naranja);font-weight:700">
               Términos y Condiciones

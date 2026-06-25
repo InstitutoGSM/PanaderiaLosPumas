@@ -6,160 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Términos y Condiciones — PanaderiaMarket</title>
   <link rel="stylesheet" href="css/global.css">
-  <style>
-    html,
-    body {
-      overflow-x: hidden;
-    }
-
-    .terms-wrap {
-      max-width: 860px;
-      margin: 0 auto;
-      padding: 48px 24px 80px;
-    }
-
-    .terms-header {
-      text-align: center;
-      margin-bottom: 48px;
-      padding-bottom: 32px;
-      border-bottom: 2px solid var(--crema-dark);
-    }
-
-    .terms-header h1 {
-      font-size: 2.2rem;
-      color: var(--marron);
-      margin-bottom: 10px;
-    }
-
-    .terms-header p {
-      color: var(--gris);
-      font-size: 0.92rem;
-    }
-
-    .terms-toc {
-      background: var(--crema);
-      border-radius: var(--radio-lg);
-      padding: 24px 28px;
-      margin-bottom: 40px;
-    }
-
-    .terms-toc h3 {
-      font-family: 'Playfair Display', serif;
-      margin-bottom: 14px;
-      font-size: 1.1rem;
-    }
-
-    .terms-toc ol {
-      padding-left: 20px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 6px 24px;
-    }
-
-    .terms-toc li a {
-      color: var(--naranja);
-      font-size: 0.88rem;
-      font-weight: 600;
-    }
-
-    .terms-toc li a:hover {
-      text-decoration: underline;
-    }
-
-    .terms-sec {
-      margin-bottom: 40px;
-      padding-bottom: 40px;
-      border-bottom: 1px solid var(--crema-dark);
-    }
-
-    .terms-sec:last-child {
-      border-bottom: none;
-    }
-
-    .terms-sec h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.35rem;
-      color: var(--marron);
-      margin-bottom: 16px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .terms-sec h3 {
-      font-size: 1rem;
-      color: var(--marron-mid);
-      margin: 18px 0 8px;
-    }
-
-    .terms-sec p {
-      color: #444;
-      line-height: 1.8;
-      margin-bottom: 12px;
-      font-size: 0.93rem;
-    }
-
-    .terms-sec ul,
-    .terms-sec ol {
-      padding-left: 22px;
-      margin-bottom: 12px;
-    }
-
-    .terms-sec li {
-      color: #444;
-      line-height: 1.8;
-      font-size: 0.93rem;
-      margin-bottom: 4px;
-    }
-
-    .terms-highlight {
-      background: #FFF8E1;
-      border-left: 4px solid var(--naranja);
-      padding: 14px 18px;
-      border-radius: 0 var(--radio) var(--radio) 0;
-      margin: 16px 0;
-      font-size: 0.9rem;
-      color: var(--marron);
-    }
-
-    .terms-alert {
-      background: #FFF3E0;
-      border: 1px solid var(--naranja-lt);
-      border-radius: var(--radio);
-      padding: 14px 18px;
-      margin: 16px 0;
-      font-size: 0.9rem;
-    }
-
-    .terms-footer {
-      background: var(--marron);
-      color: white;
-      border-radius: var(--radio-lg);
-      padding: 28px 32px;
-      text-align: center;
-      margin-top: 48px;
-    }
-
-    .terms-footer p {
-      color: rgba(255, 255, 255, 0.75);
-      font-size: 0.88rem;
-      margin: 6px 0;
-    }
-
-    .terms-footer a {
-      color: var(--naranja-lt);
-    }
-
-    @media (max-width: 600px) {
-      .terms-toc ol {
-        grid-template-columns: 1fr;
-      }
-
-      .terms-header h1 {
-        font-size: 1.6rem;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="css/terminos.css">
 </head>
 
 <body>
@@ -179,13 +26,11 @@
   <div class="terms-wrap">
 
     <div class="terms-header">
-      <div style="font-size:3rem;margin-bottom:12px">📋</div>
+      <span class="emoji">📋</span>
       <h1>Términos y Condiciones</h1>
       <p>Última actualización: <span id="fecha-actual"></span> — PanaderiaMarket, República Argentina</p>
-      <p style="margin-top:8px">
-        Al utilizar esta plataforma, aceptás los presentes términos en su totalidad.
-        Te recomendamos leerlos detenidamente.
-      </p>
+      <p style="margin-top:8px">Al utilizar esta plataforma, aceptás los presentes términos en su totalidad. Te
+        recomendamos leerlos detenidamente.</p>
     </div>
 
     <!-- ÍNDICE -->
@@ -510,30 +355,26 @@
     </div>
 
     <div class="terms-footer">
-      <div style="font-size:2rem;margin-bottom:8px">🥖</div>
-      <strong style="font-family:'Playfair Display',serif;font-size:1.1rem">
-        PanaderiaMarket
-      </strong>
+      <span class="logo-emoji">🥖</span>
+      <strong>PanaderiaMarket</strong>
       <p>San Fernando del Valle de Catamarca, Provincia de Catamarca, Argentina</p>
-      <p>Consultas: <a href="mailto:pumapasteleria@gmail.com">pumapasteleria@gmail.com</a>
-        · <a href="tel:+5493834223388">+54 9 383 422-3388</a></p>
-      <p style="margin-top:12px;font-size:0.78rem;opacity:0.6">
-        © <span id="anio-actual"></span> PanaderiaMarket — Todos los derechos reservados
-      </p>
+      <p>Consultas: <a href="mailto:pumapasteleria@gmail.com">pumapasteleria@gmail.com</a> · <a
+          href="tel:+5493834223388">+54 9 383 422-3388</a></p>
+      <p class="copy">© <span id="anio-actual"></span> PanaderiaMarket — Todos los derechos reservados</p>
     </div>
 
   </div>
+
   <footer style="text-align:center;padding:24px;font-size:0.8rem;color:var(--gris)">
     <a href="privacidad.html" style="color:var(--gris)">Privacidad</a> ·
     <a href="nosotros.html" style="color:var(--gris)">Sobre nosotros</a>
   </footer>
-  <script>
-    const hoy = new Date()
-    document.getElementById('fecha-actual').textContent =
-      hoy.toLocaleDateString('es-AR')
-    document.getElementById('anio-actual').textContent = hoy.getFullYear()
-  </script>
 
+  <script>
+    const hoy = new Date();
+    document.getElementById('fecha-actual').textContent = hoy.toLocaleDateString('es-AR');
+    document.getElementById('anio-actual').textContent = hoy.getFullYear();
+  </script>
 </body>
 
 </html>

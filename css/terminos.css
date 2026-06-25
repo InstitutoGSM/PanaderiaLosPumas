@@ -1,0 +1,45 @@
+/* -- Layout General -- */
+.terms-wrap { max-width: 860px; margin: 0 auto; padding: 48px 24px 80px; }
+
+/* -- Header -- */
+.terms-header {
+    text-align: center; margin-bottom: 48px;
+    padding-bottom: 32px; border-bottom: 2px solid var(--crema-dark);
+}
+.terms-header .emoji { font-size: 3rem; margin-bottom: 12px; display: block; }
+.terms-header h1 { font-size: 2.2rem; color: var(--marron); margin-bottom: 10px; }
+.terms-header p { color: var(--gris); font-size: 0.92rem; }
+
+/* -- Secciones -- */
+.terms-sec { margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid var(--crema-dark); }
+.terms-sec:last-child { border-bottom: none; }
+.terms-sec h2 {
+    font-family: 'Playfair Display', serif; font-size: 1.35rem;
+    color: var(--marron); margin-bottom: 16px; display: flex; align-items: center; gap: 10px;
+}
+.terms-sec h3 { font-size: 1rem; color: var(--marron-mid); margin: 18px 0 8px; }
+.terms-sec p { color: #444; line-height: 1.8; margin-bottom: 12px; font-size: 0.93rem; }
+.terms-sec ul { padding-left: 22px; margin-bottom: 12px; }
+.terms-sec li { color: #444; line-height: 1.8; font-size: 0.93rem; margin-bottom: 4px; }
+
+/* -- Bloques destacados -- */
+.terms-highlight {
+    background: #FFF8E1; border-left: 4px solid var(--naranja);
+    padding: 14px 18px; border-radius: 0 var(--radio) var(--radio) 0;
+    margin: 16px 0; font-size: 0.9rem; color: var(--marron);
+}
+
+/* -- Footer interno -- */
+.terms-footer {
+    background: var(--marron); color: white; border-radius: var(--radio-lg);
+    padding: 28px 32px; text-align: center; margin-top: 48px;
+}
+.terms-footer .logo-emoji { font-size: 2rem; margin-bottom: 8px; display: block; }
+.terms-footer strong { font-family: 'Playfair Display', serif; font-size: 1.1rem; }
+.terms-footer p { color: rgba(255, 255, 255, 0.75); font-size: 0.88rem; margin: 6px 0; }
+.terms-footer a { color: var(--naranja-lt); }
+.terms-footer .copy { margin-top: 12px; font-size: 0.78rem; opacity: 0.6; }
+
+@media (max-width: 600px) {
+    .terms-header h1 { font-size: 1.6rem; }
+}
