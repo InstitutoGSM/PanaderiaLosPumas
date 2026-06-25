@@ -7,157 +7,9 @@
   <title>Mi Panel — PanaderiaMarket</title>
   <link rel="stylesheet" href="css/global.css">
   <link rel="stylesheet" href="css/vendedor.css">
-  <style>
-    html,
-    body {
-      overflow-x: hidden;
-    }
-
-    .onboarding {
-      background: linear-gradient(135deg, var(--marron) 0%, var(--marron-mid) 100%);
-      border-radius: var(--radio-lg);
-      padding: 32px;
-      color: white;
-      margin-bottom: 28px;
-      display: none;
-      position: relative;
-    }
-
-    .onboarding h2 {
-      color: white;
-      margin-bottom: 8px;
-      font-size: 1.4rem;
-    }
-
-    .onboarding p {
-      opacity: 0.8;
-      margin-bottom: 20px;
-      font-size: 0.95rem;
-    }
-
-    .ob-steps {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-
-    .ob-step {
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: var(--radio);
-      padding: 16px;
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-    }
-
-    .ob-step-ico {
-      font-size: 1.6rem;
-      flex-shrink: 0;
-    }
-
-    .ob-step-txt strong {
-      display: block;
-      font-size: 0.9rem;
-      margin-bottom: 2px;
-    }
-
-    .ob-step-txt span {
-      font-size: 0.78rem;
-      opacity: 0.75;
-    }
-
-    .ob-actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .ob-cerrar {
-      position: absolute;
-      top: 16px;
-      right: 16px;
-      background: none;
-      border: none;
-      color: rgba(255, 255, 255, 0.6);
-      font-size: 1.2rem;
-      cursor: pointer;
-    }
-
-    .ob-cerrar:hover {
-      color: white;
-    }
-
-    .mob-menu-btn {
-      display: none;
-    }
-
-    .medios-pago-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-      gap: 10px;
-
-      .filtro {
-        padding: 7px 16px;
-        border-radius: 50px;
-        border: 2px solid var(--crema-dark);
-        background: var(--blanco);
-        font-weight: 700;
-        font-size: 0.82rem;
-        cursor: pointer;
-        transition: all var(--trans);
-      }
-
-      .filtro.on {
-        border-color: var(--naranja);
-        background: #FFF3E0;
-        color: var(--naranja);
-      }
-    }
-
-    .medio-check {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      border: 2px solid var(--crema-dark);
-      border-radius: var(--radio);
-      padding: 12px;
-      cursor: pointer;
-      font-weight: 700;
-      font-size: 0.88rem;
-      transition: all var(--trans);
-      background: var(--blanco);
-    }
-
-    .medio-check:hover {
-      border-color: var(--naranja-lt);
-    }
-
-    .medio-check.on {
-      border-color: var(--naranja);
-      background: #FFF3E0;
-    }
-
-    .medio-check input {
-      width: auto;
-      margin: 0;
-      accent-color: var(--naranja);
-    }
-
-    .medio-ico {
-      font-size: 1.1rem;
-    }
-
-    .medios-pago-hint {
-      font-size: 0.82rem;
-      color: var(--gris);
-      margin-bottom: 14px;
-    }
-  </style>
 </head>
 
 <body>
-
   <div class="dash-layout">
 
     <!-- SIDEBAR -->
@@ -622,7 +474,6 @@
 
           <!-- Estado actual -->
           <div id="doc-estado-wrap" style="margin-bottom:24px">
-            <!-- Se rellena por JS -->
           </div>
 
           <p style="font-size:0.88rem;color:var(--gris);margin-bottom:20px;line-height:1.7">
@@ -631,7 +482,7 @@
             los revisará y te notificará por email.
           </p>
 
-          <!-- Documento 1 -->
+          <!-- Pedido de BROMATOLOGIA -->
           <div class="sec-card"
             style="box-shadow:none;border:2px solid var(--crema-dark);margin-bottom:14px;padding:18px">
             <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
@@ -654,7 +505,7 @@
             </span>
           </div>
 
-          <!-- Documento 2 -->
+          <!-- Pedido de CARNET ALIMENTOS -->
           <div class="sec-card"
             style="box-shadow:none;border:2px solid var(--crema-dark);margin-bottom:14px;padding:18px">
             <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
@@ -677,7 +528,7 @@
             </span>
           </div>
 
-          <!-- Documento 3 -->
+          <!-- Pedido de HABILIT DE COMERCIO MUNICIPAL -->
           <div class="sec-card"
             style="box-shadow:none;border:2px solid var(--crema-dark);margin-bottom:20px;padding:18px">
             <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">

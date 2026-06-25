@@ -129,3 +129,5 @@
   /* Ajustes de Producto */
   .prod-layout { grid-template-columns: 1fr; gap: 20px; padding: 24px 0 40px; }
 }
+
+html, body { overflow-x: hidden; }
