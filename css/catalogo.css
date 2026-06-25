@@ -1,0 +1,181 @@
+html, body { overflow-x: hidden; }
+
+/* -- Header -- */
+.catalogo-header {
+  background: linear-gradient(135deg, var(--marron) 0%, var(--marron-mid) 100%);
+  padding: 28px 0 24px;
+  color: white;
+}
+.catalogo-header h1 {
+  color: white;
+  font-size: 1.6rem;
+  margin-bottom: 6px;
+}
+.catalogo-header p {
+  color: rgba(255,255,255,0.7);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+/* -- Barra búsqueda -- */
+.catalogo-search-bar {
+  background: var(--blanco);
+  border-bottom: 1px solid var(--crema-dark);
+  padding: 14px 0;
+  position: sticky;
+  top: 60px;
+  z-index: 90;
+}
+.catalogo-search-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.catalogo-search-inner .search-wrap {
+  flex: 1;
+  position: relative;
+}
+.catalogo-search-inner .search-wrap .ico {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+.catalogo-search-inner input {
+  width: 100%;
+  padding-left: 36px;
+  margin: 0;
+}
+.catalogo-search-inner select {
+  width: auto;
+  margin: 0;
+  font-size: 0.88rem;
+  padding: 8px 12px;
+}
+
+/* -- Layout -- */
+.catalogo-layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 28px 24px 60px;
+  align-items: start;
+}
+
+/* -- Sidebar panaderías -- */
+.sidebar-pan {
+  background: var(--blanco);
+  border-radius: var(--radio-lg);
+  padding: 18px;
+  box-shadow: var(--sombra);
+  position: sticky;
+  top: 130px;
+}
+.sidebar-pan h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  margin-bottom: 12px;
+  color: var(--marron);
+}
+.sidebar-pan .search-pan {
+  position: relative;
+  margin-bottom: 12px;
+}
+.sidebar-pan .search-pan input {
+  padding-left: 32px;
+  font-size: 0.82rem;
+  margin: 0;
+}
+.sidebar-pan .search-pan .ico {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.8rem;
+  pointer-events: none;
+  color: var(--gris);
+}
+
+/* -- Chips panaderías -- */
+.pan-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: var(--radio);
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--marron);
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: background var(--trans);
+  margin-bottom: 4px;
+}
+.pan-chip:hover { background: var(--crema); }
+.pan-chip.on    { background: var(--crema-dark); }
+.pan-chip-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--naranja);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* -- Filtros categoría -- */
+.filtros-cat {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+/* -- Toolbar -- */
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.toolbar-count { font-size: 0.88rem; color: var(--gris); }
+
+/* -- Botón toggle sidebar (solo mobile) -- */
+.btn-toggle-sidebar { display: none; }
+
+/* -- Footer legal -- */
+.footer-legal {
+  text-align: center;
+  padding: 24px;
+  font-size: 0.8rem;
+  color: var(--gris);
+}
+.footer-legal a { color: var(--gris); }
+
+/* -- Responsive -- */
+@media (max-width: 860px) {
+  .catalogo-layout { grid-template-columns: 1fr; }
+  .sidebar-pan {
+    position: static;
+    display: none;
+  }
+  .sidebar-pan.open { display: block; }
+  .btn-toggle-sidebar { display: inline-flex !important; }
+}
+
+@media (max-width: 480px) {
+  .catalogo-search-inner { flex-direction: column; }
+  .catalogo-search-inner select { width: 100%; }
+}

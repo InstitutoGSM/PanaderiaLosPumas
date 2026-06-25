@@ -7,7 +7,7 @@ let todos = []
 let cat   = 'todos'
 let busq  = ''
 
-// ── Cargar panaderías ──
+// -- Cargar panaderías --
 export async function cargarPanaderias() {
   const el = document.getElementById('panaderias-row')
   if (!el) return
@@ -39,7 +39,7 @@ export async function cargarPanaderias() {
   `).join('')
 }
 
-// ── Cargar productos ──
+// -- Cargar productos --
 export async function cargarProductos() {
   const grid = document.getElementById('productos-grid')
   if (grid) {
@@ -89,7 +89,7 @@ export async function cargarProductos() {
   renderProductos()
 }
 
-// ── Filtrar ──
+// -- Filtrar --
 function filtrar() {
   let lista = todos
   if (cat !== 'todos') lista = lista.filter(p => p.categoria === cat)
@@ -109,7 +109,7 @@ function filtrar() {
   return lista
 }
 
-// ── Render grid ──
+// -- Render grid --
 export function renderProductos() {
   const grid  = document.getElementById('productos-grid')
   const empty = document.getElementById('empty-state')

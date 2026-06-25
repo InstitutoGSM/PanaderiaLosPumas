@@ -1,4 +1,4 @@
-/* ── Header de tienda ── */
+/* -- Header de tienda -- */
 .tienda-header {
   background: linear-gradient(135deg, var(--marron) 0%, var(--marron-mid) 100%);
   color: var(--blanco);
@@ -30,7 +30,7 @@
 }
 .tienda-meta a:hover { color: var(--blanco); }
 
-/* ── Volver ── */
+/* -- Volver -- */
 .volver {
   display: inline-flex; align-items: center; gap: 6px;
   color: rgba(255,255,255,0.7); font-size: 0.85rem;
@@ -38,7 +38,7 @@
 }
 .volver:hover { color: var(--blanco); }
 
-/* ── Responsive ── */
+/* -- Responsive -- */
 @media (max-width: 600px) {
   .tienda-info { flex-direction: column; text-align: center; }
   .tienda-meta { justify-content: center; }

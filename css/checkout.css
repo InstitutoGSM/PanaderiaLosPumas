@@ -1,3 +1,5 @@
+html, body { overflow-x: hidden; }
+
 .checkout-wrap {
   max-width: 900px; margin: 0 auto;
   padding: 36px 24px 60px;
@@ -21,6 +23,7 @@
 .resumen-card h3 {
   font-family: 'Playfair Display', serif; margin-bottom: 16px;
 }
+.resumen-cargando { color: var(--gris); font-size: 0.9rem; }
 .resumen-item {
   display: flex; justify-content: space-between;
   padding: 8px 0; border-bottom: 1px solid var(--crema-dark);
@@ -64,7 +67,46 @@
 .pago-opt.on    { border-color: var(--naranja); background: #FFF3E0; }
 .pago-ico { font-size: 1.4rem; display: block; margin-bottom: 4px; }
 
-/* ── Tarjeta maqueta ── */
+/* ── Pago por vendedor ── */
+.vendor-pago-group {
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--crema-dark);
+}
+.vendor-pago-group:last-of-type {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+.vendor-pago-titulo {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.95rem;
+  margin: 4px 0 8px;
+  color: var(--marron);
+}
+.pago-opts-vendor { margin-top: 8px; }
+.cbu-box {
+  margin-top: 10px;
+  font-size: 0.82rem;
+  background: var(--crema);
+  padding: 10px 12px;
+  border-radius: 8px;
+  line-height: 1.6;
+}
+.cbu-box strong {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--marron);
+}
+.subtotal-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-weight: 700;
+  font-size: 0.88rem;
+  border-top: 1px solid var(--crema-dark);
+}
+
+/* ── Tarjeta ── */
 .tarjeta-wrap {
   margin-top: 16px;
   display: none;
@@ -105,7 +147,6 @@
 .tarjeta-label { font-size: 0.65rem; opacity: 0.6; text-transform: uppercase; margin-bottom: 2px; }
 .tarjeta-val   { font-size: 0.88rem; font-weight: 700; letter-spacing: 0.05em; }
 .tarjeta-brand { font-size: 1.1rem; font-weight: 900; opacity: 0.85; }
-
 .tarjeta-form .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .tarjeta-aviso {
   font-size: 0.75rem; color: var(--gris);
@@ -113,6 +154,24 @@
   border-radius: 8px; margin-top: 10px;
   display: flex; align-items: center; gap: 6px;
 }
+
+/* ── Botón y aviso final ── */
+.btn-finalizar-margin { margin-top: 16px; }
+.checkout-aviso-final {
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--gris);
+  margin-top: 10px;
+}
+
+/* ── Footer ── */
+.footer-legal {
+  text-align: center;
+  padding: 24px;
+  font-size: 0.8rem;
+  color: var(--gris);
+}
+.footer-legal a { color: var(--gris); }
 
 /* ── Responsive ── */
 @media (max-width: 720px) {

@@ -9,12 +9,12 @@ let perfil     = null
 let misProds   = []
 let fotosExtra = []
 
-// ── Pedidos: estado de filtros ──
+// -- Pedidos: estado de filtros --
 let todosPedidosCache  = []
 let filtroPedidoEstado = 'todos'
 let busqPedidos        = ''
 
-// ── Notificación de pedido nuevo ──
+// -- Notificación de pedido nuevo --
 const TITULO_ORIGINAL = document.title
 let tituloFlashInterval = null
 

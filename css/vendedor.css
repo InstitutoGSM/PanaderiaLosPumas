@@ -1,11 +1,11 @@
-/* ── Layout ── */
+/* -- Layout -- */
 .dash-layout {
   display: flex;
   min-height: 100vh;
   align-items: stretch;
 }
 
-/* ── Sidebar ── */
+/* -- Sidebar -- */
 .sidebar {
   width: 250px; flex-shrink: 0;
   background: var(--marron); color: var(--blanco);
@@ -42,7 +42,7 @@ height: auto;
   border-top: 1px solid rgba(255,255,255,0.1);
 }
 
-/* ── Main ── */
+/* -- Main -- */
 .dash-main {
   flex: 1; padding: 36px 40px;
   overflow-y: auto; background: var(--crema);
@@ -55,7 +55,7 @@ height: auto;
 .dash-topbar h1 { font-size: 1.8rem; }
 .dash-topbar p  { color: var(--gris); font-size: 0.9rem; margin-top: 2px; }
 
-/* ── Stats ── */
+/* -- Stats -- */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -72,7 +72,7 @@ height: auto;
 }
 .stat-sub { font-size: 0.78rem; color: var(--naranja); font-weight: 700; margin-top: 3px; }
 
-/* ── Sección card ── */
+/* -- Sección card -- */
 .sec-card {
   background: var(--blanco); border-radius: var(--radio-lg);
   padding: 26px; box-shadow: var(--sombra); margin-bottom: 24px;
@@ -84,7 +84,7 @@ height: auto;
 }
 .sec-card-top h2 { margin: 0; }
 
-/* ── Tabla ── */
+/* -- Tabla -- */
 .tabla {
   width: 100%; border-collapse: collapse; font-size: 0.88rem;
   min-width: 580px;
@@ -106,7 +106,7 @@ height: auto;
 .td-precio { font-weight: 700; color: var(--verde); }
 .td-nombre { font-weight: 700; }
 
-/* ── Toggle activo/inactivo ── */
+/* -- Toggle activo/inactivo -- */
 .toggle-estado {
   padding: 4px 12px; border-radius: 50px;
   border: 2px solid; font-size: 0.78rem; font-weight: 700;
@@ -122,7 +122,7 @@ height: auto;
   background: #F5F5F5;
 }
 
-/* ── Formulario producto ── */
+/* -- Formulario producto -- */
 .form-row {
   display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
 }
@@ -132,7 +132,7 @@ height: auto;
   border: 2px solid var(--crema-dark);
 }
 
-/* ── Pedidos ── */
+/* -- Pedidos -- */
 .pedido-card {
   background: var(--crema); border-radius: var(--radio-lg);
   padding: 18px; margin-bottom: 14px;
@@ -156,7 +156,7 @@ height: auto;
 }
 .pedido-total span { color: var(--verde); font-size: 1.05rem; }
 
-/* ── Estado badge ── */
+/* -- Estado badge -- */
 .estado-badge {
   padding: 4px 10px; border-radius: 50px;
   font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
@@ -166,7 +166,7 @@ height: auto;
 .estado-listo      { background: #E8F5E9; color: #2E7D32; }
 .estado-entregado  { background: #F3E5F5; color: #6A1B9A; }
 
-/* ── Perfil ── */
+/* -- Perfil -- */
 .perfil-wrap { max-width: 560px; }
 
 /* ══════════════════════════════

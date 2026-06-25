@@ -1,7 +1,7 @@
 import { supabase } from './supabase.js'
 import { toast } from './utils.js'
 
-// ── Mostrar motivo si viene de intento de compra ──
+// -- Mostrar motivo si viene de intento de compra --
 window.addEventListener('DOMContentLoaded', () => {
   const motivo = sessionStorage.getItem('login_motivo')
   if (motivo) {
@@ -10,7 +10,7 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 })
 
-// ── Tabs ──
+// -- Tabs --
 const tabs = document.querySelectorAll('.tab')
 const panels = document.querySelectorAll('.panel')
 
@@ -26,7 +26,7 @@ tabs.forEach(t => t.addEventListener('click', () => switchTab(t.dataset.tab)))
 document.getElementById('ir-registro')?.addEventListener('click', () => switchTab('registro'))
 document.getElementById('ir-login')?.addEventListener('click', () => switchTab('login'))
 
-// ── Recuperar contraseña (panel especial, fuera de los tabs) ──
+// -- Recuperar contraseña (panel especial, fuera de los tabs) --
 function mostrarPanel(id) {
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('on'))
   document.getElementById(id).classList.add('on')
@@ -55,7 +55,7 @@ document.getElementById('btn-recuperar')?.addEventListener('click', async () => 
   toast('Si el email existe, te enviamos un link de recuperación 📧', 'ok')
 })
 
-// ── Tipo de usuario ──
+// -- Tipo de usuario --
 let tipoSel = 'comprador'
 document.querySelectorAll('.tipo-opt').forEach(opt => {
   opt.addEventListener('click', () => {
@@ -74,7 +74,7 @@ document.querySelectorAll('.tipo-opt').forEach(opt => {
   opt.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') opt.click() })
 })
 
-// ── Fuerza contraseña ──
+// -- Fuerza contraseña --
 document.getElementById('r-pass')?.addEventListener('input', e => {
   const v = e.target.value
   const bar = document.getElementById('pass-bar')
@@ -93,7 +93,7 @@ document.getElementById('r-pass')?.addEventListener('input', e => {
   lbl.style.color = colores[nivel] || ''
 })
 
-// ── Redirect post-login ──
+// -- Redirect post-login --
 function redirigirPostLogin(perfil) {
   const destino = sessionStorage.getItem('redirect_after_login')
   sessionStorage.removeItem('redirect_after_login')
@@ -108,7 +108,7 @@ function redirigirPostLogin(perfil) {
   }
 }
 
-// ── Login ──
+// -- Login --
 document.getElementById('btn-login')?.addEventListener('click', async () => {
   const btn = document.getElementById('btn-login')
   const email = document.getElementById('l-email').value.trim()
@@ -127,7 +127,7 @@ document.getElementById('btn-login')?.addEventListener('click', async () => {
   setTimeout(() => redirigirPostLogin(perfil), 700)
 })
 
-// ── Registro ──
+// -- Registro --
 document.getElementById('btn-registro')?.addEventListener('click', async () => {
   const btn = document.getElementById('btn-registro')
   const nombre = document.getElementById('r-nombre').value.trim()
@@ -159,7 +159,7 @@ document.getElementById('btn-registro')?.addEventListener('click', async () => {
   setTimeout(() => redirigirPostLogin({ tipo: tipoSel }), 700)
 })
 
-// ── Enter para enviar ──
+// -- Enter para enviar --
 document.addEventListener('keydown', e => {
   if (e.key !== 'Enter') return
   if (document.getElementById('panel-login').classList.contains('on')) {

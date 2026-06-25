@@ -112,7 +112,7 @@
     let busqueda = ''
     let nombrePan = ''
 
-    // ── Cargar perfil ──
+    // -- Cargar perfil --
     async function cargarPerfil() {
       const { data: p } = await supabase
         .from('profiles').select('*').eq('id', vendedorId).single()
@@ -171,7 +171,7 @@
       }
     }
 
-    // ── Cargar productos ──
+    // -- Cargar productos --
     async function cargarProductos() {
       const grid = document.getElementById('grid-tienda')
       grid.innerHTML = Array(6).fill(`
@@ -189,7 +189,7 @@
       render()
     }
 
-    // ── Filtros dinámicos ──
+    // -- Filtros dinámicos --
     function generarFiltros() {
       const cats = ['todos', ...new Set(productos.map(p => p.categoria).filter(Boolean))]
       const labels = {
@@ -215,7 +215,7 @@
       })
     }
 
-    // ── Render ──
+    // -- Render --
     function render() {
       let lista = catActual === 'todos'
         ? productos
@@ -319,12 +319,12 @@
       })
     }
 
-    // ── Búsqueda ──
+    // -- Búsqueda --
     const onSearch = debounce(v => { busqueda = v; render() }, 250)
     document.getElementById('search-tienda').addEventListener('input', e =>
       onSearch(e.target.value))
 
-    // ── Carrito ──
+    // -- Carrito --
     function toggleCart(abrir) {
       document.getElementById('cart-drawer').classList.toggle('open', abrir)
       document.getElementById('cart-overlay').classList.toggle('open', abrir)

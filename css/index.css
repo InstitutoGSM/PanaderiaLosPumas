@@ -1,4 +1,4 @@
-/* ── Hero ── */
+/* -- Hero -- */
 .hero {
   background: linear-gradient(135deg, var(--marron) 0%, var(--marron-mid) 100%);
   color: var(--blanco);
@@ -46,7 +46,7 @@
   border-color: var(--naranja-lt);
 }
 
-/* ── Sección panaderías ── */
+/* -- Sección panaderías -- */
 .sec-titulo {
   font-family: 'Playfair Display', serif;
   font-size: 1.4rem; font-weight: 700;
@@ -69,7 +69,7 @@
 }
 .chip-nombre { font-weight: 700; font-size: 0.88rem; }
 
-/* ── Toolbar ── */
+/* -- Toolbar -- */
 .toolbar {
   display: flex; justify-content: space-between;
   align-items: center; margin: 16px 0;
@@ -78,17 +78,17 @@
 .toolbar-count { font-size: 0.88rem; color: var(--gris); }
 .toolbar select { width: auto; margin: 0; font-size: 0.88rem; padding: 8px 12px; }
 
-/* ── Estado vacío ── */
+/* -- Estado vacío -- */
 .empty-state        { text-align: center; padding: 70px 0; display: none; }
 .empty-state .ico   { font-size: 3.5rem; display: block; margin-bottom: 14px; }
 .empty-state h3     { margin-bottom: 8px; }
 .empty-state p      { color: var(--gris); }
 
-/* ── Padding secciones ── */
+/* -- Padding secciones -- */
 .sec    { padding: 32px 0; }
 .sec-sm { padding: 16px 0; }
 
-/* ── Sin stock overlay en card ── */
+/* -- Sin stock overlay en card -- */
 .card.sin-stock .card-img,
 .card.sin-stock .card-img-ph {
   filter: grayscale(60%);
