@@ -25,7 +25,6 @@ async function verificarAcceso() {
   if (!user) { await requireAuthParaComprar(); return null }
   return user
 }
-git add .
 async function cargarResumen() {
   const items = getCarrito()
   const el    = document.getElementById('resumen-items')
