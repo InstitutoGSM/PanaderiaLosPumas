@@ -1,18 +1,20 @@
-import { supabase }            from './supabase.js'
-import { toast, formatPrecio,
-         getIniciales }        from './utils.js'
+import { supabase } from './supabase.js'
+import {
+  toast, formatPrecio,
+  getIniciales
+} from './utils.js'
 import { requireAuth, logout } from './auth.js'
-import { subirImagen }         from './upload.js'
+import { subirImagen } from './upload.js'
 
-let uid        = null
-let perfil     = null
-let misProds   = []
+let uid = null
+let perfil = null
+let misProds = []
 let fotosExtra = []
 
 // -- Pedidos: estado de filtros --
-let todosPedidosCache  = []
+let todosPedidosCache = []
 let filtroPedidoEstado = 'todos'
-let busqPedidos        = ''
+let busqPedidos = ''
 
 // -- Notificación de pedido nuevo --
 const TITULO_ORIGINAL = document.title
@@ -20,12 +22,12 @@ let tituloFlashInterval = null
 
 function reproducirSonidoPedido() {
   try {
-    const ctx  = new (window.AudioContext || window.webkitAudioContext)()
-    const osc  = ctx.createOscillator()
+    const ctx = new (window.AudioContext || window.webkitAudioContext)()
+    const osc = ctx.createOscillator()
     const gain = ctx.createGain()
     osc.type = 'sine'
     osc.connect(gain); gain.connect(ctx.destination)
-    osc.frequency.setValueAtTime(880,  ctx.currentTime)
+    osc.frequency.setValueAtTime(880, ctx.currentTime)
     osc.frequency.setValueAtTime(1175, ctx.currentTime + 0.15)
     gain.gain.setValueAtTime(0.18, ctx.currentTime)
     gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.5)
@@ -59,7 +61,7 @@ document.addEventListener('visibilitychange', () => {
 async function init() {
   const session = await requireAuth('vendedor')
   if (!session) return
-  uid    = session.user.id
+  uid = session.user.id
   perfil = session.perfil
 
   document.getElementById('dash-sub').textContent =
@@ -71,7 +73,7 @@ async function init() {
   rellenarPerfil()
   initEventos()
   initRealtime()
-  initDocumentos() 
+  initDocumentos()
   initSucursales()
   const { count, error: countErr } = await supabase
     .from('productos')
@@ -91,9 +93,9 @@ function initRealtime() {
   supabase
     .channel('pedidos-vendedor')
     .on('postgres_changes', {
-      event:  'INSERT',
+      event: 'INSERT',
       schema: 'public',
-      table:  'pedidos',
+      table: 'pedidos',
       filter: `vendedor_id=eq.${uid}`
     }, payload => {
       const ticketRef = payload.new.ticket_id ||
@@ -106,7 +108,7 @@ function initRealtime() {
       const badge = document.getElementById('badge-pedidos')
       if (badge) {
         const n = parseInt(badge.textContent || '0') + 1
-        badge.textContent   = n
+        badge.textContent = n
         badge.style.display = 'flex'
       }
       cargarStats()
@@ -119,12 +121,12 @@ function initRealtime() {
 
 // ══ NAVEGACIÓN ══
 const TITULOS = {
-  inicio:      'Mi Panel',
-  productos:   'Mis Productos',
-  agregar:     'Agregar Producto',
-  pedidos:     'Pedidos',
-  perfil:      'Mi Perfil',
-  documentos:  'Mis Documentos',
+  inicio: 'Mi Panel',
+  productos: 'Mis Productos',
+  agregar: 'Agregar Producto',
+  pedidos: 'Pedidos',
+  perfil: 'Mi Perfil',
+  documentos: 'Mis Documentos',
   sucursales: 'Mis Sucursales'
 }
 
@@ -171,7 +173,7 @@ function initEventos() {
     const file = e.target.files[0]
     if (!file) return
     if (!file.type.startsWith('image/')) { toast('Debe ser una imagen', 'err'); return }
-    if (file.size > 5 * 1024 * 1024)    { toast('Máx 5MB', 'err'); return }
+    if (file.size > 5 * 1024 * 1024) { toast('Máx 5MB', 'err'); return }
     const reader = new FileReader()
     reader.onload = ev => {
       const prev = document.getElementById('img-preview')
@@ -184,7 +186,7 @@ function initEventos() {
 
   // Imagen principal — URL
   document.getElementById('p-img-url').addEventListener('input', e => {
-    const url  = e.target.value.trim()
+    const url = e.target.value.trim()
     const prev = document.getElementById('img-preview')
     window._imgFile = null
     if (url) { prev.src = url; prev.style.display = 'block' }
@@ -194,8 +196,8 @@ function initEventos() {
   // Fotos extra
   document.getElementById('p-fotos-extra').addEventListener('change', e => {
     const files = Array.from(e.target.files).slice(0, 4)
-    fotosExtra  = files
-    const prev  = document.getElementById('fotos-extra-preview')
+    fotosExtra = files
+    const prev = document.getElementById('fotos-extra-preview')
     prev.innerHTML = ''
     files.forEach(f => {
       const reader = new FileReader()
@@ -239,19 +241,19 @@ function initEventos() {
 
   // Toggle campos docena/kilo
   document.getElementById('p-unidad').addEventListener('change', e => {
-    const esKilo   = e.target.value === 'kilo'
-    const campos   = document.getElementById('campos-docena')
-    const hint     = document.getElementById('label-precio-hint')
-    const labelEl  = document.getElementById('label-precio-completo')
+    const esKilo = e.target.value === 'kilo'
+    const campos = document.getElementById('campos-docena')
+    const hint = document.getElementById('label-precio-hint')
+    const labelEl = document.getElementById('label-precio-completo')
     const hintKilo = document.getElementById('hint-kilo')
-    const inputP   = document.getElementById('p-precio')
-    if (campos)   campos.style.display   = esKilo ? 'none' : 'grid'
-    if (hint)     hint.textContent       = esKilo ? '(precio por kg)' : '(por unidad)'
-    if (labelEl)  labelEl.textContent    = esKilo ? 'Precio por KG *' : 'Precio *'
+    const inputP = document.getElementById('p-precio')
+    if (campos) campos.style.display = esKilo ? 'none' : 'grid'
+    if (hint) hint.textContent = esKilo ? '(precio por kg)' : '(por unidad)'
+    if (labelEl) labelEl.textContent = esKilo ? 'Precio por KG *' : 'Precio *'
     if (hintKilo) hintKilo.style.display = esKilo ? 'block' : 'none'
     if (inputP) {
       inputP.placeholder = esKilo ? 'Ej: 2500 (= $2.500 x 1kg)' : '0'
-      inputP.step        = esKilo ? '100' : '50'
+      inputP.step = esKilo ? '100' : '50'
     }
   })
 
@@ -263,14 +265,14 @@ function initEventos() {
     document.getElementById('onboarding').style.display = 'none'
   })
 
-  // Medios de pago — checkboxes
-  ;['pf-pago-transferencia','pf-pago-debito','pf-pago-credito'].forEach(id => {
-    const chk = document.getElementById(id)
-    chk.addEventListener('change', () => {
-      actualizarEstiloMedio(chk)
-      if (id === 'pf-pago-transferencia') toggleTransferenciaDatos()
+    // Medios de pago — checkboxes
+    ;['pf-pago-transferencia', 'pf-pago-debito', 'pf-pago-credito'].forEach(id => {
+      const chk = document.getElementById(id)
+      chk.addEventListener('change', () => {
+        actualizarEstiloMedio(chk)
+        if (id === 'pf-pago-transferencia') toggleTransferenciaDatos()
+      })
     })
-  })
 
   // Filtros de pedidos
   document.querySelectorAll('#filtros-pedidos .filtro').forEach(btn => {
@@ -293,7 +295,7 @@ async function cargarStats() {
     .from('productos').select('id, activo').eq('vendedor_id', uid)
   const activos = (prods || []).filter(p => p.activo).length
   document.getElementById('st-activos').textContent = activos
-  document.getElementById('st-total').textContent   = (prods || []).length
+  document.getElementById('st-total').textContent = (prods || []).length
 
   const { data: peds } = await supabase
     .from('pedidos').select('id')
@@ -363,9 +365,9 @@ function renderTabla() {
       <td class="td-nombre">
         <div style="display:flex;align-items:center;gap:10px">
           ${p.imagen_url
-            ? `<img src="${p.imagen_url}"
+      ? `<img src="${p.imagen_url}"
                     style="width:38px;height:38px;border-radius:6px;object-fit:cover">`
-            : `<div style="width:38px;height:38px;border-radius:6px;
+      : `<div style="width:38px;height:38px;border-radius:6px;
                            background:var(--crema-dark);display:flex;
                            align-items:center;justify-content:center;font-size:1.1rem">
                  ${catEmojiSimple(p.categoria)}
@@ -375,7 +377,7 @@ function renderTabla() {
             <div style="font-size:0.75rem;color:var(--gris)">
               ${p.unidad_venta === 'kilo' ? '⚖️ Por kilo' : '📦 Por unidad'}
               ${p.cantidad_disponible === 0
-                ? ' · <span style="color:var(--rojo)">Sin stock</span>' : ''}
+      ? ' · <span style="color:var(--rojo)">Sin stock</span>' : ''}
             </div>
           </div>
         </div>
@@ -416,8 +418,8 @@ function renderTabla() {
         .from('productos').update({ activo: nuevo }).eq('id', btn.dataset.id)
       if (error) { toast('Error al actualizar', 'err'); return }
       btn.dataset.activo = nuevo
-      btn.className      = `toggle-estado ${nuevo ? 'activo' : 'inactivo'}`
-      btn.textContent    = nuevo ? '✓ Activo' : '✗ Inactivo'
+      btn.className = `toggle-estado ${nuevo ? 'activo' : 'inactivo'}`
+      btn.textContent = nuevo ? '✓ Activo' : '✗ Inactivo'
       toast(nuevo ? 'Producto activado' : 'Producto desactivado', 'ok')
       cargarStats()
     })
@@ -427,17 +429,17 @@ function renderTabla() {
     btn.addEventListener('click', () => {
       const p = misProds.find(x => x.id === btn.dataset.id)
       if (!p) return
-      document.getElementById('edit-id').value     = p.id
-      document.getElementById('p-nombre').value    = p.nombre
-      document.getElementById('p-cat').value       = p.categoria    || ''
-      document.getElementById('p-unidad').value    = p.unidad_venta || 'unidad'
-      document.getElementById('p-desc').value      = p.descripcion  || ''
-      document.getElementById('p-precio').value    = p.precio
+      document.getElementById('edit-id').value = p.id
+      document.getElementById('p-nombre').value = p.nombre
+      document.getElementById('p-cat').value = p.categoria || ''
+      document.getElementById('p-unidad').value = p.unidad_venta || 'unidad'
+      document.getElementById('p-desc').value = p.descripcion || ''
+      document.getElementById('p-precio').value = p.precio
       document.getElementById('p-media-doc').value = p.precio_media_docena || ''
-      document.getElementById('p-docena').value    = p.precio_docena       || ''
-      document.getElementById('p-stock').value     = p.cantidad_disponible || 0
-      document.getElementById('p-extra').value     = p.dato_extra   || ''
-      document.getElementById('p-img-url').value   = p.imagen_url   || ''
+      document.getElementById('p-docena').value = p.precio_docena || ''
+      document.getElementById('p-stock').value = p.cantidad_disponible || 0
+      document.getElementById('p-extra').value = p.dato_extra || ''
+      document.getElementById('p-img-url').value = p.imagen_url || ''
 
       const campos = document.getElementById('campos-docena')
       if (campos) campos.style.display = p.unidad_venta === 'kilo' ? 'none' : 'grid'
@@ -447,8 +449,8 @@ function renderTabla() {
       else prev.style.display = 'none'
 
       window._imgFile = null
-      document.getElementById('form-titulo').textContent     = '✏️ Editar Producto'
-      document.getElementById('btn-cancelar').style.display  = 'inline-flex'
+      document.getElementById('form-titulo').textContent = '✏️ Editar Producto'
+      document.getElementById('btn-cancelar').style.display = 'inline-flex'
       mostrarSec('agregar')
     })
   })
@@ -470,7 +472,7 @@ function renderTabla() {
 async function guardarProducto() {
   const editId = document.getElementById('edit-id').value
   const nombre = document.getElementById('p-nombre').value.trim()
-  const cat    = document.getElementById('p-cat').value
+  const cat = document.getElementById('p-cat').value
   const unidad = document.getElementById('p-unidad').value
   const precio = parseFloat(document.getElementById('p-precio').value)
 
@@ -495,30 +497,30 @@ async function guardarProducto() {
   }
 
   const payload = {
-    vendedor_id:         uid,
+    vendedor_id: uid,
     nombre,
-    categoria:           cat,
-    unidad_venta:        unidad,
-    descripcion:         document.getElementById('p-desc').value.trim()      || null,
+    categoria: cat,
+    unidad_venta: unidad,
+    descripcion: document.getElementById('p-desc').value.trim() || null,
     precio,
     precio_media_docena: unidad === 'kilo' ? null :
       parseFloat(document.getElementById('p-media-doc').value) || null,
-    precio_docena:       unidad === 'kilo' ? null :
-      parseFloat(document.getElementById('p-docena').value)    || null,
-    cantidad_disponible: parseInt(document.getElementById('p-stock').value)  || 0,
-    dato_extra:          document.getElementById('p-extra').value.trim()     || null,
-    imagen_url:          imagenUrl,
+    precio_docena: unidad === 'kilo' ? null :
+      parseFloat(document.getElementById('p-docena').value) || null,
+    cantidad_disponible: parseInt(document.getElementById('p-stock').value) || 0,
+    dato_extra: document.getElementById('p-extra').value.trim() || null,
+    imagen_url: imagenUrl,
   }
 
   let error
   let savedId = editId || null
 
   if (editId) {
-    ;({ error } = await supabase.from('productos').update(payload).eq('id', editId))
+    ; ({ error } = await supabase.from('productos').update(payload).eq('id', editId))
   } else {
     const { data: nuevo, error: err } = await supabase
       .from('productos').insert(payload).select().single()
-    error   = err
+    error = err
     savedId = nuevo?.id || null
   }
 
@@ -551,15 +553,15 @@ async function guardarProducto() {
 }
 
 function resetForm() {
-  ['edit-id','p-nombre','p-desc','p-precio','p-media-doc',
-   'p-docena','p-stock','p-extra','p-img-url'].forEach(id => {
-    const el = document.getElementById(id); if (el) el.value = ''
-  })
-  document.getElementById('p-cat').value      = ''
-  document.getElementById('p-unidad').value   = 'unidad'
+  ['edit-id', 'p-nombre', 'p-desc', 'p-precio', 'p-media-doc',
+    'p-docena', 'p-stock', 'p-extra', 'p-img-url'].forEach(id => {
+      const el = document.getElementById(id); if (el) el.value = ''
+    })
+  document.getElementById('p-cat').value = ''
+  document.getElementById('p-unidad').value = 'unidad'
   document.getElementById('p-img-file').value = ''
-  document.getElementById('img-preview').style.display  = 'none'
-  document.getElementById('form-titulo').textContent    = '➕ Agregar Producto'
+  document.getElementById('img-preview').style.display = 'none'
+  document.getElementById('form-titulo').textContent = '➕ Agregar Producto'
   document.getElementById('btn-cancelar').style.display = 'none'
   const campos = document.getElementById('campos-docena')
   if (campos) campos.style.display = 'grid'
@@ -594,7 +596,7 @@ function renderPedidosFiltrados() {
     )
   }
 
-  const el    = document.getElementById('lista-pedidos')
+  const el = document.getElementById('lista-pedidos')
   const empty = document.getElementById('empty-pedidos')
 
   if (todosPedidosCache.length === 0) {
@@ -626,10 +628,10 @@ function renderPedidosFiltrados() {
           <span class="estado-badge estado-${p.estado}">${p.estado}</span>
           <select onchange="window._cambiarEstado('${p.id}', this.value)"
                   style="width:auto;margin:0;font-size:0.82rem;padding:5px 10px">
-            <option value="pendiente"  ${p.estado==='pendiente'  ?'selected':''}>Pendiente</option>
-            <option value="confirmado" ${p.estado==='confirmado' ?'selected':''}>Confirmado</option>
-            <option value="listo"      ${p.estado==='listo'      ?'selected':''}>Listo</option>
-            <option value="entregado"  ${p.estado==='entregado'  ?'selected':''}>Entregado</option>
+            <option value="pendiente"  ${p.estado === 'pendiente' ? 'selected' : ''}>Pendiente</option>
+            <option value="confirmado" ${p.estado === 'confirmado' ? 'selected' : ''}>Confirmado</option>
+            <option value="listo"      ${p.estado === 'listo' ? 'selected' : ''}>Listo</option>
+            <option value="entregado"  ${p.estado === 'entregado' ? 'selected' : ''}>Entregado</option>
           </select>
         </div>
       </div>
@@ -676,28 +678,32 @@ function toggleTransferenciaDatos() {
 }
 
 function rellenarPerfil() {
-  document.getElementById('pf-nombre').value    = perfil.nombre           || ''
+  document.getElementById('pf-nombre').value = perfil.nombre || ''
   document.getElementById('pf-panaderia').value = perfil.nombre_panaderia || ''
-  document.getElementById('pf-desc').value      = perfil.descripcion      || ''
-  document.getElementById('pf-ig').value        = perfil.instagram        || ''
-  document.getElementById('pf-tel').value       = perfil.telefono         || ''
-  document.getElementById('pf-email').value     = perfil.email_contacto   || ''
-  document.getElementById('pf-banner').value    = perfil.banner_anuncio   || ''
+  document.getElementById('pf-desc').value = perfil.descripcion || ''
+  document.getElementById('pf-ig').value = perfil.instagram || ''
+  document.getElementById('pf-tel').value = perfil.telefono || ''
+  document.getElementById('pf-email').value = perfil.email_contacto || ''
+  document.getElementById('pf-banner').value = perfil.banner_anuncio || ''
+  document.getElementById('pf-direccion').value = perfil.direccion || ''
 
   const medios = Array.isArray(perfil.medios_pago) ? perfil.medios_pago : ['efectivo']
   const chkTransf = document.getElementById('pf-pago-transferencia')
-  const chkDeb    = document.getElementById('pf-pago-debito')
-  const chkCred   = document.getElementById('pf-pago-credito')
+  const chkDeb = document.getElementById('pf-pago-debito')
+  const chkCred = document.getElementById('pf-pago-credito')
   chkTransf.checked = medios.includes('transferencia')
-  chkDeb.checked    = medios.includes('debito')
-  chkCred.checked   = medios.includes('credito')
-  ;[chkTransf, chkDeb, chkCred].forEach(actualizarEstiloMedio)
+  chkDeb.checked = medios.includes('debito')
+  chkCred.checked = medios.includes('credito')
+    ;[chkTransf, chkDeb, chkCred].forEach(actualizarEstiloMedio)
 
-  document.getElementById('pf-cbu').value     = perfil.cbu            || ''
-  document.getElementById('pf-alias').value   = perfil.alias_cbu      || ''
+  document.getElementById('pf-cbu').value = perfil.cbu || ''
+  document.getElementById('pf-alias').value = perfil.alias_cbu || ''
   document.getElementById('pf-titular').value = perfil.titular_cuenta || ''
 
   toggleTransferenciaDatos()
+
+  // Inicializar mapa del vendedor
+  setTimeout(() => initMapaVendedor(), 100)
 
   const avatarEl = document.getElementById('avatar-preview')
   if (perfil.avatar_url) {
@@ -713,11 +719,11 @@ async function guardarPerfil() {
 
   const medios = ['efectivo']
   if (document.getElementById('pf-pago-transferencia').checked) medios.push('transferencia')
-  if (document.getElementById('pf-pago-debito').checked)        medios.push('debito')
-  if (document.getElementById('pf-pago-credito').checked)       medios.push('credito')
+  if (document.getElementById('pf-pago-debito').checked) medios.push('debito')
+  if (document.getElementById('pf-pago-credito').checked) medios.push('credito')
 
-  const cbu     = document.getElementById('pf-cbu').value.trim()
-  const alias   = document.getElementById('pf-alias').value.trim()
+  const cbu = document.getElementById('pf-cbu').value.trim()
+  const alias = document.getElementById('pf-alias').value.trim()
   const titular = document.getElementById('pf-titular').value.trim()
 
   if (medios.includes('transferencia') && !cbu && !alias) {
@@ -728,32 +734,41 @@ async function guardarPerfil() {
   btn.disabled = true; btn.textContent = 'Guardando...'
 
   const { error } = await supabase.from('profiles').update({
-    nombre:           document.getElementById('pf-nombre').value.trim(),
+    nombre: document.getElementById('pf-nombre').value.trim(),
     nombre_panaderia: document.getElementById('pf-panaderia').value.trim(),
-    descripcion:      document.getElementById('pf-desc').value.trim(),
-    instagram:        document.getElementById('pf-ig').value.trim(),
-    telefono:         document.getElementById('pf-tel').value.trim(),
-    email_contacto:   document.getElementById('pf-email').value.trim(),
-    banner_anuncio:   document.getElementById('pf-banner').value.trim() || null,
-    medios_pago:      medios,
-    cbu:              cbu     || null,
-    alias_cbu:        alias   || null,
-    titular_cuenta:   titular || null,
+    descripcion: document.getElementById('pf-desc').value.trim(),
+    instagram: document.getElementById('pf-ig').value.trim(),
+    telefono: document.getElementById('pf-tel').value.trim(),
+    email_contacto: document.getElementById('pf-email').value.trim(),
+    banner_anuncio: document.getElementById('pf-banner').value.trim() || null,
+    medios_pago: medios,
+    cbu: cbu || null,
+    alias_cbu: alias || null,
+    titular_cuenta: titular || null,
+    direccion: document.getElementById('pf-direccion').value.trim() || null,
+    latitud: perfil._latTemp ?? perfil.latitud ?? null,
+    longitud: perfil._lngTemp ?? perfil.longitud ?? null,
   }).eq('id', uid)
 
   btn.disabled = false; btn.textContent = 'Guardar cambios'
   if (error) { toast('Error al guardar', 'err'); return }
 
-  perfil.medios_pago    = medios
-  perfil.cbu            = cbu     || null
-  perfil.alias_cbu      = alias   || null
+  perfil.medios_pago = medios
+  perfil.cbu = cbu || null
+  perfil.alias_cbu = alias || null
   perfil.titular_cuenta = titular || null
+
+  perfil.direccion = document.getElementById('pf-direccion').value.trim() || null
+  perfil.latitud = perfil._latTemp ?? perfil.latitud ?? null
+  perfil.longitud = perfil._lngTemp ?? perfil.longitud ?? null
+  delete perfil._latTemp
+  delete perfil._lngTemp
 
   toast('Perfil actualizado ✓', 'ok')
 }
 
 function catEmojiSimple(c) {
-  return { pan:'🍞', facturas:'🥐', galletas:'🍪', cakes:'🎂', otro:'✨' }[c] || '🛒'
+  return { pan: '🍞', facturas: '🥐', galletas: '🍪', cakes: '🎂', otro: '✨' }[c] || '🛒'
 }
 
 // ══ DOCUMENTOS ══
@@ -762,43 +777,43 @@ let docsPendientes = { doc1: null, doc2: null, doc3: null }
 export function initDocumentos() {
   cargarEstadoDocs()
 
-  // Importar Archivos
-  ;[
-    { inputId: 'file-doc-1', key: 'doc1', previewId: 'preview-doc-1', icoId: 'ico-doc-1' },
-    { inputId: 'file-doc-2', key: 'doc2', previewId: 'preview-doc-2', icoId: 'ico-doc-2' },
-    { inputId: 'file-doc-3', key: 'doc3', previewId: 'preview-doc-3', icoId: 'ico-doc-3' },
-  ].forEach(({ inputId, key, previewId, icoId }) => {
-    document.getElementById(inputId)?.addEventListener('change', e => {
-      const file = e.target.files[0]
-      if (!file) return
-      if (file.size > 5 * 1024 * 1024) { toast('Máx 5MB', 'err'); return }
+    // Importar Archivos
+    ;[
+      { inputId: 'file-doc-1', key: 'doc1', previewId: 'preview-doc-1', icoId: 'ico-doc-1' },
+      { inputId: 'file-doc-2', key: 'doc2', previewId: 'preview-doc-2', icoId: 'ico-doc-2' },
+      { inputId: 'file-doc-3', key: 'doc3', previewId: 'preview-doc-3', icoId: 'ico-doc-3' },
+    ].forEach(({ inputId, key, previewId, icoId }) => {
+      document.getElementById(inputId)?.addEventListener('change', e => {
+        const file = e.target.files[0]
+        if (!file) return
+        if (file.size > 5 * 1024 * 1024) { toast('Máx 5MB', 'err'); return }
 
-      docsPendientes[key] = file
+        docsPendientes[key] = file
 
-      const prev  = document.getElementById(previewId)
-      const ico   = document.getElementById(icoId)
-      if (ico) ico.textContent = '✅'
+        const prev = document.getElementById(previewId)
+        const ico = document.getElementById(icoId)
+        if (ico) ico.textContent = '✅'
 
-      if (file.type.startsWith('image/')) {
-        const reader = new FileReader()
-        reader.onload = ev => {
-          prev.innerHTML = `
+        if (file.type.startsWith('image/')) {
+          const reader = new FileReader()
+          reader.onload = ev => {
+            prev.innerHTML = `
             <img src="${ev.target.result}"
                  style="width:100%;max-height:140px;object-fit:cover;
                         border-radius:8px;border:2px solid var(--crema-dark)">`
-        }
-        reader.readAsDataURL(file)
-      } else {
-        prev.innerHTML = `
+          }
+          reader.readAsDataURL(file)
+        } else {
+          prev.innerHTML = `
           <div style="padding:10px;background:var(--crema);border-radius:8px;
                       font-size:0.82rem;color:var(--marron)">
             📄 ${file.name}
           </div>`
-      }
+        }
 
-      actualizarBtnEnviar()
+        actualizarBtnEnviar()
+      })
     })
-  })
 
   document.getElementById('btn-enviar-docs')?.addEventListener('click', enviarDocumentos)
 }
@@ -808,7 +823,7 @@ async function cargarEstadoDocs() {
   if (!wrap) return
 
   const estado = perfil?.estado_verificacion || 'sin_enviar'
-  const nota   = perfil?.doc_notas_rechazo
+  const nota = perfil?.doc_notas_rechazo
 
   const configs = {
     sin_enviar: {
@@ -855,8 +870,8 @@ async function cargarEstadoDocs() {
   `
 
   // Precargar docs ya subidos
-  if (perfil?.doc_bromatologia)         mostrarDocExistente('preview-doc-1', 'ico-doc-1', perfil.doc_bromatologia)
-  if (perfil?.doc_carnet_manipulador)   mostrarDocExistente('preview-doc-2', 'ico-doc-2', perfil.doc_carnet_manipulador)
+  if (perfil?.doc_bromatologia) mostrarDocExistente('preview-doc-1', 'ico-doc-1', perfil.doc_bromatologia)
+  if (perfil?.doc_carnet_manipulador) mostrarDocExistente('preview-doc-2', 'ico-doc-2', perfil.doc_carnet_manipulador)
   if (perfil?.doc_habilitacion_comercial) mostrarDocExistente('preview-doc-3', 'ico-doc-3', perfil.doc_habilitacion_comercial)
 
   // Mostrar punto naranja en sidebar si está pendiente
@@ -865,7 +880,7 @@ async function cargarEstadoDocs() {
 
   // Deshabilitar subida si ya está aprobado
   if (estado === 'aprobado') {
-    ;['file-doc-1','file-doc-2','file-doc-3'].forEach(id => {
+    ;['file-doc-1', 'file-doc-2', 'file-doc-3'].forEach(id => {
       const el = document.getElementById(id)
       if (el) el.disabled = true
     })
@@ -876,7 +891,7 @@ async function cargarEstadoDocs() {
 
 function mostrarDocExistente(previewId, icoId, url) {
   const prev = document.getElementById(previewId)
-  const ico  = document.getElementById(icoId)
+  const ico = document.getElementById(icoId)
   if (ico) ico.textContent = '✅'
   if (!prev) return
 
@@ -929,7 +944,7 @@ async function enviarDocumentos() {
     }
 
     updates.estado_verificacion = 'pendiente'
-    updates.doc_notas_rechazo   = null
+    updates.doc_notas_rechazo = null
 
     const { error } = await supabase.from('profiles').update(updates).eq('id', uid)
     if (error) throw error
@@ -1070,14 +1085,14 @@ async function cargarMetricasGrupo() {
     { count: cProds }
   ] = await Promise.all([
     supabase.from('pedidos').select('total').in('vendedor_id', ids),
-    supabase.from('productos').select('id', { count:'exact', head:true })
+    supabase.from('productos').select('id', { count: 'exact', head: true })
       .in('vendedor_id', ids).eq('activo', true)
   ])
 
   const totalVentas = (pedidos || []).reduce((acc, p) => acc + (p.total || 0), 0)
 
-  document.getElementById('sg-ventas').textContent    = formatPrecio(totalVentas)
-  document.getElementById('sg-pedidos').textContent   = (pedidos || []).length
+  document.getElementById('sg-ventas').textContent = formatPrecio(totalVentas)
+  document.getElementById('sg-pedidos').textContent = (pedidos || []).length
   document.getElementById('sg-productos').textContent = cProds || 0
   document.getElementById('sg-sucursales').textContent = (sucursales || []).length
 }
@@ -1105,8 +1120,8 @@ async function cargarListaSucursales() {
                     color:white;display:flex;align-items:center;justify-content:center;
                     font-weight:700;font-size:0.9rem;flex-shrink:0;overflow:hidden">
           ${s.avatar_url
-            ? `<img src="${s.avatar_url}" style="width:100%;height:100%;object-fit:cover">`
-            : getIniciales(s.nombre_panaderia || s.nombre)}
+      ? `<img src="${s.avatar_url}" style="width:100%;height:100%;object-fit:cover">`
+      : getIniciales(s.nombre_panaderia || s.nombre)}
         </div>
         <div style="flex:1;min-width:0">
           <div style="font-weight:700">${s.nombre_panaderia || s.nombre}</div>
@@ -1201,9 +1216,9 @@ function initEventosSucursales() {
   // Crear sucursal nueva
   document.getElementById('btn-confirmar-crear-sucursal')?.addEventListener('click', async () => {
     const nombrePan = document.getElementById('suc-nombre-pan').value.trim()
-    const nombre    = document.getElementById('suc-nombre').value.trim()
-    const email     = document.getElementById('suc-email').value.trim()
-    const pass      = document.getElementById('suc-pass').value
+    const nombre = document.getElementById('suc-nombre').value.trim()
+    const email = document.getElementById('suc-email').value.trim()
+    const pass = document.getElementById('suc-pass').value
 
     if (!nombrePan || !nombre || !email || !pass) {
       toast('Completá todos los campos', 'err'); return
@@ -1224,20 +1239,20 @@ function initEventosSucursales() {
     }
 
     await supabase.from('profiles').insert({
-      id:                 data.user.id,
+      id: data.user.id,
       nombre,
-      nombre_panaderia:   nombrePan,
-      tipo:               'vendedor',
-      es_sucursal:        true,
+      nombre_panaderia: nombrePan,
+      tipo: 'vendedor',
+      es_sucursal: true,
       panaderia_padre_id: uid,
       estado_verificacion: 'sin_enviar'
     })
 
     btn.disabled = false; btn.textContent = 'Crear sucursal'
     document.getElementById('form-crear-sucursal').style.display = 'none'
-    ;['suc-nombre-pan','suc-nombre','suc-email','suc-pass'].forEach(id => {
-      document.getElementById(id).value = ''
-    })
+      ;['suc-nombre-pan', 'suc-nombre', 'suc-email', 'suc-pass'].forEach(id => {
+        document.getElementById(id).value = ''
+      })
 
     toast('¡Sucursal creada! 🎉', 'ok')
     cargarListaSucursales()
@@ -1259,15 +1274,15 @@ window.verDetalleSucursal = async (sucId, nombre) => {
     { data: ultimosPeds }
   ] = await Promise.all([
     supabase.from('pedidos').select('total, estado, created_at').eq('vendedor_id', sucId),
-    supabase.from('productos').select('id', { count:'exact', head:true })
+    supabase.from('productos').select('id', { count: 'exact', head: true })
       .eq('vendedor_id', sucId).eq('activo', true),
     supabase.from('pedidos').select('*').eq('vendedor_id', sucId)
       .order('created_at', { ascending: false }).limit(3)
   ])
 
-  const totalVentas   = (pedidos || []).reduce((acc, p) => acc + (p.total || 0), 0)
-  const pendientes    = (pedidos || []).filter(p => p.estado === 'pendiente').length
-  const entregados    = (pedidos || []).filter(p => p.estado === 'entregado').length
+  const totalVentas = (pedidos || []).reduce((acc, p) => acc + (p.total || 0), 0)
+  const pendientes = (pedidos || []).filter(p => p.estado === 'pendiente').length
+  const entregados = (pedidos || []).filter(p => p.estado === 'entregado').length
 
   el.innerHTML = `
     <h4 style="margin-bottom:12px;font-family:'Playfair Display',serif">
@@ -1324,5 +1339,66 @@ window.desvincularSucursal = async (sucId) => {
   cargarListaSucursales()
   cargarMetricasGrupo()
 }
+
+// ══ MAPA ══
+let mapaVendedor     = null
+let marcadorVendedor = null
+
+function initMapaVendedor() {
+  const contenedor = document.getElementById('mapa-vendedor')
+  if (!contenedor || typeof L === 'undefined') return
+
+  if (mapaVendedor) { mapaVendedor.invalidateSize(); return }
+
+  const latInicial = perfil.latitud  || -28.4696
+  const lngInicial = perfil.longitud || -65.7795
+
+  mapaVendedor = L.map('mapa-vendedor').setView([latInicial, lngInicial], perfil.latitud ? 15 : 13)
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors',
+    maxZoom: 19
+  }).addTo(mapaVendedor)
+
+  marcadorVendedor = L.marker([latInicial, lngInicial], { draggable: true }).addTo(mapaVendedor)
+
+  marcadorVendedor.on('dragend', () => {
+    const pos = marcadorVendedor.getLatLng()
+    perfil._latTemp = pos.lat
+    perfil._lngTemp = pos.lng
+  })
+
+  mapaVendedor.on('click', e => {
+    marcadorVendedor.setLatLng(e.latlng)
+    perfil._latTemp = e.latlng.lat
+    perfil._lngTemp = e.latlng.lng
+  })
+
+  document.querySelector('[data-sec="perfil"]')?.addEventListener('click', () => {
+    setTimeout(() => mapaVendedor?.invalidateSize(), 200)
+  })
+}
+
+document.getElementById('pf-direccion')?.addEventListener('blur', async () => {
+  const direccion = document.getElementById('pf-direccion').value.trim()
+  if (!direccion || direccion.length < 5) return
+
+  try {
+    const query = encodeURIComponent(direccion + ', Catamarca, Argentina')
+    const res = await fetch(`https://nominatim.openstreetmap.org/search?q=${query}&format=json&limit=1`)
+    const data = await res.json()
+    if (data && data[0]) {
+      const lat = parseFloat(data[0].lat)
+      const lng = parseFloat(data[0].lon)
+      if (mapaVendedor && marcadorVendedor) {
+        mapaVendedor.setView([lat, lng], 16)
+        marcadorVendedor.setLatLng([lat, lng])
+        perfil._latTemp = lat
+        perfil._lngTemp = lng
+        toast('📍 Ubicación encontrada, ajustala si hace falta', 'ok')
+      }
+    }
+  } catch (e) { /* el usuario puede ajustarlo manualmente */ }
+})
 
 init()

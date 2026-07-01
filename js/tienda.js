@@ -10,13 +10,13 @@ import {
 
 actualizarBadge()
 
-const params     = new URLSearchParams(location.search)
+const params = new URLSearchParams(location.search)
 const vendedorId = params.get('id')
 if (!vendedorId) location.href = 'index.html'
 
 let productos = []
 let catActual = 'todos'
-let busqueda  = ''
+let busqueda = ''
 let nombrePan = ''
 
 async function cargarPerfil() {
@@ -43,12 +43,12 @@ async function cargarPerfil() {
       <p class="tienda-desc">${p.descripcion || 'Panadería artesanal'}</p>
       <div class="tienda-meta">
         ${p.instagram
-          ? `<a href="https://instagram.com/${p.instagram}"
+      ? `<a href="https://instagram.com/${p.instagram}"
                  target="_blank" rel="noopener">📸 @${p.instagram}</a>` : ''}
         ${p.telefono
-          ? `<a href="tel:${p.telefono}">📞 ${p.telefono}</a>` : ''}
+      ? `<a href="tel:${p.telefono}">📞 ${p.telefono}</a>` : ''}
         ${p.email_contacto
-          ? `<a href="mailto:${p.email_contacto}">✉️ ${p.email_contacto}</a>` : ''}
+      ? `<a href="mailto:${p.email_contacto}">✉️ ${p.email_contacto}</a>` : ''}
       </div>
       ${p.telefono ? `
         <a href="https://wa.me/${p.telefono.replace(/\D/g, '')}?text=${encodeURIComponent('Hola! Vi tu tienda en PanaderiaMarket 🥖')}"
@@ -72,6 +72,41 @@ async function cargarPerfil() {
     banner.textContent = `📢 ${p.banner_anuncio}`
     document.getElementById('tienda-header-wrap').after(banner)
   }
+
+  if (p.latitud && p.longitud) {
+    mostrarMapaTienda(p.latitud, p.longitud, p.direccion, p.nombre_panaderia || p.nombre)
+  }
+}
+
+function mostrarMapaTienda(lat, lng, direccion, nombrePanaderia) {
+  const contenedor = document.getElementById('mapa-tienda')
+  if (!contenedor || typeof L === 'undefined') return
+
+  const mapa = L.map('mapa-tienda', { zoomControl: true, scrollWheelZoom: false })
+    .setView([lat, lng], 16)
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors',
+    maxZoom: 19
+  }).addTo(mapa)
+
+  const marker = L.marker([lat, lng]).addTo(mapa)
+  marker.bindPopup(
+    `<strong>${nombrePanaderia}</strong>${direccion ? '<br>' + direccion : ''}`,
+    { autoClose: false }
+  ).openPopup()
+
+  const secMapa = document.getElementById('sec-mapa-tienda')
+  if (secMapa) {
+    secMapa.style.display = 'block'
+    setTimeout(() => mapa.invalidateSize(), 50)
+  }
+
+  const textoDir = document.getElementById('texto-direccion-tienda')
+  if (textoDir && direccion) textoDir.textContent = direccion
+
+  const linkMaps = document.getElementById('link-mapa-externo')
+  if (linkMaps) linkMaps.href = `https://www.google.com/maps?q=${lat},${lng}`
 }
 
 async function cargarProductos() {
@@ -92,7 +127,7 @@ async function cargarProductos() {
 }
 
 function generarFiltros() {
-  const cats   = ['todos', ...new Set(productos.map(p => p.categoria).filter(Boolean))]
+  const cats = ['todos', ...new Set(productos.map(p => p.categoria).filter(Boolean))]
   const labels = {
     todos: 'Todos', pan: '🍞 Pan', facturas: '🥐 Facturas',
     galletas: '🍪 Galletas', cakes: '🎂 Cakes', otro: '✨ Otro'
@@ -129,7 +164,7 @@ function render() {
     )
   }
 
-  const grid  = document.getElementById('grid-tienda')
+  const grid = document.getElementById('grid-tienda')
   const empty = document.getElementById('empty-tienda')
   const count = document.getElementById('count-tienda')
 
@@ -149,25 +184,25 @@ function render() {
           ${catLabel(p.categoria)}
         </span>
         ${p.imagen_url
-          ? `<img class="card-img" src="${p.imagen_url}" alt="${p.nombre}" loading="lazy">`
-          : `<div class="card-img-ph">${catEmoji(p.categoria)}</div>`}
+        ? `<img class="card-img" src="${p.imagen_url}" alt="${p.nombre}" loading="lazy">`
+        : `<div class="card-img-ph">${catEmoji(p.categoria)}</div>`}
         <div class="card-body">
           <div class="card-nombre">${p.nombre}</div>
           ${p.descripcion
-            ? `<div style="font-size:0.8rem;color:var(--gris);margin-bottom:6px;line-height:1.4">${p.descripcion}</div>`
-            : ''}
+        ? `<div style="font-size:0.8rem;color:var(--gris);margin-bottom:6px;line-height:1.4">${p.descripcion}</div>`
+        : ''}
           <div class="card-precio">
             ${p.unidad_venta === 'kilo'
-              ? `${formatPrecio(p.precio)} / kg`
-              : formatPrecio(p.precio)}
+        ? `${formatPrecio(p.precio)} / kg`
+        : formatPrecio(p.precio)}
           </div>
           ${p.precio_media_docena && p.unidad_venta !== 'kilo'
-            ? `<div style="font-size:0.78rem;color:var(--gris)">Media doc: ${formatPrecio(p.precio_media_docena)}</div>` : ''}
+        ? `<div style="font-size:0.78rem;color:var(--gris)">Media doc: ${formatPrecio(p.precio_media_docena)}</div>` : ''}
           ${p.precio_docena && p.unidad_venta !== 'kilo'
-            ? `<div style="font-size:0.78rem;color:var(--gris);margin-bottom:8px">Docena: ${formatPrecio(p.precio_docena)}</div>` : ''}
+        ? `<div style="font-size:0.78rem;color:var(--gris);margin-bottom:8px">Docena: ${formatPrecio(p.precio_docena)}</div>` : ''}
           ${p.dato_extra
-            ? `<div style="font-size:0.78rem;background:var(--crema);padding:5px 9px;border-radius:6px;margin-bottom:8px">ℹ️ ${p.dato_extra}</div>`
-            : ''}
+        ? `<div style="font-size:0.78rem;background:var(--crema);padding:5px 9px;border-radius:6px;margin-bottom:8px">ℹ️ ${p.dato_extra}</div>`
+        : ''}
           <div style="display:flex;gap:8px;margin-top:8px">
             <a href="producto.html?id=${p.id}" class="btn btn-ghost btn-sm"
                onclick="event.stopPropagation()"
@@ -214,8 +249,8 @@ function toggleCart(abrir) {
   document.getElementById('cart-overlay').classList.toggle('open', abrir)
   if (abrir) renderCarrito()
 }
-document.getElementById('cart-toggle').addEventListener('click',  () => toggleCart(true))
-document.getElementById('cart-close').addEventListener('click',   () => toggleCart(false))
+document.getElementById('cart-toggle').addEventListener('click', () => toggleCart(true))
+document.getElementById('cart-close').addEventListener('click', () => toggleCart(false))
 document.getElementById('cart-overlay').addEventListener('click', () => toggleCart(false))
 
 cargarPerfil()
